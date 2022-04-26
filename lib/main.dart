@@ -1,3 +1,7 @@
+import 'dart:async';
+
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -12,6 +16,12 @@ import 'app/routes/app_pages.dart';
 
 void main() async{
 
+  //firebase
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
+
   //dependancy Injection
   await GetStorage.init();
   Get.put<LocalStorage>(LocalStorage());
@@ -21,7 +31,12 @@ void main() async{
   await Get.putAsync<AuthRepository>(() async => AuthRepository());
 
 
-  runApp(MyApp());
+  await runZonedGuarded(() async {
+    runApp(const MyApp());
+  }, (error, stackTrace) {
+    FirebaseCrashlytics.instance.recordError(error, stackTrace);
+  });
+
 }
 
 class MyApp extends StatelessWidget {

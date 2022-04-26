@@ -12,10 +12,13 @@ class HomeView extends GetView<HomeController> {
         title: const Text('HomeView'),
         centerTitle: true,
       ),
-      body: const Center(
-        child: Text(
-          'HomeView is working',
-          style: TextStyle(fontSize: 20),
+      body:  Center(
+        child: InkWell(
+          onTap: () => controller.increment(),
+          child: const Text(
+            'HomeView is working',
+            style: TextStyle(fontSize: 20),
+          ),
         ),
       ),
     );

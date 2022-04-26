@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "203250401788",
+    "project_id": "dotspot-87c9b",
+    "storage_bucket": "dotspot-87c9b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203250401788:android:6b5467ad91c29ade07f279",
+        "android_client_info": {
+          "package_name": "app.neiman.neiman_inventory"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "203250401788-ea9evu4rh3nq39197qsu15n1pntaee3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwhQXWgVxllBwYdSkgk-R_KkZIu5MLCxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "203250401788-ea9evu4rh3nq39197qsu15n1pntaee3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:203250401788:android:1133eef42575c9ed07f279",
+        "android_client_info": {
+          "package_name": "com.neiman.neiman_kosher"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "203250401788-ea9evu4rh3nq39197qsu15n1pntaee3j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwhQXWgVxllBwYdSkgk-R_KkZIu5MLCxE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "203250401788-ea9evu4rh3nq39197qsu15n1pntaee3j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
