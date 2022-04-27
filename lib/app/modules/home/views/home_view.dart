@@ -30,13 +30,6 @@ class HomeView extends GetView<HomeController> {
               actions: [
                 IconButton(
                   icon: const Icon(
-                    Icons.camera_alt,
-                    color: Colors.white,
-                  ),
-                  onPressed: () => controller.openBarCodeScanner(),
-                ),
-                IconButton(
-                  icon: const Icon(
                     Icons.filter_alt,
                     color: Colors.white,
                   ),
@@ -230,7 +223,9 @@ class HomeView extends GetView<HomeController> {
                             ),
                           ),
                           const SizedBox(width: 18),
-                          CAssetImage(imagePath: 'images/barcode.png', height: 40,)
+                          InkWell(
+                              onTap: () => controller.openBarCodeScanner(),
+                              child: CAssetImage(imagePath: 'images/barcode.png', height: 40,))
                           
                         ],
                       ),
