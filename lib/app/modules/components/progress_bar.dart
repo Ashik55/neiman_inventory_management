@@ -16,7 +16,7 @@ class CProgressBar extends StatelessWidget {
             height: size ?? 25.0,
             width: size ?? 25.0,
             child: Platform.isIOS
-                ? CupertinoActivityIndicator()
+                ? const CupertinoActivityIndicator()
                 : CircularProgressIndicator(
                     color: color,
                   )));

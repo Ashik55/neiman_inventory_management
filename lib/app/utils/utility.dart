@@ -139,6 +139,10 @@ getMaxHeight(BuildContext context) {
   return MediaQuery.of(context).size.height;
 }
 
+Orientation getOrientation(BuildContext context) {
+  return MediaQuery.of(context).orientation;
+}
+
 // hideKeyboard(context) {
 //   FocusScope.of(context).unfocus();
 // }

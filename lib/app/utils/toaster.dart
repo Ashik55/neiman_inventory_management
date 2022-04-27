@@ -10,14 +10,14 @@ showMessageSnackbar(
     SnackPosition? snackPosition,
     Duration? duration,
     Color? backgroundColor}) {
-  if(backgroundColor != Colors.red || !kReleaseMode){
+  // if(backgroundColor != Colors.red || !kReleaseMode){
     Get.showSnackbar(GetSnackBar(
       message: message,
       backgroundColor: backgroundColor ?? Colors.blueGrey,
       duration: duration ?? const Duration(milliseconds: 2000),
       snackPosition: snackPosition ?? SnackPosition.BOTTOM,
     ));
-  }
+  // }
 
 }
 

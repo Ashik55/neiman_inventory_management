@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/utils/constants.dart';
-import '../data/local_storage/local_storage.dart';
+import '../../data/local_storage/local_storage.dart';
 import 'package:http/http.dart' as http;
 
 class ApiClient {
@@ -20,12 +20,12 @@ class ApiClient {
     Map<String, dynamic>? params,
     required T Function(Map<String, dynamic>? data) builder,
   }) async {
-    print(_localStorage.getUserName());
-    print(_localStorage.getPassword());
+    if (kDebugMode) {
+      print(_localStorage.getUserName());
+      print(_localStorage.getPassword());
+    }
 
-    final customEndpoint =
-        "/api/v1${_localStorage.getIsCustomer() == true ? "/portal-access/625f0528806e5d1b6" : ""}$endpoint"
-            .trim();
+    final customEndpoint = "/api/v1$endpoint".trim();
 
     if (kDebugMode) {
       print("End-point : $customEndpoint");
@@ -89,7 +89,7 @@ class ApiClient {
     }
 
     final customEndpoint =
-        "/api/v1${_localStorage.getIsCustomer() == true ? "/portal-access/625f0528806e5d1b6" : ""}$endpoint"
+        "/api/v1$endpoint"
             .trim();
 
     if (kDebugMode) {
