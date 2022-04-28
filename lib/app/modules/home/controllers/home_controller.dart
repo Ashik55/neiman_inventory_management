@@ -1,4 +1,3 @@
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +17,7 @@ class HomeController extends GetxController {
   ProductRepository productRepository = Get.find();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController searchController = TextEditingController();
-  String searcheText = "";
+  String searchText = "";
   String? sortBy;
   double totalPrice = 0;
 
@@ -66,7 +65,9 @@ class HomeController extends GetxController {
         barcodeScanRes = 'Failed to get platform version.';
       }
 
-      print(barcodeScanRes);
+      if (kDebugMode) {
+        print(barcodeScanRes);
+      }
 
       if (barcodeScanRes.trim() != "-1") {
         searchController.text = barcodeScanRes;
@@ -80,7 +81,7 @@ class HomeController extends GetxController {
   }
 
   onSearchChange(String text) async {
-    searcheText = text;
+    searchText = text;
     if (text.isNotEmpty) {
       productList = await productRepository.searchProduct(searchText: text);
       update();
