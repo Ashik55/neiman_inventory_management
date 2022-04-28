@@ -128,4 +128,13 @@ class HomeController extends GetxController {
     update();
     await getFilteredProductsV3();
   }
+
+  onLogoutClick() {
+    localStorage.clearStorage();
+    Get.offAllNamed(Routes.LOGIN);
+  }
+
+  onPurchaseClick() {
+    Get.toNamed(Routes.PURCHASE);
+  }
 }

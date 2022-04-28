@@ -6,6 +6,7 @@ import 'package:neiman_inventory/app/modules/components/grid_product_item.dart';
 import 'package:neiman_inventory/app/modules/components/load_image.dart';
 
 import '../../../data/models/Products.dart';
+import '../../../utils/colors.dart';
 import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';
 import '../../components/custom_textwidget.dart';
@@ -39,6 +40,50 @@ class HomeView extends GetView<HomeController> {
               ],
             ),
 
+            drawer: Drawer(
+              // Add a ListView to the drawer. This ensures the user can scroll
+              // through the options in the drawer if there isn't enough vertical
+              // space to fit everything.
+              child: ListView(
+                // Important: Remove any padding from the ListView.
+                padding: EdgeInsets.zero,
+                children: [
+                  DrawerHeader(
+                    decoration: const BoxDecoration(
+                      color: Colors.blue,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Spacer(),
+                        CText(
+                          'Menus',
+                          textColor: Colors.white,
+                          fontSize: Dimens.textLargeDoubleExtra,
+                        ),
+                      ],
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.restore_outlined),
+                    title: CText('Purchase'),
+                    onTap: () => controller.onPurchaseClick(),
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.arrow_back,
+                      color: CustomColors.KPrimaryColor,
+                    ),
+                    title: CText(
+                      'Logout',
+                      fontWeight: FontWeight.bold,
+                      textColor: CustomColors.KPrimaryColor,
+                    ),
+                    onTap: () => controller.onLogoutClick(),
+                  ),
+                ],
+              ),
+            ),
             endDrawer: SizedBox(
               width: MediaQuery.of(context).size.width * 0.85,
               child: Drawer(
