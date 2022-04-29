@@ -1,20 +1,30 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:neiman_inventory/app/api/repository/product_repository.dart';
+import 'package:neiman_inventory/app/data/models/Purchase.dart';
+import 'package:neiman_inventory/app/modules/base/base_controller.dart';
 
-class PurchaseController extends GetxController {
-  //TODO: Implement PurchaseController
+import '../../../data/local_storage/local_storage.dart';
 
-  final count = 0.obs;
+class PurchaseController extends BaseController {
+  final LocalStorage _localStorage = Get.find();
+  final ProductRepository _productRepository = Get.find();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  List<Purchase> purchaseList = [];
+
   @override
   void onInit() {
     super.onInit();
+    getPurchaseList();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
+  void getPurchaseList() async {
+    startLoading();
+    purchaseList = await _productRepository.getPurchaseList();
+    stopLoading();
   }
 
-  @override
-  void onClose() {}
-  void increment() => count.value++;
+  onPurchaseClick(Purchase? purchase) {}
 }

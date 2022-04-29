@@ -11,8 +11,9 @@ import '../../../data/models/Products.dart';
 import '../../../routes/app_pages.dart';
 import '../../../utils/toaster.dart';
 import '../../../utils/utility.dart';
+import '../../base/base_controller.dart';
 
-class HomeController extends GetxController {
+class HomeController extends BaseController {
   LocalStorage localStorage = Get.find();
   ProductRepository productRepository = Get.find();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -20,8 +21,6 @@ class HomeController extends GetxController {
   String searchText = "";
   String? sortBy;
   double totalPrice = 0;
-
-  bool showLoading = false;
   List<Products> productList = [];
 
   @override
@@ -31,16 +30,18 @@ class HomeController extends GetxController {
   }
 
   Future<void> loadInitialData() async {
-    emitLoading();
+    startLoading();
     productList = await productRepository.getLocalProducts();
-    stopLoading();
+    if(productList.isNotEmpty) {
+      stopLoading();
+    }
     productList = await productRepository.getProducts();
 
     stopLoading();
   }
 
   getFilteredProductsV3() async {
-    emitLoading();
+    startLoading();
     productList = await productRepository.getFilterProductV3(sortBy: sortBy);
     if (kDebugMode) {
       print(productList.length);
@@ -102,16 +103,6 @@ class HomeController extends GetxController {
 
     update();
     await getFilteredProductsV3();
-  }
-
-  emitLoading() {
-    showLoading = true;
-    update();
-  }
-
-  stopLoading() {
-    showLoading = false;
-    update();
   }
 
   onProductClick({Products? products}) {

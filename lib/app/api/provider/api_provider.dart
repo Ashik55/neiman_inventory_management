@@ -1,31 +1,17 @@
-
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/client/api_client.dart';
+import 'package:neiman_inventory/app/data/models/Purchase.dart';
 
 import '../../data/models/Products.dart';
 import '../../data/models/UserModel.dart';
 
-
-
-
-class ApiProvider extends GetxService{
+class ApiProvider extends GetxService {
   ApiClient apiClient = Get.find();
 
-
   static const String _product = '/product';
-  static const String _order_history = '/SalesOrderItems';
-  static const String _brand = '/brand';
-  static const String _category = '/category';
-
-  // static const String _sales = '/sales';
-  static const String _sales = '/sales';
-  static const String _salesOrderItems = '/salesOrderItems';
-  static const String _account = '/account';
-  static const String _applog = '/Applog';
+  static const String _purchase = '/Purchase';
   static const String _login = '/App/user';
-
-
 
   Future<UserModel?> loginNow() async {
     return apiClient.callGetApi(
@@ -53,8 +39,17 @@ class ApiProvider extends GetxService{
     );
   }
 
-
-
-
-
+  Future<List<Purchase>> getPurchaseList() async {
+    return apiClient.callGetApi(
+      endpoint: _purchase,
+      builder: (data) {
+        List<Purchase> purchaseList = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          purchaseList.add(Purchase.fromJson(element));
+        }
+        return purchaseList;
+      },
+    );
+  }
 }

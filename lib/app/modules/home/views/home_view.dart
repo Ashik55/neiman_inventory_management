@@ -39,7 +39,6 @@ class HomeView extends GetView<HomeController> {
                 ),
               ],
             ),
-
             drawer: Drawer(
               // Add a ListView to the drawer. This ensures the user can scroll
               // through the options in the drawer if there isn't enough vertical
@@ -93,7 +92,10 @@ class HomeView extends GetView<HomeController> {
                   padding: EdgeInsets.zero,
                   physics: const BouncingScrollPhysics(),
                   children: [
-                    SizedBox(height:  getOrientation(context) == Orientation.portrait ? 25 : 8),
+                    SizedBox(
+                        height: getOrientation(context) == Orientation.portrait
+                            ? 25
+                            : 8),
                     // Row(
                     //   children: [
                     //     const Spacer(),
@@ -128,12 +130,17 @@ class HomeView extends GetView<HomeController> {
                       child: GridView(
                         physics: const ClampingScrollPhysics(),
                         shrinkWrap: true,
-                        gridDelegate:
-                        SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: getOrientation(context) == Orientation.portrait ? 2 : 3,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount:
+                                getOrientation(context) == Orientation.portrait
+                                    ? 2
+                                    : 3,
                             mainAxisSpacing: 5,
                             crossAxisSpacing: 5,
-                            childAspectRatio: getOrientation(context) == Orientation.portrait ? 4 : 6),
+                            childAspectRatio:
+                                getOrientation(context) == Orientation.portrait
+                                    ? 4
+                                    : 6),
                         children: [
                           IdSelectableChipWidget(
                             id: "name",
@@ -235,7 +242,7 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             body: BaseView(
-              showLoading: controller.showLoading,
+              showLoading: controller.loading,
               child: Column(
                 children: [
                   Container(
@@ -260,7 +267,8 @@ class HomeView extends GetView<HomeController> {
                                 suffixIcon:
                                     controller.searchController.text.isNotEmpty
                                         ? IconButton(
-                                            onPressed: () => controller.clearSearch(),
+                                            onPressed: () =>
+                                                controller.clearSearch(),
                                             icon: const Icon(Icons.clear),
                                           )
                                         : null,
@@ -270,8 +278,10 @@ class HomeView extends GetView<HomeController> {
                           const SizedBox(width: 18),
                           InkWell(
                               onTap: () => controller.openBarCodeScanner(),
-                              child: CAssetImage(imagePath: 'images/barcode.png', height: 40,))
-                          
+                              child: CAssetImage(
+                                imagePath: 'images/barcode.png',
+                                height: 40,
+                              ))
                         ],
                       ),
                     ),
@@ -279,23 +289,30 @@ class HomeView extends GetView<HomeController> {
                   Expanded(
                       child: controller.productList.isEmpty == true
                           ? NoDataWidget(
-                              isLoading: controller.showLoading,
+                              isLoading: controller.loading,
                             )
                           :
 
                           // ListView.builder(
                           GridView.builder(
                               gridDelegate:
-                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: getOrientation(context) == Orientation.portrait ? 2 : 3,
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: getOrientation(context) ==
+                                              Orientation.portrait
+                                          ? 2
+                                          : 3,
                                       mainAxisSpacing: 5,
                                       crossAxisSpacing: 5,
-                                      childAspectRatio: getOrientation(context) == Orientation.portrait ? .75 : 1.3),
+                                      childAspectRatio:
+                                          getOrientation(context) ==
+                                                  Orientation.portrait
+                                              ? .75
+                                              : 1.3),
 
-                                      // crossAxisCount: 2,
-                                      // mainAxisSpacing: 2,
-                                      // crossAxisSpacing: 2,
-                                      // childAspectRatio: .75),
+                              // crossAxisCount: 2,
+                              // mainAxisSpacing: 2,
+                              // crossAxisSpacing: 2,
+                              // childAspectRatio: .75),
                               itemCount: controller.productList.length,
                               padding: const EdgeInsets.only(bottom: 5),
                               shrinkWrap: true,
@@ -303,10 +320,8 @@ class HomeView extends GetView<HomeController> {
                               itemBuilder: (BuildContext context, int index) =>
                                   GridProductItem(
                                 products: controller.productList[index],
-                                onclick: (Products? products) =>
-                                    controller.onProductClick(
-                                        products: products),
-
+                                onclick: (Products? products) => controller
+                                    .onProductClick(products: products),
                               ),
                             )),
                 ],
@@ -317,13 +332,15 @@ class HomeView extends GetView<HomeController> {
 
 class NoDataWidget extends StatelessWidget {
   bool? isLoading;
+  String? dataName;
 
-  NoDataWidget({this.isLoading});
+  NoDataWidget({this.isLoading, this.dataName});
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: CText(isLoading == true ? "Please Wait . . " : "No data found"),
+      child: CText(
+          isLoading == true ? "Please Wait . . " : "No data found"),
     );
   }
 }
