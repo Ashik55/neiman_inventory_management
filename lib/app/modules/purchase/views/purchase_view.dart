@@ -36,18 +36,18 @@ class PurchaseView extends GetView<PurchaseController> {
                       itemCount: 10,
                       // itemCount: controller.purchaseList.length,
                       physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal:Dimens.basePaddingNone),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Dimens.basePaddingNone),
                       shrinkWrap: true,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount:
                               getOrientation(context) == Orientation.portrait
                                   ? 1
                                   : 2,
-
                           childAspectRatio:
                               getOrientation(context) == Orientation.portrait
-                                  ? 2.4
-                                  : 2.4),
+                                  ? 2.35
+                                  : 2.35),
                       itemBuilder: (BuildContext context, int index) =>
                           PurchaseItem(
                         purchase: controller.purchaseList[0],
@@ -76,9 +76,11 @@ class PurchaseItem extends StatelessWidget {
       child: InkWell(
         onTap: () => onClick(purchase),
         child: Padding(
-          padding: const EdgeInsets.symmetric(
-              vertical: Dimens.basePadding,
-              horizontal: Dimens.basePadding),
+          padding: const EdgeInsets.only(
+              top: 6,
+              bottom: Dimens.basePaddingNone,
+              left: Dimens.basePadding,
+              right: Dimens.basePadding),
           child: Column(
             children: [
               Padding(
@@ -151,7 +153,29 @@ class PurchaseItem extends StatelessWidget {
                   ],
                 ),
               ),
-
+              Padding(
+                padding: const EdgeInsets.all(2),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: CText(
+                        'Po Number',
+                        textColor: CustomColors.KPrimaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: Dimens.textMid,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: CText(
+                        ': ${purchase?.poNumber}',
+                        textColor: CustomColors.KPrimaryColor,
+                        fontSize: Dimens.textMid,
+                      ),
+                    )
+                  ],
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(2),
                 child: Row(
@@ -198,7 +222,6 @@ class PurchaseItem extends StatelessWidget {
                   ],
                 ),
               ),
-
             ],
           ),
         ),

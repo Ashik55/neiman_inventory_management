@@ -7,13 +7,13 @@ import 'package:neiman_inventory/app/data/models/UserModel.dart';
 import '../../../data/local_storage/local_storage.dart';
 import '../../../routes/app_pages.dart';
 import '../../../utils/toaster.dart';
+import '../../base/base_controller.dart';
 
-class LoginController extends GetxController {
+class LoginController extends BaseController {
   final LocalStorage _localStorage = Get.find();
   ProductRepository productRepository = Get.find();
 
   bool rememberCheckbox = false;
-  bool showLoading = false;
   TextEditingController userNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -28,7 +28,7 @@ class LoginController extends GetxController {
   onLoginClick() async {
     if (userNameController.text.isNotEmpty &&
         passwordController.text.isNotEmpty) {
-      emitLoading();
+      startLoading();
 
       _localStorage.setUserName(userNameController.text);
       _localStorage.setPassword(passwordController.text);
@@ -45,8 +45,7 @@ class LoginController extends GetxController {
           _localStorage.setSellerId(result.user?.id);
         }
 
-        showLoading = false;
-        update();
+        stopLoading();
         Get.offAllNamed(Routes.HOME);
       } else {
         stopLoading();
@@ -59,13 +58,5 @@ class LoginController extends GetxController {
     }
   }
 
-  emitLoading() {
-    showLoading = true;
-    update();
-  }
 
-  stopLoading() {
-    showLoading = false;
-    update();
-  }
 }
