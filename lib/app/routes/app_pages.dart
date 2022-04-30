@@ -8,6 +8,8 @@ import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
 import '../modules/purchase/bindings/purchase_binding.dart';
 import '../modules/purchase/views/purchase_view.dart';
+import '../modules/purchase_create/bindings/purchase_create_binding.dart';
+import '../modules/purchase_create/views/purchase_create_view.dart';
 import '../modules/splash_screen/bindings/splash_screen_binding.dart';
 import '../modules/splash_screen/views/splash_screen_view.dart';
 
@@ -43,6 +45,11 @@ class AppPages {
       name: _Paths.PURCHASE,
       page: () => PurchaseView(),
       binding: PurchaseBinding(),
+    ),
+    GetPage(
+      name: _Paths.PURCHASE_CREATE,
+      page: () => PurchaseCreateView(),
+      binding: PurchaseCreateBinding(),
     ),
   ];
 }

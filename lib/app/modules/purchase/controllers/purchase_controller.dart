@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/repository/product_repository.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/modules/base/base_controller.dart';
+import 'package:neiman_inventory/app/routes/app_pages.dart';
 
 import '../../../data/local_storage/local_storage.dart';
 
@@ -27,4 +28,8 @@ class PurchaseController extends BaseController {
   }
 
   onPurchaseClick(Purchase? purchase) {}
+
+  createPO() {
+    Get.toNamed(Routes.PURCHASE_CREATE);
+  }
 }

@@ -19,6 +19,8 @@ class Products {
     this.salesPrice,
     this.qty,
     this.quantity,
+    this.reOrder,
+    this.stock,
     this.salesCount,
     this.uom,
     this.qtyUom,
@@ -133,6 +135,8 @@ class Products {
   String? categoryName;
   num? costConverted;
   num? salesPriceConverted;
+  double? reOrder;
+  double? stock;
   dynamic deliveryOrderItemsId;
   dynamic deliveryOrderItemsName;
 

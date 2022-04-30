@@ -25,6 +25,13 @@ class PurchaseView extends GetView<PurchaseController> {
                 textColor: Colors.white,
               ),
             ),
+            floatingActionButton: FloatingActionButton.extended(
+                onPressed: () => controller.createPO(),
+                icon: const Icon(Icons.add),
+                label: CText(
+                  "Create PO",
+                  textColor: Colors.white,
+                )),
             body: BaseView(
               showLoading: controller.loading,
               child: controller.purchaseList.isEmpty == true

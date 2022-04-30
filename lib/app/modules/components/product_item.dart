@@ -1,6 +1,5 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:neiman_inventory/app/modules/components/rounded_button.dart';
 
 import '../../data/models/Products.dart';
 import '../../utils/colors.dart';
@@ -13,29 +12,18 @@ import 'load_image.dart';
 
 class ProductItem extends StatelessWidget {
   Products? products;
-  Products? cartProduct;
   Function(Products? products) onclick;
-  Function(Products? products) onAddtoCart;
-  Function(Products? products) onDeleteClick;
-  Function(Products? products) onIncrementClick;
-  Function(Products? products) onDecrementClick;
-  Function(Products? products) onPriceUpdate;
-  Function(Products? products) onQuantityUpdate;
-  int? index;
-  String? lastOrderDate;
+  Function(Products? products) onReorderUpdate;
+  Function(Products? products) onStockUpdate;
+  Function(Products? products) onSubmitUpdate;
 
-  ProductItem(
-      {required this.products,
-        required this.onclick,
-        required this.onAddtoCart,
-        required this.cartProduct,
-        required this.onDeleteClick,
-        required this.onIncrementClick,
-        required this.onDecrementClick,
-        required this.onPriceUpdate,
-        required this.onQuantityUpdate,
-        required this.lastOrderDate,
-        this.index});
+  ProductItem({
+    required this.products,
+    required this.onclick,
+    required this.onReorderUpdate,
+    required this.onStockUpdate,
+    required this.onSubmitUpdate,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -76,131 +64,57 @@ class ProductItem extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: Dimens.basePaddingNone),
-                    child: cartProduct != null
-                        ? Row(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Row(
                       children: [
                         Expanded(
                           child: TextField(
-                            // controller: controller.priceController,
+                            decoration: const InputDecoration(
+                              labelText: 'Reorder',
+                              border: OutlineInputBorder(),
+                            ),
                             textAlign: TextAlign.center,
-                            // keyboardType: TextInputType.number,
                             keyboardType: const TextInputType.numberWithOptions(
                                 signed: true, decimal: true),
                             textInputAction: TextInputAction.done,
-                            controller: TextEditingController(
-                                text:
-                                "${getSimpleFraction(value: "${cartProduct?.salesPrice}", fractionDigit: 2)}"),
                             onSubmitted: (value) {
                               if (value.isNotEmpty == true) {
-                                cartProduct?.salesPrice =
-                                    double.parse(value);
-                                onPriceUpdate(cartProduct);
-                              } else {
-                                cartProduct?.salesPrice =
-                                    cartProduct?.salesPriceConverted;
-                                onPriceUpdate(cartProduct);
+                                products?.reOrder = double.parse(value);
+                                onReorderUpdate(products);
                               }
                             },
                           ),
                         ),
-                        IconButton(
-                          onPressed: () => onDecrementClick(cartProduct),
-                          icon: const Icon(
-                            Icons.remove,
-                            color: Colors.black,
-                          ),
-                        ),
+                        const SizedBox(width: 10),
                         Expanded(
-                            child: CTextField(
-                              controller: TextEditingController(
-                                  text:
-                                  "${getSimpleFraction(value: "${cartProduct?.quantity}")}"),
-                              hintText: '1',
-                              onSubmitted: (value) {
-                                if (value?.isNotEmpty == true) {
-                                  cartProduct?.quantity =
-                                      double.parse("$value");
-                                  onQuantityUpdate(cartProduct);
-                                } else {
-                                  cartProduct?.quantity = 0;
-                                  onQuantityUpdate(cartProduct);
-                                }
-                              },
-                              textInputType: const TextInputType.numberWithOptions(
-                                  signed: true, decimal: true),
-                              inputAction: TextInputAction.done,
-                              textAlign: TextAlign.center,
-                              strokeColor: CustomColors.KPrimaryColor,
-                              strokeWidth: 1.5,
-                              radius: Dimens.radiusMin,
-                            )),
-                        IconButton(
-                          onPressed: () => onIncrementClick(cartProduct),
-                          icon: const Icon(
-                            Icons.add,
-                            color: Colors.black,
+                          child: TextField(
+                            decoration: const InputDecoration(
+                              labelText: 'Stocks',
+                              border: OutlineInputBorder(),
+                            ),
+                            textAlign: TextAlign.center,
+                            keyboardType: const TextInputType.numberWithOptions(
+                                signed: true, decimal: true),
+                            textInputAction: TextInputAction.done,
+                            onSubmitted: (value) {
+                              if (value.isNotEmpty == true) {
+                                products?.reOrder = double.parse(value);
+                                onReorderUpdate(products);
+                              }
+                            },
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () => onDeleteClick(products),
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Colors.red,
-                          ),
-                        ),
-                      ],
-                    )
-                        : Row(
-                      children: [
-                        CText(
-                          '\$  ${getSimpleFraction(value: "${products?.salesPrice}", fractionDigit: 2)}',
-                          fontWeight: FontWeight.bold,
-                        ),
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        ChipWidget(
-                          text: "Add to cart".toUpperCase(),
-                          radius: Dimens.radiusExtraLarge,
-                          backgroundColor: Colors.green,
-                          textColor: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          onClick: () => onAddtoCart(products),
-                          elevation: 0,
                         ),
                       ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: Dimens.basePaddingNone),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Container(
-                        //   width: 20,
-                        //   height: 20,
-                        //   decoration: BoxDecoration(
-                        //       shape: BoxShape.circle, color: Colors.red),
-                        // ),
-                        CText('${products?.itemNumber}'),
-                        // CText('SC : ${products?.salesCount}'),
-
-                        if (lastOrderDate != null)
-                          CText(
-                            getFormattedDate(lastOrderDate),
-                            fontSize: Dimens.textRegular,
-                            textColor: CustomColors.KPrimaryColor,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        const SizedBox(
-                          width: 1,
-                        )
-                      ],
-                    ),
-                  ),
+                    padding: const EdgeInsets.only(top: 12),
+                    child: CRoundedButton(
+                        onClick: () => onSubmitUpdate(products),
+                        text: "Submit",
+                        width: getMaxWidth(context),
+                        radius: Dimens.radiusNone),
+                  )
                 ],
               ),
             )
