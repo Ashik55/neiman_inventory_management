@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
+import 'package:neiman_inventory/app/data/remote/POResponse.dart';
 import 'package:neiman_inventory/app/modules/base/base_controller.dart';
+import 'package:neiman_inventory/app/modules/purchase/controllers/purchase_controller.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../api/repository/product_repository.dart';
@@ -14,7 +18,6 @@ import '../../../utils/toaster.dart';
 import '../../../utils/utility.dart';
 
 class PurchaseCreateController extends BaseController {
-
   LocalStorage localStorage = Get.find();
   ProductRepository productRepository = Get.find();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -33,7 +36,7 @@ class PurchaseCreateController extends BaseController {
   Future<void> loadInitialData() async {
     startLoading();
     productList = await productRepository.getLocalProducts();
-    if(productList.isNotEmpty) {
+    if (productList.isNotEmpty) {
       stopLoading();
     }
     productList = await productRepository.getProducts();
@@ -131,4 +134,20 @@ class PurchaseCreateController extends BaseController {
     Get.toNamed(Routes.PURCHASE);
   }
 
+  onPOSubmit(Products? products) async {
+    if (products?.reOrder != null && products?.stock != null) {
+      if (kDebugMode) {
+        print(json.encode(products));
+      }
+      PoResponse poResponse =
+          await productRepository.createPO(products: products);
+      if (poResponse != null) {
+        showMessageSnackbar(message: "Purchase Order Created Successfully");
+        PurchaseController purchaseController = Get.find();
+        purchaseController.onInit();
+      }
+    } else {
+      showMessageSnackbar(message: "Please add reorder & stock amount");
+    }
+  }
 }

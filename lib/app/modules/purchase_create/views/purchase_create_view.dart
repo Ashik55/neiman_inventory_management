@@ -81,12 +81,13 @@ class PurchaseCreateView extends GetView<PurchaseCreateController> {
                               shrinkWrap: true,
                               // physics: BouncingScrollPhysics(),
                               itemBuilder: (BuildContext context, int index) =>
-                                  ProductItem(
+                                  PurchaseProductItem(
                                 products: controller.productList[index],
                                 onclick: (Products? products) => controller
                                     .onProductClick(products: products),
                                 onStockUpdate: (Products? products) {},
-                                onReorderUpdate: (Products? products) {}, onSubmitUpdate: (Products? products) {  },
+                                onReorderUpdate: (Products? products) {},
+                                    onSubmitUpdate: (Products? products) => controller.onPOSubmit(products),
                               ),
                             )),
                 ],

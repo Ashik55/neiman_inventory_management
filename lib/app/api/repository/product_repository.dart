@@ -5,6 +5,7 @@ import 'package:neiman_inventory/app/data/models/Purchase.dart';
 
 import '../../data/models/Products.dart';
 import '../../data/models/UserModel.dart';
+import '../../data/remote/POResponse.dart';
 import '../../utils/utility.dart';
 import '../provider/api_provider.dart';
 
@@ -58,6 +59,13 @@ class ProductRepository extends GetxService {
   Future<List<Purchase>> getPurchaseList() async {
     return _apiProvider.getPurchaseList();
   }
+
+
+  Future<PoResponse> createPO({required Products? products}) async {
+    return _apiProvider.createPO(products: products);
+  }
+
+
 
 
 

@@ -10,14 +10,14 @@ import 'custom_textfield.dart';
 import 'custom_textwidget.dart';
 import 'load_image.dart';
 
-class ProductItem extends StatelessWidget {
+class PurchaseProductItem extends StatelessWidget {
   Products? products;
   Function(Products? products) onclick;
   Function(Products? products) onReorderUpdate;
   Function(Products? products) onStockUpdate;
   Function(Products? products) onSubmitUpdate;
 
-  ProductItem({
+  PurchaseProductItem({
     required this.products,
     required this.onclick,
     required this.onReorderUpdate,
@@ -77,10 +77,9 @@ class ProductItem extends StatelessWidget {
                             keyboardType: const TextInputType.numberWithOptions(
                                 signed: true, decimal: true),
                             textInputAction: TextInputAction.done,
-                            onSubmitted: (value) {
+                            onChanged: (value) {
                               if (value.isNotEmpty == true) {
                                 products?.reOrder = double.parse(value);
-                                onReorderUpdate(products);
                               }
                             },
                           ),
@@ -96,10 +95,10 @@ class ProductItem extends StatelessWidget {
                             keyboardType: const TextInputType.numberWithOptions(
                                 signed: true, decimal: true),
                             textInputAction: TextInputAction.done,
-                            onSubmitted: (value) {
+                            onChanged: (value) {
                               if (value.isNotEmpty == true) {
-                                products?.reOrder = double.parse(value);
-                                onReorderUpdate(products);
+                                products?.stock = double.parse(value);
+
                               }
                             },
                           ),
