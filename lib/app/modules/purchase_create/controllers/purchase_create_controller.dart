@@ -30,7 +30,7 @@ class PurchaseCreateController extends BaseController {
   @override
   void onInit() {
     super.onInit();
-    loadInitialData();
+    //loadInitialData();
   }
 
   Future<void> loadInitialData() async {

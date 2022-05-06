@@ -87,7 +87,10 @@ class PurchaseCreateView extends GetView<PurchaseCreateController> {
                                     .onProductClick(products: products),
                                 onStockUpdate: (Products? products) {},
                                 onReorderUpdate: (Products? products) {},
-                                    onSubmitUpdate: (Products? products) => controller.onPOSubmit(products),
+                                onSubmitUpdate: (Products? products) {
+                                  hideKeyboard();
+                                  controller.onPOSubmit(products);
+                                },
                               ),
                             )),
                 ],
