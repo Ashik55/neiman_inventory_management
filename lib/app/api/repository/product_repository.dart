@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/provider/localdb_provider.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
 
+import '../../data/models/DeliveryOrder.dart';
 import '../../data/models/Products.dart';
+import '../../data/models/SalesOrderItem.dart';
 import '../../data/models/UserModel.dart';
 import '../../data/remote/POResponse.dart';
 import '../../utils/utility.dart';
@@ -46,7 +48,6 @@ class ProductRepository extends GetxService {
     return _localDBProvider.getAllProducts();
   }
 
-
   Future<List<Products>> searchProduct({String? searchText}) async {
     return _localDBProvider.searchProduct(searchText: searchText);
   }
@@ -60,13 +61,17 @@ class ProductRepository extends GetxService {
     return _apiProvider.getPurchaseList();
   }
 
-
   Future<PoResponse> createPO({required Products? products}) async {
     return _apiProvider.createPO(products: products);
   }
 
+  Future<List<DeliveryOrder>> getDeliveryOrders() async {
+    return _apiProvider.getDeliveryOrders();
+  }
 
-
-
+  Future<List<SalesOrderItem>> getDeliveryDetails(
+      {required String? salesId}) async {
+    return _apiProvider.getDeliveryDetails(salesId: salesId);
+  }
 
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/repository/product_repository.dart';
 import 'package:neiman_inventory/app/data/models/UserModel.dart';
+import 'package:neiman_inventory/app/utils/utility.dart';
 
 import '../../../data/local_storage/local_storage.dart';
 import '../../../routes/app_pages.dart';
@@ -28,6 +29,7 @@ class LoginController extends BaseController {
   onLoginClick() async {
     if (userNameController.text.isNotEmpty &&
         passwordController.text.isNotEmpty) {
+      hideKeyboard();
       startLoading();
 
       _localStorage.setUserName(userNameController.text);
@@ -57,6 +59,4 @@ class LoginController extends BaseController {
       showMessageSnackbar(message: "Email & Password required");
     }
   }
-
-
 }

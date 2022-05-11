@@ -1,7 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/client/api_client.dart';
+import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
+import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
 import 'package:neiman_inventory/app/data/remote/POResponse.dart';
 
 import '../../data/models/Products.dart';
@@ -14,6 +16,8 @@ class ApiProvider extends GetxService {
   static const String _purchase = '/Purchase';
   static const String _login = '/App/user';
   static const String _purchaseItem = '/PurchaseItems';
+  static const String _deliveryOrders = '/DeliveryOrders';
+  // static const String _deliveryDetails = '/Sales/627a9cf6628dabd85/salesOrderItems';
 
   Future<UserModel?> loginNow() async {
     return apiClient.callGetApi(
@@ -60,6 +64,9 @@ class ApiProvider extends GetxService {
     );
   }
 
+
+
+
   Future<PoResponse> createPO({ required Products? products}) async {
     return apiClient.callPostApi(
       endpoint: _purchaseItem,
@@ -70,6 +77,34 @@ class ApiProvider extends GetxService {
       },
       builder: (data) {
         return PoResponse.fromJson(data);
+      },
+    );
+  }
+
+  Future<List<DeliveryOrder>> getDeliveryOrders() async {
+    return apiClient.callGetApi(
+      endpoint: _deliveryOrders,
+      builder: (data) {
+        List<DeliveryOrder> deliveryOrders = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          deliveryOrders.add(DeliveryOrder.fromJson(element));
+        }
+        return deliveryOrders;
+      },
+    );
+  }
+
+  Future<List<SalesOrderItem>> getDeliveryDetails({required String? salesId}) async {
+    return apiClient.callGetApi(
+      endpoint: "/Sales/$salesId/salesOrderItems",
+      builder: (data) {
+        List<SalesOrderItem> salesOrderItems = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          salesOrderItems.add(SalesOrderItem.fromJson(element));
+        }
+        return salesOrderItems;
       },
     );
   }

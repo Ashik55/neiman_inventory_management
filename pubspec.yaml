@@ -22,8 +22,7 @@ dependencies:
   flutter_barcode_scanner: 2.0.0
   collection: ^1.15.0
   permission_handler: 9.2.0
-
-
+  qr_code_scanner: 0.7.0
   flutter: 
     sdk: flutter
 
@@ -34,15 +33,13 @@ dev_dependencies:
   flutter_test: 
     sdk: flutter
 
-
-flutter_icons:
+flutter_icons: 
   image_path: assets/images/app_logo.jpg
   android: true
   ios: true
 
-
-flutter:
-  assets:
+flutter: 
+  assets: 
     - assets/
     - assets/images/
   uses-material-design: true

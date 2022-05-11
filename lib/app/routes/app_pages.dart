@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 
+import '../modules/delivery_details/bindings/delivery_details_binding.dart';
+import '../modules/delivery_details/views/delivery_details_view.dart';
+import '../modules/delivery_items/bindings/delivery_items_binding.dart';
+import '../modules/delivery_items/views/delivery_items_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/image_preview/bindings/image_preview_binding.dart';
@@ -50,6 +54,16 @@ class AppPages {
       name: _Paths.PURCHASE_CREATE,
       page: () => PurchaseCreateView(),
       binding: PurchaseCreateBinding(),
+    ),
+    GetPage(
+      name: _Paths.DELIVERY_ITEMS,
+      page: () => DeliveryItemsView(),
+      binding: DeliveryItemsBinding(),
+    ),
+    GetPage(
+      name: _Paths.DELIVERY_DETAILS,
+      page: () => DeliveryDetailsView(),
+      binding: DeliveryDetailsBinding(),
     ),
   ];
 }

@@ -56,7 +56,7 @@ class HomeView extends GetView<HomeController> {
                       children: [
                         const Spacer(),
                         CText(
-                          'Menus',
+                          'Inventory',
                           textColor: Colors.white,
                           fontSize: Dimens.textLargeDoubleExtra,
                         ),
@@ -67,6 +67,11 @@ class HomeView extends GetView<HomeController> {
                     leading: const Icon(Icons.restore_outlined),
                     title: CText('Purchase'),
                     onTap: () => controller.onPurchaseClick(),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.delivery_dining),
+                    title: CText('Delivery Orders'),
+                    onTap: () => controller.onDeliveryClick(),
                   ),
                   ListTile(
                     leading: const Icon(

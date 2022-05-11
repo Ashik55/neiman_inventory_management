@@ -129,4 +129,8 @@ class HomeController extends BaseController {
   onPurchaseClick() {
     Get.toNamed(Routes.PURCHASE);
   }
+
+  onDeliveryClick() {
+    Get.toNamed(Routes.DELIVERY_ITEMS);
+  }
 }
