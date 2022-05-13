@@ -60,7 +60,7 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                         Expanded(
                           flex: 5,
                           child: GridView.builder(
-                              itemCount: 10,
+                              itemCount: controller.salesOrderList.length,
                               // itemCount: controller.purchaseList.length,
                               physics: const BouncingScrollPhysics(),
                               padding: const EdgeInsets.symmetric(
@@ -84,9 +84,15 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                                   //       controller.onSalesItemClick(salesOrderItem),
                                   // ),
 
-                                  SalesDetailsItemView(
-                                    salesDetailsItem:
-                                        controller.salesOrderList[0],
+                                  InkWell(
+                                    onTap: ()=> controller.onItemClick(),
+                                    child: SalesDetailsItemView(
+                                      salesDetailsItem:
+                                          controller.salesOrderList[index],
+                                      allPacked: controller.isAllPacked(controller.salesOrderList[index]),
+
+
+                                    ),
                                   )),
                         ),
                       ],
@@ -95,119 +101,20 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
   }
 }
 
-class SalesItem extends StatelessWidget {
-  SalesOrderItem? salesOrderItem;
-  Function(SalesOrderItem? salesOrderItem) onClick;
 
-  SalesItem({required this.salesOrderItem, required this.onClick});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Dimens.radiusMin),
-      ),
-      child: InkWell(
-        onTap: () => onClick(salesOrderItem),
-        child: Padding(
-          padding: const EdgeInsets.only(
-              top: 6,
-              bottom: Dimens.basePaddingNone,
-              left: Dimens.basePadding,
-              right: Dimens.basePadding),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(2),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: CText(
-                        'Name',
-                        textColor: CustomColors.KPrimaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Dimens.textMid,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: CText(
-                        ': ${salesOrderItem?.name}',
-                        // ': ${deliveryOrder?.name ?? "Not available"}',
-                        textColor: CustomColors.KPrimaryColor,
-                        fontSize: Dimens.textMid,
-                        maxLines: 2,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(2),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: CText(
-                        'Quantity ',
-                        textColor: CustomColors.KPrimaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Dimens.textMid,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: CText(
-                        ': ${salesOrderItem?.qty}',
-                        textColor: CustomColors.KPrimaryColor,
-                        fontSize: Dimens.textMid,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(2),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: CText(
-                        'Date',
-                        textColor: CustomColors.KPrimaryColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: Dimens.textMid,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: CText(
-                        ': ${getFormattedDate(salesOrderItem?.createdAt)}',
-                        textColor: CustomColors.KPrimaryColor,
-                        fontSize: Dimens.textMid,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class SalesDetailsItemView extends StatelessWidget {
   SalesOrderItem? salesDetailsItem;
+  bool? allPacked;
 
-  SalesDetailsItemView({required this.salesDetailsItem});
+  SalesDetailsItemView({required this.salesDetailsItem, required this.allPacked});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       elevation: 0,
       clipBehavior: Clip.antiAlias,
+      color: allPacked == true ? Colors.green.shade100 : Colors.yellow.shade100,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Dimens.radiusMin),
       ),

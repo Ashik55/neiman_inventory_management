@@ -27,6 +27,7 @@ class DeliveryDetailsController extends BaseController {
   final ProductRepository _productRepository = Get.find();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   List<SalesOrderItem> salesOrderList = [];
+  List<String> scannedBarcodes = [];
   DeliveryOrder? deliveryOrder;
   bool showBarcode = false;
 
@@ -60,8 +61,37 @@ class DeliveryDetailsController extends BaseController {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
       result = scanData;
+
+      if (result != null) {
+        controller.pauseCamera();
+        showBarcode = false;
+        scannedBarcodes.add("${result?.code}");
+        update();
+      }
+
       showMessageSnackbar(message: "Result : ${result?.code}");
       update();
     });
+
+    if (kDebugMode) {
+      print(scannedBarcodes);
+    }
+  }
+
+  bool isAllPacked(SalesOrderItem salesOrderList) {
+    int qty = salesOrderList.qty ?? 1;
+    String barcode = "${salesOrderList.barcode}";
+    int scannedCount = 0;
+    for (var element in scannedBarcodes) {
+      if (element == barcode) scannedCount++;
+    }
+
+    return scannedCount >= qty;
+  }
+
+  onItemClick() {
+    if (kDebugMode) {
+      print(scannedBarcodes);
+    }
   }
 }

@@ -1,34 +1,36 @@
 class SalesOrderItem {
   SalesOrderItem({
-      this.id, 
-      this.name, 
-      this.deleted, 
-      this.description, 
-      this.createdAt, 
-      this.modifiedAt, 
-      this.qty, 
-      this.delivered, 
-      this.unitPrice, 
-      this.totalPrice, 
-      this.qbProductId, 
-      this.done, 
-      this.packingOrder, 
-      this.unitPriceCurrency, 
-      this.totalPriceCurrency, 
-      this.createdById, 
-      this.createdByName, 
-      this.modifiedById, 
-      this.modifiedByName, 
-      this.assignedUserId, 
-      this.assignedUserName, 
-      this.unitPriceConverted, 
-      this.totalPriceConverted, 
-      this.productId, 
-      this.productName, 
-      this.salesId, 
-      this.salesName, 
-      this.accountId, 
-      this.accountName,});
+    this.id,
+    this.name,
+    this.deleted,
+    this.description,
+    this.createdAt,
+    this.modifiedAt,
+    this.qty,
+    this.delivered,
+    this.unitPrice,
+    this.totalPrice,
+    this.qbProductId,
+    this.done,
+    this.packingOrder,
+    this.unitPriceCurrency,
+    this.totalPriceCurrency,
+    this.createdById,
+    this.createdByName,
+    this.modifiedById,
+    this.barcode,
+    this.modifiedByName,
+    this.assignedUserId,
+    this.assignedUserName,
+    this.unitPriceConverted,
+    this.totalPriceConverted,
+    this.productId,
+    this.productName,
+    this.salesId,
+    this.salesName,
+    this.accountId,
+    this.accountName,
+  });
 
   SalesOrderItem.fromJson(dynamic json) {
     id = json['id'];
@@ -43,6 +45,7 @@ class SalesOrderItem {
     totalPrice = json['totalPrice'];
     qbProductId = json['qbProductId'];
     done = json['done'];
+    barcode = json['barcode'];
     packingOrder = json['packingOrder'];
     unitPriceCurrency = json['unitPriceCurrency'];
     totalPriceCurrency = json['totalPriceCurrency'];
@@ -61,6 +64,7 @@ class SalesOrderItem {
     accountId = json['accountId'];
     accountName = json['accountName'];
   }
+
   String? id;
   String? name;
   bool? deleted;
@@ -74,6 +78,7 @@ class SalesOrderItem {
   String? qbProductId;
   bool? done;
   String? packingOrder;
+  String? barcode;
   String? unitPriceCurrency;
   String? totalPriceCurrency;
   String? createdById;
@@ -124,5 +129,4 @@ class SalesOrderItem {
     map['accountName'] = accountName;
     return map;
   }
-
 }
