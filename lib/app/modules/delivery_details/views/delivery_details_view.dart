@@ -36,17 +36,10 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                     imagePath: 'images/barcode.png',
                     imageColor: Colors.white,
                   ),
-                  onPressed: () => controller.openBarCodeScanner(),
+                  onPressed: () => controller.enableBarcodeView(),
                 ),
               ],
             ),
-            // floatingActionButton: FloatingActionButton.extended(
-            //     onPressed: () => controller.createPO(),
-            //     icon: const Icon(Icons.add),
-            //     label: CText(
-            //       "Create PO",
-            //       textColor: Colors.white,
-            //     )),
             body: BaseView(
               showLoading: controller.loading,
               child: controller.salesOrderList.isEmpty == true
@@ -56,13 +49,14 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                     )
                   : Column(
                       children: [
-                        Expanded(
-                          flex: 2,
-                          child: QRView(
-                            key: controller.qrKey,
-                            onQRViewCreated: controller.onQRViewCreated,
+                        if (controller.showBarcode)
+                          Expanded(
+                            flex: 2,
+                            child: QRView(
+                              key: controller.qrKey,
+                              onQRViewCreated: controller.onQRViewCreated,
+                            ),
                           ),
-                        ),
                         Expanded(
                           flex: 5,
                           child: GridView.builder(

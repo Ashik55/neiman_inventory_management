@@ -28,6 +28,7 @@ class DeliveryDetailsController extends BaseController {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   List<SalesOrderItem> salesOrderList = [];
   DeliveryOrder? deliveryOrder;
+  bool showBarcode = false;
 
   @override
   void onInit() {
@@ -50,32 +51,9 @@ class DeliveryDetailsController extends BaseController {
 
   onSalesItemClick(SalesOrderItem? salesOrderItem) {}
 
-  Future<void> openBarCodeScanner() async {
-    if (await Permission.camera.request().isGranted) {
-      if (kDebugMode) {
-        print('open scanner');
-      }
-      String barcodeScanResult;
-      // Platform messages may fail, so we use a try/catch PlatformException.
-      try {
-        barcodeScanResult = await FlutterBarcodeScanner.scanBarcode(
-            '#ff6666', 'Cancel', true, ScanMode.BARCODE);
-      } on PlatformException {
-        barcodeScanResult = 'Failed to get platform version.';
-      }
-
-      if (kDebugMode) {
-        print(barcodeScanResult);
-      }
-
-      if (barcodeScanResult.trim() != "-1") {
-        // barcodeScanResult;
-        // update();
-        showMessageSnackbar(message: barcodeScanResult);
-      }
-    } else {
-      showMessageSnackbar(message: "Permission failed");
-    }
+  enableBarcodeView() async {
+    showBarcode = true;
+    update();
   }
 
   void onQRViewCreated(QRViewController controller) {
@@ -86,5 +64,4 @@ class DeliveryDetailsController extends BaseController {
       update();
     });
   }
-
 }
