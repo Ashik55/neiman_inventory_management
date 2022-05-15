@@ -57,7 +57,7 @@ class DeliveryItemsView extends GetView<DeliveryItemsController> {
                                   : 4.35),
                       itemBuilder: (BuildContext context, int index) =>
                           DeliveryItem(
-                        deliveryOrder: controller.deliveryOrdersList[0],
+                        deliveryOrder: controller.deliveryOrdersList[index],
                         onClick: (DeliveryOrder? deliveryOrder) =>
                             controller.onDeliveryItemClick(deliveryOrder),
                       ),

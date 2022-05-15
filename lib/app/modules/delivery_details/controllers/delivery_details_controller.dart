@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -12,6 +13,7 @@ import '../../../data/local_storage/local_storage.dart';
 import '../../../data/models/DeliveryOrder.dart';
 import '../../../data/remote/DeliverOrderStatusUpdateResponse.dart';
 import '../../../utils/toaster.dart';
+import '../../delivery_items/controllers/delivery_items_controller.dart';
 
 // Start = Started Packing
 // Done = Ready Delivery
@@ -72,6 +74,11 @@ class DeliveryDetailsController extends BaseController {
         showBarcode = false;
         scannedBarcodes.add("${result?.code}");
         update();
+
+        Timer(const Duration(seconds: 3), () {
+          controller.resumeCamera();
+          enableBarcodeView();
+        });
       }
 
       showMessageSnackbar(message: "Result : ${result?.code}");
@@ -84,7 +91,7 @@ class DeliveryDetailsController extends BaseController {
   }
 
   bool isAllPacked(SalesOrderItem salesOrderList) {
-    int qty = salesOrderList.qty ?? 1;
+    int qty = salesOrderList.qty?.toInt() ?? 1;
     String barcode = "${salesOrderList.barcode}";
     int scannedCount = 0;
     for (var element in scannedBarcodes) {
@@ -105,6 +112,9 @@ class DeliveryDetailsController extends BaseController {
     DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
         await _productRepository.updateDeliveryStatus(
             orderID: deliveryOrder?.id, orderStatus: donePacking);
+
+    await checkOrderStatus();
+
     showMessageSnackbar(message: "${deliverOrderStatusUpdateResponse.status}");
     stopLoading();
   }
@@ -114,6 +124,9 @@ class DeliveryDetailsController extends BaseController {
     DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
         await _productRepository.updateDeliveryStatus(
             orderID: deliveryOrder?.id, orderStatus: holdPacking);
+
+    await checkOrderStatus();
+
     showMessageSnackbar(message: "${deliverOrderStatusUpdateResponse.status}");
     stopLoading();
   }
@@ -124,7 +137,23 @@ class DeliveryDetailsController extends BaseController {
         await _productRepository.updateDeliveryStatus(
             orderID: deliveryOrder?.id, orderStatus: startPacking);
 
+    await checkOrderStatus();
+
     showMessageSnackbar(message: "${deliverOrderStatusUpdateResponse.status}");
     stopLoading();
+  }
+
+  checkOrderStatus() async {
+    deliveryOrder =
+        await _productRepository.getDeliveryOrder(orderID: deliveryOrder?.id);
+
+    if (kDebugMode) {
+      print(deliveryOrder?.status);
+      print(deliveryOrder?.status == startPacking);
+    }
+    update();
+
+    DeliveryItemsController deliveryItemsController = Get.find();
+    await deliveryItemsController.getDeliveryOrderList();
   }
 }

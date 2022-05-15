@@ -96,9 +96,9 @@ class ApiProvider extends GetxService {
 
   Future<DeliveryOrder> getDeliveryOrder({required String? orderID}) async {
     return apiClient.callGET(
-      endpoint: _deliveryOrders,
+      endpoint: _deliveryOrders+"/$orderID",
       builder: (data) {
-        DeliveryOrder deliveryOrder = DeliveryOrder.fromJson(data)
+        DeliveryOrder deliveryOrder = DeliveryOrder.fromJson(data);
         return deliveryOrder;
       },
     );
@@ -126,7 +126,7 @@ class ApiProvider extends GetxService {
       body: {"status": orderStatus},
       builder: (data) {
         DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
-        DeliverOrderStatusUpdateResponse.fromJson(data);
+            DeliverOrderStatusUpdateResponse.fromJson(data);
         return deliverOrderStatusUpdateResponse;
       },
     );

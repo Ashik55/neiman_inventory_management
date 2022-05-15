@@ -71,7 +71,7 @@ class SalesOrderItem {
   dynamic description;
   String? createdAt;
   String? modifiedAt;
-  int? qty;
+  num? qty;
   int? delivered;
   num? unitPrice;
   num? totalPrice;

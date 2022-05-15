@@ -8,6 +8,7 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';
+import '../../components/chip_widget.dart';
 import '../../components/custom_textwidget.dart';
 import '../../components/load_image.dart';
 import '../../components/rounded_button.dart';
@@ -28,6 +29,21 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                 textColor: Colors.white,
               ),
               actions: [
+/*                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+
+                      ChipWidget(
+                        text: controller.deliveryOrder?.status,
+                        radius: Dimens.radiusExtraLarge,
+                        backgroundColor: CustomColors.KPrimaryColorLite1,
+                        textColor: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        elevation: 0,
+                      ),
+                  ],
+                ),*/
+
                 IconButton(
                   icon: CAssetImage(
                     imagePath: 'images/barcode.png',
@@ -46,15 +62,30 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                     )
                   : Column(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(Dimens.basePadding),
-                          child: CRoundedButton(
-                              onClick: () => controller.onStartPacking(),
-                              text: "Start Packing",
-                              backgroundColor: Colors.green,
-                              width: getMaxWidth(context),
-                              radius: Dimens.radiusNone),
-                        ),
+                        if (controller.deliveryOrder?.status ==
+                                controller.awaitPacking ||
+                            controller.deliveryOrder?.status ==
+                                controller.holdPacking)
+                          Padding(
+                            padding: const EdgeInsets.all(Dimens.basePadding),
+                            child: CRoundedButton(
+                                onClick: () => controller.onStartPacking(),
+                                text: "Start Packing",
+                                backgroundColor: Colors.green,
+                                width: getMaxWidth(context),
+                                radius: Dimens.radiusNone),
+                          ),
+                        if (controller.deliveryOrder?.status ==
+                            controller.startPacking)
+                          Padding(
+                            padding: const EdgeInsets.all(Dimens.basePadding),
+                            child: CRoundedButton(
+                                onClick: () => controller.onHoldPacking(),
+                                text: "Hold Packing",
+                                backgroundColor: Colors.red,
+                                width: getMaxWidth(context),
+                                radius: Dimens.radiusNone),
+                          ),
                         if (controller.showBarcode)
                           Expanded(
                             flex: 2,

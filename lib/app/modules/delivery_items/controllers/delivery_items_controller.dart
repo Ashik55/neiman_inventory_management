@@ -20,7 +20,7 @@ class DeliveryItemsController extends BaseController {
     getDeliveryOrderList();
   }
 
-  void getDeliveryOrderList() async {
+   getDeliveryOrderList() async {
     startLoading();
     deliveryOrdersList = await _productRepository.getDeliveryOrders();
     stopLoading();
