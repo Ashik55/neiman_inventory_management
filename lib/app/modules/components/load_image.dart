@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -59,9 +58,9 @@ class PlaceholderImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
         height: height,
-        child: Icon(
+        child: const Icon(
           Icons.image_outlined,
           size: 30,
           color: Colors.grey,

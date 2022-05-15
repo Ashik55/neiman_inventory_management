@@ -12,7 +12,7 @@ class CProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Container(
+        child: SizedBox(
             height: size ?? 25.0,
             width: size ?? 25.0,
             child: Platform.isIOS

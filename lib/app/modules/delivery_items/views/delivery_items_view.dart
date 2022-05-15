@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:get/get.dart';
 import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
 import 'package:neiman_inventory/app/modules/base/base_view.dart';
 
-import '../../../data/models/Purchase.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';

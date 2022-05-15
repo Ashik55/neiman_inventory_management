@@ -11,8 +11,6 @@ import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';
 import '../../components/custom_textwidget.dart';
 import '../../components/id_selectable_chip.dart';
-import '../../components/product_item.dart';
-import '../../components/rounded_button.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {

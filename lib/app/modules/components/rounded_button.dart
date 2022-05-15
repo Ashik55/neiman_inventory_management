@@ -29,7 +29,7 @@ class CRoundedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: height ?? Dimens.buttonRegular,
       width: width,
       child: ElevatedButton(

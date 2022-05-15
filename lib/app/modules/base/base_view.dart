@@ -2,12 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:get/get.dart';
 
-import '../../utils/dimens.dart';
 import '../../utils/utility.dart';
-import '../components/custom_textwidget.dart';
-import '../components/load_image.dart';
 import '../components/progress_bar.dart';
 
 

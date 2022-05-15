@@ -1,19 +1,16 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:get/get.dart';
-import 'package:get/get.dart';
-import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
 import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
 import 'package:neiman_inventory/app/modules/base/base_view.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-import '../../../data/models/Purchase.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';
 import '../../components/custom_textwidget.dart';
 import '../../components/load_image.dart';
+import '../../components/rounded_button.dart';
 import '../../home/views/home_view.dart';
 import '../controllers/delivery_details_controller.dart';
 
@@ -49,6 +46,15 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                     )
                   : Column(
                       children: [
+                        Padding(
+                          padding: const EdgeInsets.all(Dimens.basePadding),
+                          child: CRoundedButton(
+                              onClick: () => controller.onStartPacking(),
+                              text: "Start Packing",
+                              backgroundColor: Colors.green,
+                              width: getMaxWidth(context),
+                              radius: Dimens.radiusNone),
+                        ),
                         if (controller.showBarcode)
                           Expanded(
                             flex: 2,
@@ -61,7 +67,6 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                           flex: 5,
                           child: GridView.builder(
                               itemCount: controller.salesOrderList.length,
-                              // itemCount: controller.purchaseList.length,
                               physics: const BouncingScrollPhysics(),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: Dimens.basePaddingNone),
@@ -85,29 +90,35 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                                   // ),
 
                                   InkWell(
-                                    onTap: ()=> controller.onItemClick(),
+                                    onTap: () => controller.onItemClick(),
                                     child: SalesDetailsItemView(
                                       salesDetailsItem:
                                           controller.salesOrderList[index],
-                                      allPacked: controller.isAllPacked(controller.salesOrderList[index]),
-
-
+                                      allPacked: controller.isAllPacked(
+                                          controller.salesOrderList[index]),
                                     ),
                                   )),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.all(Dimens.basePadding),
+                          child: CRoundedButton(
+                              onClick: () => controller.onDonePacking(),
+                              text: "Done",
+                              width: getMaxWidth(context),
+                              radius: Dimens.radiusNone),
+                        )
                       ],
                     ),
             )));
   }
 }
 
-
-
 class SalesDetailsItemView extends StatelessWidget {
   SalesOrderItem? salesDetailsItem;
   bool? allPacked;
 
-  SalesDetailsItemView({required this.salesDetailsItem, required this.allPacked});
+  SalesDetailsItemView(
+      {required this.salesDetailsItem, required this.allPacked});
 
   @override
   Widget build(BuildContext context) {
@@ -134,7 +145,7 @@ class SalesDetailsItemView extends StatelessWidget {
                 maxLines: 2,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 6,
             ),
             Padding(

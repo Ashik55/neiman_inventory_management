@@ -7,7 +7,6 @@ import '../../../data/models/Products.dart';
 import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';
 import '../../components/custom_textwidget.dart';
-import '../../components/grid_product_item.dart';
 import '../../components/load_image.dart';
 import '../../components/product_item.dart';
 import '../../home/views/home_view.dart';

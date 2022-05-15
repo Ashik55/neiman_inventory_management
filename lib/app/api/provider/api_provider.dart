@@ -4,6 +4,7 @@ import 'package:neiman_inventory/app/api/client/api_client.dart';
 import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
+import 'package:neiman_inventory/app/data/remote/DeliverOrderStatusUpdateResponse.dart';
 import 'package:neiman_inventory/app/data/remote/POResponse.dart';
 
 import '../../data/models/Products.dart';
@@ -17,10 +18,11 @@ class ApiProvider extends GetxService {
   static const String _login = '/App/user';
   static const String _purchaseItem = '/PurchaseItems';
   static const String _deliveryOrders = '/DeliveryOrders';
+
   // static const String _deliveryDetails = '/Sales/627a9cf6628dabd85/salesOrderItems';
 
   Future<UserModel?> loginNow() async {
-    return apiClient.callGetApi(
+    return apiClient.callGET(
       endpoint: _login,
       builder: (data) {
         if (kDebugMode) {
@@ -32,7 +34,7 @@ class ApiProvider extends GetxService {
   }
 
   Future<List<Products>> getProductsList() async {
-    return apiClient.callGetApi(
+    return apiClient.callGET(
       endpoint: _product,
       // params: {
       //   "where[0][type]": "in",
@@ -51,7 +53,7 @@ class ApiProvider extends GetxService {
   }
 
   Future<List<Purchase>> getPurchaseList() async {
-    return apiClient.callGetApi(
+    return apiClient.callGET(
       endpoint: _purchase,
       builder: (data) {
         List<Purchase> purchaseList = [];
@@ -64,16 +66,13 @@ class ApiProvider extends GetxService {
     );
   }
 
-
-
-
-  Future<PoResponse> createPO({ required Products? products}) async {
-    return apiClient.callPostApi(
+  Future<PoResponse> createPO({required Products? products}) async {
+    return apiClient.callPOST(
       endpoint: _purchaseItem,
       body: {
-        "productId" : products?.id,
-        "qty" : products?.reOrder,
-        "qtyStock" : products?.stock,
+        "productId": products?.id,
+        "qty": products?.reOrder,
+        "qtyStock": products?.stock,
       },
       builder: (data) {
         return PoResponse.fromJson(data);
@@ -82,7 +81,7 @@ class ApiProvider extends GetxService {
   }
 
   Future<List<DeliveryOrder>> getDeliveryOrders() async {
-    return apiClient.callGetApi(
+    return apiClient.callGET(
       endpoint: _deliveryOrders,
       builder: (data) {
         List<DeliveryOrder> deliveryOrders = [];
@@ -95,8 +94,19 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<List<SalesOrderItem>> getDeliveryDetails({required String? salesId}) async {
-    return apiClient.callGetApi(
+  Future<DeliveryOrder> getDeliveryOrder({required String? orderID}) async {
+    return apiClient.callGET(
+      endpoint: _deliveryOrders,
+      builder: (data) {
+        DeliveryOrder deliveryOrder = DeliveryOrder.fromJson(data)
+        return deliveryOrder;
+      },
+    );
+  }
+
+  Future<List<SalesOrderItem>> getDeliveryDetails(
+      {required String? salesId}) async {
+    return apiClient.callGET(
       endpoint: "/Sales/$salesId/salesOrderItems",
       builder: (data) {
         List<SalesOrderItem> salesOrderItems = [];
@@ -109,4 +119,16 @@ class ApiProvider extends GetxService {
     );
   }
 
+  Future<DeliverOrderStatusUpdateResponse> updateDeliveryStatus(
+      {required String? orderID, required String? orderStatus}) async {
+    return apiClient.callPUT(
+      endpoint: "/DeliveryOrders/$orderID",
+      body: {"status": orderStatus},
+      builder: (data) {
+        DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
+        DeliverOrderStatusUpdateResponse.fromJson(data);
+        return deliverOrderStatusUpdateResponse;
+      },
+    );
+  }
 }

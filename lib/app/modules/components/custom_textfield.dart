@@ -90,8 +90,8 @@ class CTextField extends StatelessWidget {
                   color: hintColor ?? Colors.grey.shade500,
                   fontSize: fontSize ?? Dimens.textRegular),
               contentPadding: textAlign != TextAlign.center
-                  ? EdgeInsets.only(left: 15, top: 12, bottom: 12)
-                  : EdgeInsets.only(left: 0, top: 12, bottom: 12),
+                  ? const EdgeInsets.only(left: 15, top: 12, bottom: 12)
+                  : const EdgeInsets.only(left: 0, top: 12, bottom: 12),
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                     color: strokeColor ?? CustomColors.KPrimaryColorLite,

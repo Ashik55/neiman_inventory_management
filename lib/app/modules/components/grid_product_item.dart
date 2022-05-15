@@ -4,8 +4,6 @@ import '../../data/models/Products.dart';
 import '../../utils/colors.dart';
 import '../../utils/dimens.dart';
 import '../../utils/utility.dart';
-import 'chip_widget.dart';
-import 'custom_textfield.dart';
 import 'custom_textwidget.dart';
 import 'load_image.dart';
 

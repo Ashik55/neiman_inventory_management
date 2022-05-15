@@ -27,11 +27,6 @@ class PurchaseCreateController extends BaseController {
   double totalPrice = 0;
   List<Products> productList = [];
 
-  @override
-  void onInit() {
-    super.onInit();
-    //loadInitialData();
-  }
 
   Future<void> loadInitialData() async {
     startLoading();
@@ -141,11 +136,9 @@ class PurchaseCreateController extends BaseController {
       }
       PoResponse poResponse =
           await productRepository.createPO(products: products);
-      if (poResponse != null) {
-        showMessageSnackbar(message: "Purchase Order Created Successfully");
-        PurchaseController purchaseController = Get.find();
-        purchaseController.onInit();
-      }
+      showMessageSnackbar(message: "Purchase Order Created Successfully");
+      PurchaseController purchaseController = Get.find();
+      purchaseController.onInit();
     } else {
       showMessageSnackbar(message: "Please add reorder & stock amount");
     }

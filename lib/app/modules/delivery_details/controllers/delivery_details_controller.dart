@@ -1,22 +1,21 @@
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/repository/product_repository.dart';
-import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
 import 'package:neiman_inventory/app/modules/base/base_controller.dart';
-import 'package:neiman_inventory/app/routes/app_pages.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../../data/local_storage/local_storage.dart';
 import '../../../data/models/DeliveryOrder.dart';
+import '../../../data/remote/DeliverOrderStatusUpdateResponse.dart';
 import '../../../utils/toaster.dart';
+
+// Start = Started Packing
+// Done = Ready Delivery
+// On Hold = On Hold
 
 class DeliveryDetailsController extends BaseController {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -30,6 +29,12 @@ class DeliveryDetailsController extends BaseController {
   List<String> scannedBarcodes = [];
   DeliveryOrder? deliveryOrder;
   bool showBarcode = false;
+
+  //orderStatus
+  String startPacking = "Started Packing";
+  String holdPacking = "On Hold";
+  String donePacking = "Ready Delivery";
+  String awaitPacking = "Awaiting Packing";
 
   @override
   void onInit() {
@@ -93,5 +98,33 @@ class DeliveryDetailsController extends BaseController {
     if (kDebugMode) {
       print(scannedBarcodes);
     }
+  }
+
+  onDonePacking() async {
+    startLoading();
+    DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
+        await _productRepository.updateDeliveryStatus(
+            orderID: deliveryOrder?.id, orderStatus: donePacking);
+    showMessageSnackbar(message: "${deliverOrderStatusUpdateResponse.status}");
+    stopLoading();
+  }
+
+  onHoldPacking() async {
+    startLoading();
+    DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
+        await _productRepository.updateDeliveryStatus(
+            orderID: deliveryOrder?.id, orderStatus: holdPacking);
+    showMessageSnackbar(message: "${deliverOrderStatusUpdateResponse.status}");
+    stopLoading();
+  }
+
+  onStartPacking() async {
+    startLoading();
+    DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
+        await _productRepository.updateDeliveryStatus(
+            orderID: deliveryOrder?.id, orderStatus: startPacking);
+
+    showMessageSnackbar(message: "${deliverOrderStatusUpdateResponse.status}");
+    stopLoading();
   }
 }

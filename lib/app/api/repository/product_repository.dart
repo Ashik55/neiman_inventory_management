@@ -7,6 +7,7 @@ import '../../data/models/DeliveryOrder.dart';
 import '../../data/models/Products.dart';
 import '../../data/models/SalesOrderItem.dart';
 import '../../data/models/UserModel.dart';
+import '../../data/remote/DeliverOrderStatusUpdateResponse.dart';
 import '../../data/remote/POResponse.dart';
 import '../../utils/utility.dart';
 import '../provider/api_provider.dart';
@@ -73,5 +74,16 @@ class ProductRepository extends GetxService {
       {required String? salesId}) async {
     return _apiProvider.getDeliveryDetails(salesId: salesId);
   }
+
+  Future<DeliverOrderStatusUpdateResponse> updateDeliveryStatus(
+      {required String? orderID, required String? orderStatus}) async {
+    return _apiProvider.updateDeliveryStatus(
+        orderID: orderID, orderStatus: orderStatus);
+  }
+
+  Future<DeliveryOrder> getDeliveryOrder({required String? orderID}) async {
+    return _apiProvider.getDeliveryOrder(orderID: orderID);
+  }
+
 
 }

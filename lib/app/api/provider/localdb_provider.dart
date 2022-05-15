@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:neiman_inventory/app/api/client/api_client.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../../data/models/Products.dart';
-import '../../data/models/UserModel.dart';
 import '../client/db_client.dart';
 
 class LocalDBProvider extends GetxService {

@@ -61,7 +61,7 @@ class ChipWidget extends StatelessWidget {
             children: [
               if (prefixWidget != null)
                 Padding(
-                    padding: EdgeInsets.only(right: 4), child: prefixWidget),
+                    padding: const EdgeInsets.only(right: 4), child: prefixWidget),
               CText(
                 text ?? "Brand New",
                 textColor: textColor,
@@ -71,7 +71,7 @@ class ChipWidget extends StatelessWidget {
                 maxLines: 1,
               ),
               if (suffixwidget != null)
-                Padding(padding: EdgeInsets.only(left: 4), child: suffixwidget),
+                Padding(padding: const EdgeInsets.only(left: 4), child: suffixwidget),
             ],
           ),
         ),

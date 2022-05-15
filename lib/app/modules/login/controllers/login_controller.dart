@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/repository/product_repository.dart';
-import 'package:neiman_inventory/app/data/models/UserModel.dart';
 import 'package:neiman_inventory/app/utils/utility.dart';
 
 import '../../../data/local_storage/local_storage.dart';
