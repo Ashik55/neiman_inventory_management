@@ -7,8 +7,7 @@ import 'package:neiman_inventory/app/routes/app_pages.dart';
 import '../../../data/local_storage/local_storage.dart';
 import '../../../data/models/DeliveryOrder.dart';
 
-
-class DeliveryItemsController extends BaseController {
+class DeliveryOrdersController extends BaseController {
   final LocalStorage _localStorage = Get.find();
   final ProductRepository _productRepository = Get.find();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -20,7 +19,7 @@ class DeliveryItemsController extends BaseController {
     getDeliveryOrderList();
   }
 
-   getDeliveryOrderList() async {
+  getDeliveryOrderList() async {
     startLoading();
     deliveryOrdersList = await _productRepository.getDeliveryOrders();
     stopLoading();
@@ -30,7 +29,4 @@ class DeliveryItemsController extends BaseController {
   onDeliveryItemClick(DeliveryOrder? deliveryOrder) {
     Get.toNamed(Routes.DELIVERY_DETAILS, arguments: {"data": deliveryOrder});
   }
-
-
-
 }

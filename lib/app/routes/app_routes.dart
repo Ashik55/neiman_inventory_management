@@ -9,8 +9,8 @@ abstract class Routes {
   static const IMAGE_PREVIEW = _Paths.IMAGE_PREVIEW;
   static const PURCHASE = _Paths.PURCHASE;
   static const PURCHASE_CREATE = _Paths.PURCHASE_CREATE;
-  static const DELIVERY_ITEMS = _Paths.DELIVERY_ITEMS;
   static const DELIVERY_DETAILS = _Paths.DELIVERY_DETAILS;
+  static const DELIVERY_ORDERS = _Paths.DELIVERY_ORDERS;
 }
 
 abstract class _Paths {
@@ -21,6 +21,6 @@ abstract class _Paths {
   static const IMAGE_PREVIEW = '/image-preview';
   static const PURCHASE = '/purchase';
   static const PURCHASE_CREATE = '/purchase-create';
-  static const DELIVERY_ITEMS = '/delivery-items';
   static const DELIVERY_DETAILS = '/delivery-details';
+  static const DELIVERY_ORDERS = '/delivery-orders';
 }

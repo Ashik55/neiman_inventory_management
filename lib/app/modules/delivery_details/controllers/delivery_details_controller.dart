@@ -7,13 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:neiman_inventory/app/api/repository/product_repository.dart';
 import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
 import 'package:neiman_inventory/app/modules/base/base_controller.dart';
+import 'package:neiman_inventory/app/modules/delivery_orders/controllers/delivery_orders_controller.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../../data/local_storage/local_storage.dart';
 import '../../../data/models/DeliveryOrder.dart';
 import '../../../data/remote/DeliverOrderStatusUpdateResponse.dart';
 import '../../../utils/toaster.dart';
-import '../../delivery_items/controllers/delivery_items_controller.dart';
+
 
 // Start = Started Packing
 // Done = Ready Delivery
@@ -153,7 +154,7 @@ class DeliveryDetailsController extends BaseController {
     }
     update();
 
-    DeliveryItemsController deliveryItemsController = Get.find();
-    await deliveryItemsController.getDeliveryOrderList();
+    DeliveryOrdersController deliveryOrdersController = Get.find();
+    await deliveryOrdersController.getDeliveryOrderList();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
 import 'package:neiman_inventory/app/modules/base/base_view.dart';
 
@@ -9,12 +10,12 @@ import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';
 import '../../components/custom_textwidget.dart';
 import '../../home/views/home_view.dart';
-import '../controllers/delivery_items_controller.dart';
+import '../controllers/delivery_orders_controller.dart';
 
-class DeliveryItemsView extends GetView<DeliveryItemsController> {
+class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DeliveryItemsController>(
+    return GetBuilder<DeliveryOrdersController>(
         builder: (controller) => Scaffold(
             key: controller.scaffoldKey,
             backgroundColor: Colors.grey.shade200,
@@ -36,32 +37,32 @@ class DeliveryItemsView extends GetView<DeliveryItemsController> {
               showLoading: controller.loading,
               child: controller.deliveryOrdersList.isEmpty == true
                   ? NoDataWidget(
-                      isLoading: controller.loading,
-                      dataName: "purchase",
-                    )
+                isLoading: controller.loading,
+                dataName: "purchase",
+              )
                   : GridView.builder(
-                      itemCount: 10,
-                      // itemCount: controller.purchaseList.length,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: Dimens.basePaddingNone),
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount:
-                              getOrientation(context) == Orientation.portrait
-                                  ? 1
-                                  : 2,
-                          childAspectRatio:
-                              getOrientation(context) == Orientation.portrait
-                                  ? 4.5
-                                  : 4.35),
-                      itemBuilder: (BuildContext context, int index) =>
-                          DeliveryItem(
-                        deliveryOrder: controller.deliveryOrdersList[index],
-                        onClick: (DeliveryOrder? deliveryOrder) =>
-                            controller.onDeliveryItemClick(deliveryOrder),
-                      ),
+                itemCount: 10,
+                // itemCount: controller.purchaseList.length,
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Dimens.basePaddingNone),
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount:
+                    getOrientation(context) == Orientation.portrait
+                        ? 1
+                        : 2,
+                    childAspectRatio:
+                    getOrientation(context) == Orientation.portrait
+                        ? 4.5
+                        : 4.35),
+                itemBuilder: (BuildContext context, int index) =>
+                    DeliveryItem(
+                      deliveryOrder: controller.deliveryOrdersList[index],
+                      onClick: (DeliveryOrder? deliveryOrder) =>
+                          controller.onDeliveryItemClick(deliveryOrder),
                     ),
+              ),
             )));
   }
 }
