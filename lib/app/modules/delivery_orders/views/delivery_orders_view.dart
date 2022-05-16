@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-
-import 'package:get/get.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
 import 'package:neiman_inventory/app/modules/base/base_view.dart';
-
+import 'package:neiman_inventory/app/utils/inventory_utility.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';
@@ -55,8 +53,8 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
                                   : 2,
                           childAspectRatio:
                               getOrientation(context) == Orientation.portrait
-                                  ? 4.5
-                                  : 4.35),
+                                  ? 4.0
+                                  : 4.0),
                       itemBuilder: (BuildContext context, int index) =>
                           DeliveryItem(
                         deliveryOrder: controller.deliveryOrdersList[index],
@@ -101,7 +99,7 @@ class DeliveryItem extends StatelessWidget {
                         'Name',
                         textColor: CustomColors.KPrimaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: Dimens.textMid,
+                        fontSize: Dimens.textRegular,
                       ),
                     ),
                     Expanded(
@@ -109,7 +107,7 @@ class DeliveryItem extends StatelessWidget {
                       child: CText(
                         ': ${deliveryOrder?.salesName}',
                         textColor: CustomColors.KPrimaryColor,
-                        fontSize: Dimens.textMid,
+                        fontSize: Dimens.textRegular,
                         maxLines: 2,
                       ),
                     )
@@ -125,15 +123,16 @@ class DeliveryItem extends StatelessWidget {
                         'Status ',
                         textColor: CustomColors.KPrimaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: Dimens.textMid,
+                        fontSize: Dimens.textRegular,
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: CText(
                         ': ${deliveryOrder?.status}',
-                        textColor: CustomColors.KPrimaryColor,
-                        fontSize: Dimens.textMid,
+                        textColor: getColorByStatus(status: deliveryOrder?.status),
+                        fontSize: Dimens.textRegular,
+                        fontWeight: FontWeight.bold,
                       ),
                     )
                   ],
@@ -148,7 +147,7 @@ class DeliveryItem extends StatelessWidget {
                         'Date',
                         textColor: CustomColors.KPrimaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: Dimens.textMid,
+                        fontSize: Dimens.textRegular,
                       ),
                     ),
                     Expanded(
@@ -156,7 +155,7 @@ class DeliveryItem extends StatelessWidget {
                       child: CText(
                         ': ${getFormattedDate(deliveryOrder?.createdAt)}',
                         textColor: CustomColors.KPrimaryColor,
-                        fontSize: Dimens.textMid,
+                        fontSize: Dimens.textRegular,
                       ),
                     )
                   ],

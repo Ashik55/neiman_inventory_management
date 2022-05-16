@@ -29,4 +29,8 @@ class DeliveryOrdersController extends BaseController {
   onDeliveryItemClick(DeliveryOrder? deliveryOrder) {
     Get.toNamed(Routes.DELIVERY_DETAILS, arguments: {"data": deliveryOrder});
   }
+
+
+
+
 }
