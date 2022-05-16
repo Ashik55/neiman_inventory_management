@@ -37,32 +37,33 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
               showLoading: controller.loading,
               child: controller.deliveryOrdersList.isEmpty == true
                   ? NoDataWidget(
-                isLoading: controller.loading,
-                dataName: "purchase",
-              )
+                      isLoading: controller.loading,
+                      dataName: "purchase",
+                    )
                   : GridView.builder(
-                itemCount: 10,
-                // itemCount: controller.purchaseList.length,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Dimens.basePaddingNone),
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount:
-                    getOrientation(context) == Orientation.portrait
-                        ? 1
-                        : 2,
-                    childAspectRatio:
-                    getOrientation(context) == Orientation.portrait
-                        ? 4.5
-                        : 4.35),
-                itemBuilder: (BuildContext context, int index) =>
-                    DeliveryItem(
-                      deliveryOrder: controller.deliveryOrdersList[index],
-                      onClick: (DeliveryOrder? deliveryOrder) =>
-                          controller.onDeliveryItemClick(deliveryOrder),
+                      itemCount: 10,
+                      // itemCount: controller.purchaseList.length,
+                      physics: const BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Dimens.basePaddingNone,
+                          vertical: Dimens.basePaddingNone),
+                      shrinkWrap: true,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount:
+                              getOrientation(context) == Orientation.portrait
+                                  ? 1
+                                  : 2,
+                          childAspectRatio:
+                              getOrientation(context) == Orientation.portrait
+                                  ? 4.5
+                                  : 4.35),
+                      itemBuilder: (BuildContext context, int index) =>
+                          DeliveryItem(
+                        deliveryOrder: controller.deliveryOrdersList[index],
+                        onClick: (DeliveryOrder? deliveryOrder) =>
+                            controller.onDeliveryItemClick(deliveryOrder),
+                      ),
                     ),
-              ),
             )));
   }
 }
@@ -106,8 +107,7 @@ class DeliveryItem extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: CText(
-                        ': ${deliveryOrder?.name}',
-                        // ': ${deliveryOrder?.name ?? "Not available"}',
+                        ': ${deliveryOrder?.salesName}',
                         textColor: CustomColors.KPrimaryColor,
                         fontSize: Dimens.textMid,
                         maxLines: 2,
