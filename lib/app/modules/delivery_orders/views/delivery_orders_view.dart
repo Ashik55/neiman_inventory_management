@@ -39,8 +39,7 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
                       dataName: "purchase",
                     )
                   : GridView.builder(
-                      itemCount: 10,
-                      // itemCount: controller.purchaseList.length,
+                      itemCount: controller.deliveryOrdersList.length,
                       physics: const BouncingScrollPhysics(),
                       padding: const EdgeInsets.symmetric(horizontal: Dimens.basePaddingNone,
                           vertical: Dimens.basePaddingNone),
