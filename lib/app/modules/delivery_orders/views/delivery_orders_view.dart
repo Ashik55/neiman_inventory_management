@@ -42,8 +42,7 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
                       itemCount: 10,
                       // itemCount: controller.purchaseList.length,
                       physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: Dimens.basePaddingNone,
+                      padding: const EdgeInsets.symmetric(horizontal: Dimens.basePaddingNone,
                           vertical: Dimens.basePaddingNone),
                       shrinkWrap: true,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(

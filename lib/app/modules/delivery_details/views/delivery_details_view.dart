@@ -127,6 +127,8 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                                           controller.salesOrderList[index],
                                       allPacked: controller.isAllPacked(
                                           controller.salesOrderList[index]),
+                                      qtyPacked: controller.packedItem(
+                                          controller.salesOrderList[index]),
                                     ),
                                   )),
                         ),
@@ -147,9 +149,12 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
 class SalesDetailsItemView extends StatelessWidget {
   SalesOrderItem? salesDetailsItem;
   bool? allPacked;
+  int? qtyPacked;
 
   SalesDetailsItemView(
-      {required this.salesDetailsItem, required this.allPacked});
+      {required this.salesDetailsItem,
+      required this.allPacked,
+      required this.qtyPacked});
 
   @override
   Widget build(BuildContext context) {
@@ -185,12 +190,12 @@ class SalesDetailsItemView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CText(
-                    'Quantity : ${salesDetailsItem?.qty}',
+                    'QTY Ordered : ${salesDetailsItem?.qty}',
                     fontSize: Dimens.textMid,
                     maxLines: 2,
                   ),
                   CText(
-                    'Delivered : ${salesDetailsItem?.delivered}',
+                    'Qty Packed : $qtyPacked',
                     fontSize: Dimens.textMid,
                     maxLines: 2,
                   ),
@@ -203,12 +208,12 @@ class SalesDetailsItemView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   CText(
-                    'Unit Price : \$${salesDetailsItem?.unitPrice}',
+                    'Barcode : ${salesDetailsItem?.barcode}',
                     fontSize: Dimens.textMid,
                     maxLines: 2,
                   ),
                   CText(
-                    'Total Price : \$${salesDetailsItem?.totalPrice}',
+                    'Bin : ${salesDetailsItem?.bin}',
                     fontSize: Dimens.textMid,
                     maxLines: 2,
                   ),

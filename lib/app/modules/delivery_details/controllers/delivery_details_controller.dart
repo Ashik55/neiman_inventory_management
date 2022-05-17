@@ -15,7 +15,6 @@ import '../../../data/models/DeliveryOrder.dart';
 import '../../../data/remote/DeliverOrderStatusUpdateResponse.dart';
 import '../../../utils/toaster.dart';
 
-
 // Start = Started Packing
 // Done = Ready Delivery
 // On Hold = On Hold
@@ -61,6 +60,17 @@ class DeliveryDetailsController extends BaseController {
   onSalesItemClick(SalesOrderItem? salesOrderItem) {}
 
   enableBarcodeView() async {
+    if (deliveryOrder?.status == startPacking) {
+      showBarcode = true;
+      update();
+    } else {
+      showMessageSnackbar(
+          message: "Barcode only available for start packing",
+          backgroundColor: Colors.red);
+    }
+  }
+
+  disableBarcodeView() async {
     showBarcode = true;
     update();
   }
@@ -72,9 +82,8 @@ class DeliveryDetailsController extends BaseController {
 
       if (result != null) {
         controller.pauseCamera();
-        showBarcode = false;
         scannedBarcodes.add("${result?.code}");
-        update();
+        disableBarcodeView();
 
         Timer(const Duration(seconds: 3), () {
           controller.resumeCamera();
@@ -91,6 +100,15 @@ class DeliveryDetailsController extends BaseController {
     }
   }
 
+  int packedItem(SalesOrderItem salesOrderList) {
+    String barcode = "${salesOrderList.barcode}";
+    int scannedCount = 0;
+    for (var element in scannedBarcodes) {
+      if (element == barcode) scannedCount++;
+    }
+    return scannedCount;
+  }
+
   bool isAllPacked(SalesOrderItem salesOrderList) {
     int qty = salesOrderList.qty?.toInt() ?? 1;
     String barcode = "${salesOrderList.barcode}";
@@ -98,7 +116,6 @@ class DeliveryDetailsController extends BaseController {
     for (var element in scannedBarcodes) {
       if (element == barcode) scannedCount++;
     }
-
     return scannedCount >= qty;
   }
 
@@ -109,6 +126,7 @@ class DeliveryDetailsController extends BaseController {
   }
 
   onDonePacking() async {
+    disableBarcodeView();
     startLoading();
     DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
         await _productRepository.updateDeliveryStatus(
@@ -121,6 +139,7 @@ class DeliveryDetailsController extends BaseController {
   }
 
   onHoldPacking() async {
+    disableBarcodeView();
     startLoading();
     DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
         await _productRepository.updateDeliveryStatus(
@@ -139,9 +158,9 @@ class DeliveryDetailsController extends BaseController {
             orderID: deliveryOrder?.id, orderStatus: startPacking);
 
     await checkOrderStatus();
-
     showMessageSnackbar(message: "${deliverOrderStatusUpdateResponse.status}");
     stopLoading();
+    enableBarcodeView();
   }
 
   checkOrderStatus() async {

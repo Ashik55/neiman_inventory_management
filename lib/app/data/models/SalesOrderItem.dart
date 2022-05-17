@@ -19,6 +19,7 @@ class SalesOrderItem {
     this.createdByName,
     this.modifiedById,
     this.barcode,
+    this.bin,
     this.modifiedByName,
     this.assignedUserId,
     this.assignedUserName,
@@ -46,6 +47,7 @@ class SalesOrderItem {
     qbProductId = json['qbProductId'];
     done = json['done'];
     barcode = json['barcode'];
+    bin = json['bin'];
     packingOrder = json['packingOrder'];
     unitPriceCurrency = json['unitPriceCurrency'];
     totalPriceCurrency = json['totalPriceCurrency'];
@@ -79,6 +81,7 @@ class SalesOrderItem {
   bool? done;
   String? packingOrder;
   String? barcode;
+  String? bin;
   String? unitPriceCurrency;
   String? totalPriceCurrency;
   String? createdById;
