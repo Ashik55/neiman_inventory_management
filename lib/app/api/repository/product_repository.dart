@@ -63,8 +63,8 @@ class ProductRepository extends GetxService {
     return _apiProvider.getPurchaseList();
   }
 
-  Future<PoResponse> createPO({required Products? products}) async {
-    return _apiProvider.createPO(products: products);
+  Future<PoResponse> createPO({required Products? products,required String? purchaseID }) async {
+    return _apiProvider.createPO(products: products, purchaseID: purchaseID);
   }
 
   Future<PostPurchaseResponse> postPurchase({required Products? products}) async {

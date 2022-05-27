@@ -67,13 +67,15 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<PoResponse> createPO({required Products? products}) async {
+  Future<PoResponse> createPO(
+      {required Products? products, required String? purchaseID}) async {
     return apiClient.callPOST(
       endpoint: _purchaseItem,
       body: {
         "productId": products?.id,
         "qty": products?.reOrder,
         "qtyStock": products?.stock,
+        "purchaseId": purchaseID
       },
       builder: (data) {
         return PoResponse.fromJson(data);
@@ -81,7 +83,8 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<PostPurchaseResponse> postPurchase({required Products? products}) async {
+  Future<PostPurchaseResponse> postPurchase(
+      {required Products? products}) async {
     return apiClient.callPOST(
       endpoint: _purchase,
       body: {
@@ -94,9 +97,6 @@ class ApiProvider extends GetxService {
       },
     );
   }
-
-
-
 
   Future<List<DeliveryOrder>> getDeliveryOrders() async {
     return apiClient.callGET(
@@ -114,7 +114,7 @@ class ApiProvider extends GetxService {
 
   Future<DeliveryOrder> getDeliveryOrder({required String? orderID}) async {
     return apiClient.callGET(
-      endpoint: _deliveryOrders+"/$orderID",
+      endpoint: _deliveryOrders + "/$orderID",
       builder: (data) {
         DeliveryOrder deliveryOrder = DeliveryOrder.fromJson(data);
         return deliveryOrder;
