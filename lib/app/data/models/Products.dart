@@ -35,6 +35,8 @@ class Products {
     this.pictureId,
     this.pictureName,
     this.brandId,
+    this.vendorID,
+    this.vendorName,
     this.brandName,
     this.categoryId,
     this.categoryName,
@@ -89,6 +91,8 @@ class Products {
     assignedUserName = json['assignedUserName'];
     pictureId = json['pictureId'];
     pictureName = json['pictureName'];
+    vendorID = json['vendorID'];
+    vendorName = json['vendorName'];
     brandId = json['brandId'];
     brandName = json['brandName'];
     categoryId = json['categoryId'];
@@ -133,6 +137,8 @@ class Products {
   String? brandName;
   String? categoryId;
   String? categoryName;
+  String? vendorID;
+  String? vendorName;
   num? costConverted;
   num? salesPriceConverted;
   double? reOrder;
@@ -176,6 +182,8 @@ class Products {
     map['brandName'] = brandName;
     map['categoryId'] = categoryId;
     map['categoryName'] = categoryName;
+    map['vendorName'] = vendorName;
+    map['vendorID'] = vendorID;
     map['costConverted'] = costConverted;
     map['salesPriceConverted'] = salesPriceConverted;
     // map['deliveryOrderItemsId'] = deliveryOrderItemsId;

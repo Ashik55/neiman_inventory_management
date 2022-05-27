@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -32,11 +34,14 @@ class HomeController extends BaseController {
   Future<void> loadInitialData() async {
     startLoading();
     productList = await productRepository.getLocalProducts();
-    if(productList.isNotEmpty) {
+    if (productList.isNotEmpty) {
       stopLoading();
     }
     productList = await productRepository.getProducts();
 
+    if (kDebugMode) {
+      print(json.encode(productList[0]));
+    }
     stopLoading();
   }
 

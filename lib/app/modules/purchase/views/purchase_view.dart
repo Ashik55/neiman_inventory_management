@@ -40,8 +40,7 @@ class PurchaseView extends GetView<PurchaseController> {
                       dataName: "purchase",
                     )
                   : GridView.builder(
-                      itemCount: 10,
-                      // itemCount: controller.purchaseList.length,
+                      itemCount: controller.purchaseList.length,
                       physics: const BouncingScrollPhysics(),
                       padding: const EdgeInsets.symmetric(
                           horizontal: Dimens.basePaddingNone),
@@ -57,7 +56,7 @@ class PurchaseView extends GetView<PurchaseController> {
                                   : 2.35),
                       itemBuilder: (BuildContext context, int index) =>
                           PurchaseItem(
-                        purchase: controller.purchaseList[0],
+                        purchase: controller.purchaseList[index],
                         onClick: (Purchase? purchase) =>
                             controller.onPurchaseClick(purchase),
                       ),
@@ -105,7 +104,7 @@ class PurchaseItem extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: CText(
-                        ': ${purchase?.productName}',
+                        ': ${purchase?.name}',
                         textColor: CustomColors.KPrimaryColor,
                         fontSize: Dimens.textMid,
                         maxLines: 2,

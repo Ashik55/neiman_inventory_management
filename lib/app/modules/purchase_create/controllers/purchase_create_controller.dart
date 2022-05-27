@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/data/remote/POResponse.dart';
+import 'package:neiman_inventory/app/data/remote/PostPurchaseResponse.dart';
 import 'package:neiman_inventory/app/modules/base/base_controller.dart';
 import 'package:neiman_inventory/app/modules/purchase/controllers/purchase_controller.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -26,7 +27,7 @@ class PurchaseCreateController extends BaseController {
   String? sortBy;
   double totalPrice = 0;
   List<Products> productList = [];
-
+  List<Products> poProductList = [];
 
   Future<void> loadInitialData() async {
     startLoading();
@@ -131,16 +132,44 @@ class PurchaseCreateController extends BaseController {
 
   onPOSubmit(Products? products) async {
     if (products?.reOrder != null && products?.stock != null) {
+      poProductList.add(products!);
       if (kDebugMode) {
         print(json.encode(products));
       }
       PoResponse poResponse =
           await productRepository.createPO(products: products);
-      showMessageSnackbar(message: "Purchase Order Created Successfully");
-      PurchaseController purchaseController = Get.find();
-      purchaseController.onInit();
+      if (poResponse != null) {
+        showMessageSnackbar(message: "Purchase Order Created Successfully");
+      }
     } else {
       showMessageSnackbar(message: "Please add reorder & stock amount");
+    }
+  }
+
+  @override
+  void onClose() async {
+    super.onClose();
+    if (kDebugMode) {
+      print("closing PO PAGEEE");
+    }
+    List<Products> vendorProductList = [];
+    for (var poProductElement in poProductList) {
+      if (vendorProductList.indexWhere(
+              (element) => element.vendorID == poProductElement.vendorID) ==
+          -1) {
+        if (kDebugMode) {
+          print(poProductElement.vendorName);
+        }
+        vendorProductList.add(poProductElement);
+        PostPurchaseResponse postPurchaseResponse =
+            await productRepository.postPurchase(products: poProductElement);
+        if (postPurchaseResponse != null &&
+            poProductElement == poProductList.last) {
+          showMessageSnackbar(message: "Purchase Order Created Successfully");
+          PurchaseController purchaseController = Get.find();
+          purchaseController.onInit();
+        }
+      }
     }
   }
 }

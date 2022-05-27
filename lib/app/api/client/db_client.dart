@@ -1,4 +1,3 @@
-
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
@@ -50,6 +49,8 @@ class DBClient {
             pictureId TEXT,
             brandId TEXT,
             brandName TEXT,
+            vendorID TEXT,
+            vendorName TEXT,
             categoryId TEXT,
             categoryName TEXT,
             costConverted DOUBLE,
@@ -108,6 +109,8 @@ class DBClient {
             pictureId TEXT,
             brandId TEXT,
             brandName TEXT,
+            vendorID TEXT,
+            vendorName TEXT,
             categoryId TEXT,
             categoryName TEXT,
             costConverted DOUBLE,
@@ -186,5 +189,4 @@ class DBClient {
         ''');
     });
   }
-
 }

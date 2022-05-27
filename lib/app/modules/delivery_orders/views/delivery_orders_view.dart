@@ -51,7 +51,7 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
                                   : 2,
                           childAspectRatio:
                               getOrientation(context) == Orientation.portrait
-                                  ? 4.0
+                                  ? 3.2
                                   : 4.0),
                       itemBuilder: (BuildContext context, int index) =>
                           DeliveryItem(

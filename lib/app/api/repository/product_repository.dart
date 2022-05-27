@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/provider/localdb_provider.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
+import 'package:neiman_inventory/app/data/remote/PostPurchaseResponse.dart';
 
 import '../../data/models/DeliveryOrder.dart';
 import '../../data/models/Products.dart';
@@ -64,6 +65,10 @@ class ProductRepository extends GetxService {
 
   Future<PoResponse> createPO({required Products? products}) async {
     return _apiProvider.createPO(products: products);
+  }
+
+  Future<PostPurchaseResponse> postPurchase({required Products? products}) async {
+    return _apiProvider.postPurchase(products: products);
   }
 
   Future<List<DeliveryOrder>> getDeliveryOrders() async {

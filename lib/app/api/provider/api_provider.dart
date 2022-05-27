@@ -6,6 +6,7 @@ import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
 import 'package:neiman_inventory/app/data/remote/DeliverOrderStatusUpdateResponse.dart';
 import 'package:neiman_inventory/app/data/remote/POResponse.dart';
+import 'package:neiman_inventory/app/data/remote/PostPurchaseResponse.dart';
 
 import '../../data/models/Products.dart';
 import '../../data/models/UserModel.dart';
@@ -79,6 +80,23 @@ class ApiProvider extends GetxService {
       },
     );
   }
+
+  Future<PostPurchaseResponse> postPurchase({required Products? products}) async {
+    return apiClient.callPOST(
+      endpoint: _purchase,
+      body: {
+        "name": products?.vendorName,
+        "status": "Quotation",
+        "qbVendorID": products?.vendorID,
+      },
+      builder: (data) {
+        return PostPurchaseResponse.fromJson(data);
+      },
+    );
+  }
+
+
+
 
   Future<List<DeliveryOrder>> getDeliveryOrders() async {
     return apiClient.callGET(
