@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/repository/product_repository.dart';
@@ -26,7 +25,9 @@ class PurchaseController extends BaseController {
     stopLoading();
   }
 
-  onPurchaseClick(Purchase? purchase) {}
+  onPurchaseClick(Purchase? purchase) {
+    Get.toNamed(Routes.PURCHASE_DETAILS, arguments: {"data": purchase});
+  }
 
   createPO() {
     Get.toNamed(Routes.PURCHASE_CREATE);

@@ -11,6 +11,7 @@ abstract class Routes {
   static const PURCHASE_CREATE = _Paths.PURCHASE_CREATE;
   static const DELIVERY_DETAILS = _Paths.DELIVERY_DETAILS;
   static const DELIVERY_ORDERS = _Paths.DELIVERY_ORDERS;
+  static const PURCHASE_DETAILS = _Paths.PURCHASE_DETAILS;
 }
 
 abstract class _Paths {
@@ -23,4 +24,5 @@ abstract class _Paths {
   static const PURCHASE_CREATE = '/purchase-create';
   static const DELIVERY_DETAILS = '/delivery-details';
   static const DELIVERY_ORDERS = '/delivery-orders';
+  static const PURCHASE_DETAILS = '/purchase-details';
 }

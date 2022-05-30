@@ -10,6 +10,7 @@ import '../../data/models/SalesOrderItem.dart';
 import '../../data/models/UserModel.dart';
 import '../../data/remote/DeliverOrderStatusUpdateResponse.dart';
 import '../../data/remote/POResponse.dart';
+import '../../data/remote/PurchaseItem.dart';
 import '../../utils/utility.dart';
 import '../provider/api_provider.dart';
 
@@ -63,11 +64,13 @@ class ProductRepository extends GetxService {
     return _apiProvider.getPurchaseList();
   }
 
-  Future<PoResponse> createPO({required Products? products,required String? purchaseID }) async {
+  Future<PoResponse> createPO(
+      {required Products? products, required String? purchaseID}) async {
     return _apiProvider.createPO(products: products, purchaseID: purchaseID);
   }
 
-  Future<PostPurchaseResponse> postPurchase({required Products? products}) async {
+  Future<PostPurchaseResponse> postPurchase(
+      {required Products? products}) async {
     return _apiProvider.postPurchase(products: products);
   }
 
@@ -80,6 +83,11 @@ class ProductRepository extends GetxService {
     return _apiProvider.getDeliveryDetails(salesId: salesId);
   }
 
+  Future<List<PurchaseItem>> getPurchaseDetails(
+      {required String? purchaseID}) async {
+    return _apiProvider.getPurchaseDetails(purchaseID: purchaseID);
+  }
+
   Future<DeliverOrderStatusUpdateResponse> updateDeliveryStatus(
       {required String? orderID, required String? orderStatus}) async {
     return _apiProvider.updateDeliveryStatus(
@@ -89,6 +97,4 @@ class ProductRepository extends GetxService {
   Future<DeliveryOrder> getDeliveryOrder({required String? orderID}) async {
     return _apiProvider.getDeliveryOrder(orderID: orderID);
   }
-
-
 }

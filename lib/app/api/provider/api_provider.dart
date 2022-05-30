@@ -7,6 +7,7 @@ import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
 import 'package:neiman_inventory/app/data/remote/DeliverOrderStatusUpdateResponse.dart';
 import 'package:neiman_inventory/app/data/remote/POResponse.dart';
 import 'package:neiman_inventory/app/data/remote/PostPurchaseResponse.dart';
+import 'package:neiman_inventory/app/data/remote/PurchaseItem.dart';
 
 import '../../data/models/Products.dart';
 import '../../data/models/UserModel.dart';
@@ -133,6 +134,21 @@ class ApiProvider extends GetxService {
           salesOrderItems.add(SalesOrderItem.fromJson(element));
         }
         return salesOrderItems;
+      },
+    );
+  }
+
+  Future<List<PurchaseItem>> getPurchaseDetails(
+      {required String? purchaseID}) async {
+    return apiClient.callGET(
+      endpoint: "/Purchase/$purchaseID/purchaseItems",
+      builder: (data) {
+        List<PurchaseItem> purchaseItems = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          purchaseItems.add(PurchaseItem.fromJson(element));
+        }
+        return purchaseItems;
       },
     );
   }

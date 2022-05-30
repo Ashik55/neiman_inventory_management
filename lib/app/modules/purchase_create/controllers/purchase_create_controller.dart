@@ -31,7 +31,6 @@ class PurchaseCreateController extends BaseController {
   PurchaseController purchaseController = Get.find();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController searchController = TextEditingController();
-  String searchText = "";
   String? sortBy;
   double totalPrice = 0;
   List<Products> productList = [];
@@ -90,12 +89,10 @@ class PurchaseCreateController extends BaseController {
   }
 
   onSearchChange(String text) async {
-    searchText = text;
     if (text.isNotEmpty) {
       productList = await productRepository.searchProduct(searchText: text);
-      update();
     } else {
-      productList = await productRepository.getLocalProducts();
+      productList.clear();
     }
     update();
   }
@@ -140,7 +137,6 @@ class PurchaseCreateController extends BaseController {
 
   onPOSubmit(Products? products) async {
     if (products?.reOrder != null && products?.stock != null) {
-
       startLoading();
       if (poProductList.indexWhere(
               (element) => element.products?.vendorID == products?.vendorID) ==
@@ -170,7 +166,6 @@ class PurchaseCreateController extends BaseController {
           showMessageSnackbar(message: "Purchase Order Created Successfully");
         }
       }
-
 
       stopLoading();
     } else {
