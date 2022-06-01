@@ -47,35 +47,7 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                     )
                   : Column(
                       children: [
-                        if (controller.salesOrderList.isNotEmpty &&
-                            controller.deliveryOrder?.status ==
-                                controller.startPacking)
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: Dimens.basePadding,
-                                right: Dimens.basePadding,
-                                top: Dimens.basePadding),
-                            child: TextFormField(
-                              controller: controller.searchController,
-                              onChanged: (e) => controller.onSearchChange(e),
-                              keyboardType: TextInputType.number,
-                              decoration: InputDecoration(
-                                labelText: 'Search Items',
-                                border: const OutlineInputBorder(),
-                                prefixIcon: const Icon(
-                                  Icons.search,
-                                ),
-                                suffixIcon:
-                                    controller.searchController.text.isNotEmpty
-                                        ? IconButton(
-                                            onPressed: () =>
-                                                controller.clearSearch(),
-                                            icon: const Icon(Icons.clear),
-                                          )
-                                        : null,
-                              ),
-                            ),
-                          ),
+
                         if (controller.deliveryOrder?.status ==
                                 controller.awaitPacking ||
                             controller.deliveryOrder?.status ==
@@ -100,6 +72,38 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                                 width: getMaxWidth(context),
                                 radius: Dimens.radiusNone),
                           ),
+
+                        if (controller.salesOrderList.isNotEmpty &&
+                            controller.deliveryOrder?.status ==
+                                controller.startPacking)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: Dimens.basePadding,
+                                right: Dimens.basePadding,
+                                top: Dimens.basePadding),
+                            child: TextFormField(
+                              controller: controller.searchController,
+                              onChanged: (e) => controller.onSearchChange(e),
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: 'Search Items',
+                                border: const OutlineInputBorder(),
+                                prefixIcon: const Icon(
+                                  Icons.search,
+                                ),
+                                suffixIcon:
+                                controller.searchController.text.isNotEmpty
+                                    ? IconButton(
+                                  onPressed: () =>
+                                      controller.clearSearch(),
+                                  icon: const Icon(Icons.clear),
+                                )
+                                    : null,
+                              ),
+                            ),
+                          ),
+
+
                         if (controller.showBarcode)
                           Expanded(
                             flex: 2,
@@ -110,7 +114,11 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                           ),
                         Expanded(
                           flex: 5,
-                          child: GridView.builder(
+                          child:
+                          controller.searchText.isNotEmpty && controller.searchedSalesOrderList.isEmpty ?
+                              Center(child: CText("No Item Found", textColor: Colors.red,fontSize: Dimens.textRegular,fontWeight: FontWeight.bold,),):
+
+                          GridView.builder(
                               itemCount: controller.searchText.isEmpty
                                   ? controller.salesOrderList.length
                                   : controller.searchedSalesOrderList.length,
