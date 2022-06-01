@@ -14,37 +14,40 @@ import '../controllers/purchase_details_controller.dart';
 class PurchaseDetailsView extends GetView<PurchaseDetailsController> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: CText(
-          'Purchase Details',
-          fontSize: Dimens.appbarTextSize,
-          textColor: Colors.white,
-        ),
-      ),
-      body: BaseView(
-        showLoading: controller.loading,
-        child: GridView.builder(
-            itemCount: controller.purchaseList.length,
-            physics: const BouncingScrollPhysics(),
-            padding:
-                const EdgeInsets.symmetric(horizontal: Dimens.basePaddingNone),
-            shrinkWrap: true,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount:
-                    getOrientation(context) == Orientation.portrait ? 1 : 2,
-                childAspectRatio:
-                    getOrientation(context) == Orientation.portrait
-                        ? 2.8
-                        : 2.8),
-            itemBuilder: (BuildContext context, int index) =>
-                PurchaseProductItemView(
-                  purchaseItem: controller.purchaseList[index],
-                  onclick: (PurchaseItem? purchaseItem) => controller
-                      .onPurchaseItemClick(purchaseItem: purchaseItem),
-                )),
-      ),
-    );
+    return GetBuilder<PurchaseDetailsController>(
+        builder: (controller) => Scaffold(
+              appBar: AppBar(
+                title: CText(
+                  'Purchase Details',
+                  fontSize: Dimens.appbarTextSize,
+                  textColor: Colors.white,
+                ),
+              ),
+              body: BaseView(
+                showLoading: controller.loading,
+                child: GridView.builder(
+                    itemCount: controller.purchaseList.length,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Dimens.basePaddingNone),
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount:
+                            getOrientation(context) == Orientation.portrait
+                                ? 1
+                                : 2,
+                        childAspectRatio:
+                            getOrientation(context) == Orientation.portrait
+                                ? 2.8
+                                : 2.8),
+                    itemBuilder: (BuildContext context, int index) =>
+                        PurchaseProductItemView(
+                          purchaseItem: controller.purchaseList[index],
+                          onclick: (PurchaseItem? purchaseItem) => controller
+                              .onPurchaseItemClick(purchaseItem: purchaseItem),
+                        )),
+              ),
+            ));
   }
 }
 
@@ -103,24 +106,24 @@ class PurchaseProductItemView extends StatelessWidget {
                   ],
                 ),
               ),
-              // Padding(
-              //   padding: const EdgeInsets.all(4),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //     children: [
-              //       CText(
-              //         'Barcode : ${salesDetailsItem?.barcode}',
-              //         fontSize: Dimens.textMid,
-              //         maxLines: 2,
-              //       ),
-              //       CText(
-              //         'Bin : ${salesDetailsItem?.bin}',
-              //         fontSize: Dimens.textMid,
-              //         maxLines: 2,
-              //       ),
-              //     ],
-              //   ),
-              // ),
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CText(
+                      'Barcode : ${purchaseItem?.barcode}',
+                      fontSize: Dimens.textMid,
+                      maxLines: 2,
+                    ),
+                    CText(
+                      'Items Number : ${purchaseItem?.itemsNumber}',
+                      fontSize: Dimens.textMid,
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

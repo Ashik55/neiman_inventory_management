@@ -14,8 +14,10 @@ class PurchaseItem {
       this.modifiedByName, 
       this.assignedUserId, 
       this.assignedUserName, 
-      this.productId, 
-      this.productName, 
+      this.itemsNumber,
+      this.barcode,
+      this.productId,
+      this.productName,
       this.purchaseId, 
       this.purchaseName,});
 
@@ -34,6 +36,8 @@ class PurchaseItem {
     modifiedByName = json['modifiedByName'];
     assignedUserId = json['assignedUserId'];
     assignedUserName = json['assignedUserName'];
+    barcode = json['barcode'];
+    itemsNumber = json['itemsNumber'];
     productId = json['productId'];
     productName = json['productName'];
     purchaseId = json['purchaseId'];
@@ -53,6 +57,8 @@ class PurchaseItem {
   dynamic modifiedByName;
   dynamic assignedUserId;
   dynamic assignedUserName;
+  String? itemsNumber;
+  String? barcode;
   String? productId;
   String? productName;
   String? purchaseId;
