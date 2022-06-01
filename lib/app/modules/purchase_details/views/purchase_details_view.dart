@@ -38,7 +38,7 @@ class PurchaseDetailsView extends GetView<PurchaseDetailsController> {
                                 : 2,
                         childAspectRatio:
                             getOrientation(context) == Orientation.portrait
-                                ? 2.8
+                                ? 3.3
                                 : 2.8),
                     itemBuilder: (BuildContext context, int index) =>
                         PurchaseProductItemView(
