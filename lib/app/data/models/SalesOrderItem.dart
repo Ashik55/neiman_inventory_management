@@ -3,6 +3,7 @@ class SalesOrderItem {
     this.id,
     this.name,
     this.deleted,
+    this.scanned,
     this.description,
     this.createdAt,
     this.modifiedAt,
@@ -70,6 +71,7 @@ class SalesOrderItem {
   String? id;
   String? name;
   bool? deleted;
+  bool? scanned = false;
   dynamic description;
   String? createdAt;
   String? modifiedAt;

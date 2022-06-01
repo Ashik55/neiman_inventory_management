@@ -29,21 +29,6 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                 textColor: Colors.white,
               ),
               actions: [
-/*                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                      ChipWidget(
-                        text: controller.deliveryOrder?.status,
-                        radius: Dimens.radiusExtraLarge,
-                        backgroundColor: CustomColors.KPrimaryColorLite1,
-                        textColor: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        elevation: 0,
-                      ),
-                  ],
-                ),*/
-
                 IconButton(
                   icon: CAssetImage(
                     imagePath: 'images/barcode.png',
@@ -62,6 +47,35 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                     )
                   : Column(
                       children: [
+                        if (controller.salesOrderList.isNotEmpty &&
+                            controller.deliveryOrder?.status ==
+                                controller.startPacking)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: Dimens.basePadding,
+                                right: Dimens.basePadding,
+                                top: Dimens.basePadding),
+                            child: TextFormField(
+                              controller: controller.searchController,
+                              onChanged: (e) => controller.onSearchChange(e),
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: 'Search Items',
+                                border: const OutlineInputBorder(),
+                                prefixIcon: const Icon(
+                                  Icons.search,
+                                ),
+                                suffixIcon:
+                                    controller.searchController.text.isNotEmpty
+                                        ? IconButton(
+                                            onPressed: () =>
+                                                controller.clearSearch(),
+                                            icon: const Icon(Icons.clear),
+                                          )
+                                        : null,
+                              ),
+                            ),
+                          ),
                         if (controller.deliveryOrder?.status ==
                                 controller.awaitPacking ||
                             controller.deliveryOrder?.status ==
@@ -97,7 +111,9 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                         Expanded(
                           flex: 5,
                           child: GridView.builder(
-                              itemCount: controller.salesOrderList.length,
+                              itemCount: controller.searchText.isEmpty
+                                  ? controller.salesOrderList.length
+                                  : controller.searchedSalesOrderList.length,
                               physics: const BouncingScrollPhysics(),
                               padding: const EdgeInsets.symmetric(
                                   horizontal: Dimens.basePaddingNone),
@@ -114,21 +130,26 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                                               ? 2.8
                                               : 2.8),
                               itemBuilder: (BuildContext context, int index) =>
-                                  // SalesItem(
-                                  //   salesOrderItem: controller.salesOrderList[0],
-                                  //   onClick: (SalesOrderItem? salesOrderItem) =>
-                                  //       controller.onSalesItemClick(salesOrderItem),
-                                  // ),
-
                                   InkWell(
                                     onTap: () => controller.onItemClick(),
                                     child: SalesDetailsItemView(
-                                      salesDetailsItem:
-                                          controller.salesOrderList[index],
+                                      salesDetailsItem: controller
+                                              .searchText.isEmpty
+                                          ? controller.salesOrderList[index]
+                                          : controller
+                                              .searchedSalesOrderList[index],
                                       allPacked: controller.isAllPacked(
-                                          controller.salesOrderList[index]),
+                                          controller.searchText.isEmpty
+                                              ? controller.salesOrderList[index]
+                                              : controller
+                                                      .searchedSalesOrderList[
+                                                  index]),
                                       qtyPacked: controller.packedItem(
-                                          controller.salesOrderList[index]),
+                                          controller.searchText.isEmpty
+                                              ? controller.salesOrderList[index]
+                                              : controller
+                                                      .searchedSalesOrderList[
+                                                  index]),
                                     ),
                                   )),
                         ),
@@ -161,7 +182,9 @@ class SalesDetailsItemView extends StatelessWidget {
     return Card(
       elevation: 0,
       clipBehavior: Clip.antiAlias,
-      color: allPacked == true ? Colors.green.shade100 : Colors.yellow.shade100,
+      color: allPacked == true || salesDetailsItem?.scanned == true
+          ? Colors.green.shade100
+          : Colors.yellow.shade100,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Dimens.radiusMin),
       ),
