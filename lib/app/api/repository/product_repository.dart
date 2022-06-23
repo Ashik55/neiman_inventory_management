@@ -9,7 +9,9 @@ import '../../data/models/Products.dart';
 import '../../data/models/SalesOrderItem.dart';
 import '../../data/models/UserModel.dart';
 import '../../data/remote/DeliverOrderStatusUpdateResponse.dart';
+import '../../data/remote/DeliveryPurchaseItem.dart';
 import '../../data/remote/POResponse.dart';
+import '../../data/remote/PurchaseDetailsItem.dart';
 import '../../data/remote/PurchaseItem.dart';
 import '../../utils/utility.dart';
 import '../provider/api_provider.dart';
@@ -62,6 +64,17 @@ class ProductRepository extends GetxService {
   //purchase
   Future<List<Purchase>> getPurchaseList() async {
     return _apiProvider.getPurchaseList();
+  }
+
+  //purchase
+  Future<List<DeliveryPurchaseItem>> getDeliveryPurchase() async {
+    return _apiProvider.getDeliveryPurchase();
+  }
+
+  Future<List<PurchaseDetailsItem>> getDeliveryPurchaseDetails(
+      {required DeliveryPurchaseItem? deliveryPurchaseItem}) async {
+    return _apiProvider.getDeliveryPurchaseDetails(
+        deliveryPurchaseItem: deliveryPurchaseItem);
   }
 
   Future<PoResponse> createPO(

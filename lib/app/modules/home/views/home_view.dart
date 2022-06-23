@@ -72,6 +72,11 @@ class HomeView extends GetView<HomeController> {
                     onTap: () => controller.onDeliveryClick(),
                   ),
                   ListTile(
+                    leading: const Icon(Icons.description),
+                    title: CText('Delivery Purchase'),
+                    onTap: () => controller.onDeliveryPurchaseClick(),
+                  ),
+                  ListTile(
                     leading: const Icon(
                       Icons.arrow_back,
                       color: CustomColors.KPrimaryColor,

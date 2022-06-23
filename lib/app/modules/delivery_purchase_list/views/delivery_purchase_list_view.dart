@@ -1,48 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
-import 'package:neiman_inventory/app/modules/base/base_view.dart';
-import 'package:neiman_inventory/app/utils/inventory_utility.dart';
+import '../../../data/models/Purchase.dart';
+import '../../../data/remote/DeliveryPurchaseItem.dart';
+import '../../../data/remote/DeliveryPurchaseItem.dart';
+import '../../../data/remote/PurchaseItem.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';
+import '../../base/base_view.dart';
 import '../../components/custom_textwidget.dart';
 import '../../home/views/home_view.dart';
-import '../controllers/delivery_orders_controller.dart';
+import '../controllers/delivery_purchase_list_controller.dart';
 
-class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
+class DeliveryPurchaseListView extends GetView<DeliveryPurchaseListController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<DeliveryOrdersController>(
+    return GetBuilder<DeliveryPurchaseListController>(
         builder: (controller) => Scaffold(
             key: controller.scaffoldKey,
             backgroundColor: Colors.grey.shade200,
             appBar: AppBar(
               title: CText(
-                'Delivery Orders',
+                'Delivery Purchase',
                 fontSize: Dimens.appbarTextSize,
                 textColor: Colors.white,
               ),
             ),
-            // floatingActionButton: FloatingActionButton.extended(
-            //     onPressed: () => controller.createPO(),
-            //     icon: const Icon(Icons.add),
-            //     label: CText(
-            //       "Create PO",
-            //       textColor: Colors.white,
-            //     )),
             body: BaseView(
               showLoading: controller.loading,
-              child: controller.deliveryOrdersList.isEmpty == true
+              child: controller.deliveryPurchaseList.isEmpty == true
                   ? NoDataWidget(
                       isLoading: controller.loading,
                       dataName: "purchase",
                     )
                   : GridView.builder(
-                      itemCount: controller.deliveryOrdersList.length,
+                      itemCount: controller.deliveryPurchaseList.length,
                       physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: Dimens.basePaddingNone,
-                          vertical: Dimens.basePaddingNone),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Dimens.basePaddingNone),
                       shrinkWrap: true,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount:
@@ -51,24 +46,24 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
                                   : 2,
                           childAspectRatio:
                               getOrientation(context) == Orientation.portrait
-                                  ? 3.2
-                                  : 4.0),
+                                  ? 3.8
+                                  : 2.35),
                       itemBuilder: (BuildContext context, int index) =>
-                          DeliveryItem(
-                        deliveryOrder: controller.deliveryOrdersList[index],
-                        onClick: (DeliveryOrder? deliveryOrder) =>
-                            controller.onDeliveryItemClick(deliveryOrder),
+                          DeliveryPurchase(
+                        purchaseItem: controller.deliveryPurchaseList[index],
+                        onClick: (DeliveryPurchaseItem? deliveryPurchaseItem) =>
+                            controller.onPurchaseClick(deliveryPurchaseItem),
                       ),
                     ),
             )));
   }
 }
 
-class DeliveryItem extends StatelessWidget {
-  DeliveryOrder? deliveryOrder;
-  Function(DeliveryOrder? deliveryOrder) onClick;
+class DeliveryPurchase extends StatelessWidget {
+  DeliveryPurchaseItem? purchaseItem;
+  Function(DeliveryPurchaseItem? _purchase) onClick;
 
-  DeliveryItem({required this.deliveryOrder, required this.onClick});
+  DeliveryPurchase({required this.purchaseItem, required this.onClick});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +74,7 @@ class DeliveryItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(Dimens.radiusMin),
       ),
       child: InkWell(
-        onTap: () => onClick(deliveryOrder),
+        onTap: () => onClick(purchaseItem),
         child: Padding(
           padding: const EdgeInsets.only(
               top: 6,
@@ -87,6 +82,7 @@ class DeliveryItem extends StatelessWidget {
               left: Dimens.basePadding,
               right: Dimens.basePadding),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
                 padding: const EdgeInsets.all(2),
@@ -94,18 +90,18 @@ class DeliveryItem extends StatelessWidget {
                   children: [
                     Expanded(
                       child: CText(
-                        'Name',
+                        'Purchase Name',
                         textColor: CustomColors.KPrimaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: Dimens.textRegular,
+                        fontSize: Dimens.textMid,
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: CText(
-                        ': ${deliveryOrder?.salesName}',
+                        ': ${purchaseItem?.purchaseName}',
                         textColor: CustomColors.KPrimaryColor,
-                        fontSize: Dimens.textRegular,
+                        fontSize: Dimens.textMid,
                         maxLines: 2,
                       ),
                     )
@@ -118,25 +114,23 @@ class DeliveryItem extends StatelessWidget {
                   children: [
                     Expanded(
                       child: CText(
-                        'Status ',
+                        'Status',
                         textColor: CustomColors.KPrimaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: Dimens.textRegular,
+                        fontSize: Dimens.textMid,
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: CText(
-                        ': ${deliveryOrder?.status}',
-                        textColor: getColorByStatus(status: deliveryOrder?.status),
-                        fontSize: Dimens.textRegular,
-                        fontWeight: FontWeight.bold,
+                        ': ${purchaseItem?.status}',
+                        textColor: CustomColors.KPrimaryColor,
+                        fontSize: Dimens.textMid,
                       ),
                     )
                   ],
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(2),
                 child: Row(
@@ -146,15 +140,15 @@ class DeliveryItem extends StatelessWidget {
                         'Date',
                         textColor: CustomColors.KPrimaryColor,
                         fontWeight: FontWeight.bold,
-                        fontSize: Dimens.textRegular,
+                        fontSize: Dimens.textMid,
                       ),
                     ),
                     Expanded(
                       flex: 2,
                       child: CText(
-                        ': ${getFormattedDate(deliveryOrder?.createdAt)}',
+                        ': ${getFormattedDate(purchaseItem?.createdAt)}',
                         textColor: CustomColors.KPrimaryColor,
-                        fontSize: Dimens.textRegular,
+                        fontSize: Dimens.textMid,
                       ),
                     )
                   ],

@@ -5,8 +5,10 @@ import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
 import 'package:neiman_inventory/app/data/remote/DeliverOrderStatusUpdateResponse.dart';
+import 'package:neiman_inventory/app/data/remote/DeliveryPurchaseItem.dart';
 import 'package:neiman_inventory/app/data/remote/POResponse.dart';
 import 'package:neiman_inventory/app/data/remote/PostPurchaseResponse.dart';
+import 'package:neiman_inventory/app/data/remote/PurchaseDetailsItem.dart';
 import 'package:neiman_inventory/app/data/remote/PurchaseItem.dart';
 
 import '../../data/models/Products.dart';
@@ -17,6 +19,8 @@ class ApiProvider extends GetxService {
 
   static const String _product = '/product';
   static const String _purchase = '/Purchase';
+  static const String _delivery_purchase = '/DeliveryPurchase';
+  static const String _delivery_purchase_items = '/Purchase/#/purchaseItems';
   static const String _login = '/App/user';
   static const String _purchaseItem = '/PurchaseItems';
   static const String _deliveryOrders = '/DeliveryOrders';
@@ -62,6 +66,39 @@ class ApiProvider extends GetxService {
         Iterable i = data?['list'];
         for (var element in i) {
           purchaseList.add(Purchase.fromJson(element));
+        }
+        return purchaseList;
+      },
+    );
+  }
+
+  Future<List<DeliveryPurchaseItem>> getDeliveryPurchase() async {
+    return apiClient.callGET(
+      endpoint: _delivery_purchase,
+      builder: (data) {
+        List<DeliveryPurchaseItem> purchaseList = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          purchaseList.add(DeliveryPurchaseItem.fromJson(element));
+        }
+        return purchaseList;
+      },
+    );
+  }
+
+  Future<List<PurchaseDetailsItem>> getDeliveryPurchaseDetails(
+      {required DeliveryPurchaseItem? deliveryPurchaseItem}) async {
+    return apiClient.callGET(
+      endpoint: _delivery_purchase_items.replaceAll(
+          // "#", "${deliveryPurchaseItem?.id}"),
+          "#", "62914641db059e0d7"),
+      builder: (data) {
+
+        List<PurchaseDetailsItem> purchaseList = [];
+
+        Iterable i = data?['list'];
+        for (var element in i) {
+          purchaseList.add(PurchaseDetailsItem.fromJson(element));
         }
         return purchaseList;
       },

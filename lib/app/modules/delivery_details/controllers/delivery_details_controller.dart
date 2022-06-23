@@ -48,10 +48,7 @@ class DeliveryDetailsController extends BaseController {
   void onInit() {
     super.onInit();
     deliveryOrder = Get.arguments["data"];
-    if (kDebugMode) {
-      print("deliveryOrder");
-      print(json.encode(deliveryOrder));
-    }
+    printObject(data: deliveryOrder);
     getDeliveryDetailsList();
   }
 
