@@ -4,7 +4,6 @@ import 'package:neiman_inventory/app/api/provider/localdb_provider.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/data/remote/PostPurchaseResponse.dart';
 import 'package:neiman_inventory/app/modules/delivery_orders/controllers/delivery_orders_controller.dart';
-import 'package:neiman_inventory/app/modules/delivery_purchase_list/controllers/delivery_purchase_list_controller.dart';
 
 import '../../data/models/DeliveryOrder.dart';
 import '../../data/models/Products.dart';
@@ -68,16 +67,7 @@ class ProductRepository extends GetxService {
     return _apiProvider.getPurchaseList();
   }
 
-  //purchase
-  Future<List<DeliveryPurchaseItem>> getDeliveryPurchase() async {
-    return _apiProvider.getDeliveryPurchase();
-  }
 
-  Future<List<PurchaseDetailsItem>> getDeliveryPurchaseDetails(
-      {required DeliveryPurchaseItem? deliveryPurchaseItem}) async {
-    return _apiProvider.getDeliveryPurchaseDetails(
-        deliveryPurchaseItem: deliveryPurchaseItem);
-  }
 
   Future<PoResponse> createPO(
       {required Products? products, required String? purchaseID}) async {

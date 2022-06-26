@@ -4,10 +4,7 @@ import '../modules/delivery_details/bindings/delivery_details_binding.dart';
 import '../modules/delivery_details/views/delivery_details_view.dart';
 import '../modules/delivery_orders/bindings/delivery_orders_binding.dart';
 import '../modules/delivery_orders/views/delivery_orders_view.dart';
-import '../modules/delivery_purchase_details/bindings/delivery_purchase_details_binding.dart';
-import '../modules/delivery_purchase_details/views/delivery_purchase_details_view.dart';
-import '../modules/delivery_purchase_list/bindings/delivery_purchase_list_binding.dart';
-import '../modules/delivery_purchase_list/views/delivery_purchase_list_view.dart';
+
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/image_preview/bindings/image_preview_binding.dart';
@@ -76,15 +73,6 @@ class AppPages {
       page: () => PurchaseDetailsView(),
       binding: PurchaseDetailsBinding(),
     ),
-    GetPage(
-      name: _Paths.DELIVERY_PURCHASE_LIST,
-      page: () => DeliveryPurchaseListView(),
-      binding: DeliveryPurchaseListBinding(),
-    ),
-    GetPage(
-      name: _Paths.DELIVERY_PURCHASE_DETAILS,
-      page: () => DeliveryPurchaseDetailsView(),
-      binding: DeliveryPurchaseDetailsBinding(),
-    ),
+
   ];
 }

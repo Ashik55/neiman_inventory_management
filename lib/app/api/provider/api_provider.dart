@@ -75,7 +75,7 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<List<DeliveryPurchaseItem>> getDeliveryPurchase() async {
+/*  Future<List<DeliveryPurchaseItem>> getDeliveryPurchase() async {
     return apiClient.callGET(
       endpoint: _deliveryPurchase,
       builder: (data) {
@@ -106,7 +106,7 @@ class ApiProvider extends GetxService {
         return purchaseList;
       },
     );
-  }
+  }*/
 
   Future<PoResponse> createPO(
       {required Products? products, required String? purchaseID}) async {
