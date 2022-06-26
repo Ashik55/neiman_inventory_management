@@ -60,6 +60,14 @@ class GridProductItem extends StatelessWidget {
                     'Br : ${products?.brandName}',
                     textAlign: TextAlign.center,
                   ),
+                  CText(
+                    'Barcode : ${products?.barcode}',
+                    textAlign: TextAlign.center,
+                  ),
+                  CText(
+                    'Bin : ${products?.barcode}',
+                    textAlign: TextAlign.center,
+                  ),
                 ],
               ),
             ),
