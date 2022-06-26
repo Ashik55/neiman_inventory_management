@@ -13,17 +13,20 @@ import 'package:neiman_inventory/app/data/remote/PurchaseItem.dart';
 
 import '../../data/models/Products.dart';
 import '../../data/models/UserModel.dart';
+import '../../modules/delivery_orders/controllers/delivery_orders_controller.dart';
 
 class ApiProvider extends GetxService {
   ApiClient apiClient = Get.find();
 
   static const String _product = '/product';
   static const String _purchase = '/Purchase';
-  static const String _delivery_purchase = '/DeliveryPurchase';
-  static const String _delivery_purchase_items = '/Purchase/#/purchaseItems';
+
+  static const String _deliveryPurchaseItems = '/Purchase/#/purchaseItems';
   static const String _login = '/App/user';
   static const String _purchaseItem = '/PurchaseItems';
   static const String _deliveryOrders = '/DeliveryOrders';
+  static const String _deliveryPurchase = '/DeliveryPurchase';
+  static const String _deliveryOrdersItems = '/Sales/#/salesOrderItems';
 
   // static const String _deliveryDetails = '/Sales/627a9cf6628dabd85/salesOrderItems';
 
@@ -74,7 +77,7 @@ class ApiProvider extends GetxService {
 
   Future<List<DeliveryPurchaseItem>> getDeliveryPurchase() async {
     return apiClient.callGET(
-      endpoint: _delivery_purchase,
+      endpoint: _deliveryPurchase,
       builder: (data) {
         List<DeliveryPurchaseItem> purchaseList = [];
         Iterable i = data?['list'];
@@ -89,11 +92,11 @@ class ApiProvider extends GetxService {
   Future<List<PurchaseDetailsItem>> getDeliveryPurchaseDetails(
       {required DeliveryPurchaseItem? deliveryPurchaseItem}) async {
     return apiClient.callGET(
-      endpoint: _delivery_purchase_items.replaceAll(
+      endpoint: _deliveryPurchaseItems.replaceAll(
           // "#", "${deliveryPurchaseItem?.id}"),
-          "#", "62914641db059e0d7"),
+          "#",
+          "62914641db059e0d7"),
       builder: (data) {
-
         List<PurchaseDetailsItem> purchaseList = [];
 
         Iterable i = data?['list'];
@@ -136,9 +139,12 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<List<DeliveryOrder>> getDeliveryOrders() async {
+  Future<List<DeliveryOrder>> getDeliveryOrders(
+      {ParentRoute? parentRoute}) async {
     return apiClient.callGET(
-      endpoint: _deliveryOrders,
+      endpoint: parentRoute == ParentRoute.deliveryOrders
+          ? _deliveryOrders
+          : _deliveryPurchase,
       builder: (data) {
         List<DeliveryOrder> deliveryOrders = [];
         Iterable i = data?['list'];
@@ -150,9 +156,13 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<DeliveryOrder> getDeliveryOrder({required String? orderID}) async {
+  Future<DeliveryOrder> getDeliveryOrder(
+      {required DeliveryOrder? deliveryOrder,
+      required ParentRoute? parentRoute}) async {
     return apiClient.callGET(
-      endpoint: _deliveryOrders + "/$orderID",
+      endpoint: parentRoute == ParentRoute.deliveryOrders
+          ? _deliveryOrders + "/${deliveryOrder?.id}"
+          : _deliveryPurchase + "/${deliveryOrder?.purchaseId}",
       builder: (data) {
         DeliveryOrder deliveryOrder = DeliveryOrder.fromJson(data);
         return deliveryOrder;
@@ -161,9 +171,15 @@ class ApiProvider extends GetxService {
   }
 
   Future<List<SalesOrderItem>> getDeliveryDetails(
-      {required String? salesId}) async {
+      {required DeliveryOrder? deliveryOrder,
+      required ParentRoute? parentRoute}) async {
     return apiClient.callGET(
-      endpoint: "/Sales/$salesId/salesOrderItems",
+      endpoint: parentRoute == ParentRoute.deliveryOrders
+          ? _deliveryOrdersItems.replaceAll("#", "${deliveryOrder?.salesId}")
+          : _deliveryPurchaseItems.replaceAll(
+              "#", "${deliveryOrder?.purchaseId}"),
+      //   "#",
+      //   "62914641db059e0d7"),
       builder: (data) {
         List<SalesOrderItem> salesOrderItems = [];
         Iterable i = data?['list'];
@@ -191,9 +207,13 @@ class ApiProvider extends GetxService {
   }
 
   Future<DeliverOrderStatusUpdateResponse> updateDeliveryStatus(
-      {required String? orderID, required String? orderStatus}) async {
+      {required String? orderStatus,
+      required DeliveryOrder? deliveryOrder,
+      required ParentRoute? parentRoute}) async {
     return apiClient.callPUT(
-      endpoint: "/DeliveryOrders/$orderID",
+      endpoint: parentRoute == ParentRoute.deliveryOrders
+          ? _deliveryOrders + "/${deliveryOrder?.id}"
+          : _deliveryPurchase + "/${deliveryOrder?.purchaseId}",
       body: {"status": orderStatus},
       builder: (data) {
         DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =

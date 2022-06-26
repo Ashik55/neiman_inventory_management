@@ -12,8 +12,22 @@ import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';
 import '../../base/base_view.dart';
 import '../../components/custom_textwidget.dart';
+import '../../delivery_details/views/delivery_details_view.dart';
 import '../../home/views/home_view.dart';
 import '../controllers/delivery_purchase_details_controller.dart';
+import 'package:get/get.dart';
+import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
+import 'package:neiman_inventory/app/modules/base/base_view.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+import '../../../utils/colors.dart';
+import '../../../utils/dimens.dart';
+import '../../../utils/utility.dart';
+import '../../components/chip_widget.dart';
+import '../../components/custom_textwidget.dart';
+import '../../components/load_image.dart';
+import '../../components/rounded_button.dart';
+import '../../home/views/home_view.dart';
 
 class DeliveryPurchaseDetailsView
     extends GetView<DeliveryPurchaseDetailsController> {
@@ -25,40 +39,27 @@ class DeliveryPurchaseDetailsView
             backgroundColor: Colors.grey.shade200,
             appBar: AppBar(
               title: CText(
-                'Delivery Purchase Details',
+                'Delivery Order Items',
                 fontSize: Dimens.appbarTextSize,
                 textColor: Colors.white,
               ),
+              actions: [
+                IconButton(
+                  icon: CAssetImage(
+                    imagePath: 'images/barcode.png',
+                    imageColor: Colors.white,
+                  ),
+                  onPressed: () => controller.enableBarcodeView(),
+                ),
+              ],
             ),
             body: BaseView(
               showLoading: controller.loading,
-              child: controller.deliveryPurchaseDetailsItemList.isEmpty == true
-                  ? NoDataWidget(
+              child:NoDataWidget(
                 isLoading: controller.loading,
                 dataName: "purchase",
               )
-                  : GridView.builder(
-                itemCount: controller.deliveryPurchaseDetailsItemList.length,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.symmetric(
-                    horizontal: Dimens.basePaddingNone),
-                shrinkWrap: true,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount:
-                    getOrientation(context) == Orientation.portrait
-                        ? 1
-                        : 2,
-                    childAspectRatio:
-                    getOrientation(context) == Orientation.portrait
-                        ? 3.8
-                        : 2.35),
-                itemBuilder: (BuildContext context, int index) =>
-                    DeliveryPurchaseDetailsItemView(
-                      purchaseItem: controller.deliveryPurchaseDetailsItemList[index],
-                      onClick: (PurchaseDetailsItem? purchaseDetailsItem) =>
-                          controller.onPurchaseClick(purchaseDetailsItem),
-                    ),
-              ),
+
             )));
   }
 }

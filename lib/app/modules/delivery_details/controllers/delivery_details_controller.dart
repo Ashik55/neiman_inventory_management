@@ -44,10 +44,13 @@ class DeliveryDetailsController extends BaseController {
   //St
   String searchText = "";
 
+  ParentRoute? parentRoute;
+
   @override
   void onInit() {
     super.onInit();
     deliveryOrder = Get.arguments["data"];
+    parentRoute = Get.arguments["parent"];
     printObject(data: deliveryOrder);
     getDeliveryDetailsList();
   }
@@ -72,7 +75,6 @@ class DeliveryDetailsController extends BaseController {
         salesOrderList[scannedItemIndex].scanned = true;
         clearSearch();
         hideKeyboard();
-
       }
     } else {
       searchedSalesOrderList = salesOrderList;
@@ -82,8 +84,9 @@ class DeliveryDetailsController extends BaseController {
 
   void getDeliveryDetailsList() async {
     startLoading();
+
     salesOrderList = await _productRepository.getDeliveryDetails(
-        salesId: deliveryOrder?.salesId);
+        deliveryOrder: deliveryOrder, parentRoute: parentRoute);
     searchedSalesOrderList = salesOrderList;
 
     stopLoading();
@@ -172,7 +175,9 @@ class DeliveryDetailsController extends BaseController {
     startLoading();
     DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
         await _productRepository.updateDeliveryStatus(
-            orderID: deliveryOrder?.id, orderStatus: donePacking);
+            deliveryOrder: deliveryOrder,
+            parentRoute: parentRoute,
+            orderStatus: donePacking);
 
     await checkOrderStatus();
 
@@ -185,7 +190,9 @@ class DeliveryDetailsController extends BaseController {
     startLoading();
     DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
         await _productRepository.updateDeliveryStatus(
-            orderID: deliveryOrder?.id, orderStatus: holdPacking);
+            deliveryOrder: deliveryOrder,
+            parentRoute: parentRoute,
+            orderStatus: holdPacking);
 
     await checkOrderStatus();
 
@@ -197,7 +204,9 @@ class DeliveryDetailsController extends BaseController {
     startLoading();
     DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =
         await _productRepository.updateDeliveryStatus(
-            orderID: deliveryOrder?.id, orderStatus: startPacking);
+            deliveryOrder: deliveryOrder,
+            parentRoute: parentRoute,
+            orderStatus: startPacking);
 
     await checkOrderStatus();
     showMessageSnackbar(message: "${deliverOrderStatusUpdateResponse.status}");
@@ -205,8 +214,8 @@ class DeliveryDetailsController extends BaseController {
   }
 
   checkOrderStatus() async {
-    deliveryOrder =
-        await _productRepository.getDeliveryOrder(orderID: deliveryOrder?.id);
+    deliveryOrder = await _productRepository.getDeliveryOrder(
+        deliveryOrder: deliveryOrder, parentRoute: parentRoute);
 
     if (kDebugMode) {
       print(deliveryOrder?.status);

@@ -15,6 +15,7 @@ class DeliveryPurchaseListController extends BaseController {
   @override
   void onInit() {
     super.onInit();
+
     getPurchaseList();
   }
 
@@ -25,9 +26,7 @@ class DeliveryPurchaseListController extends BaseController {
   }
 
   onPurchaseClick(DeliveryPurchaseItem? purchase) {
-    Get.toNamed(Routes.DELIVERY_PURCHASE_DETAILS, arguments: {"data": purchase});
+    Get.toNamed(Routes.DELIVERY_PURCHASE_DETAILS,
+        arguments: {"data": purchase});
   }
-
-
-
 }

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/repository/product_repository.dart';
+import 'package:neiman_inventory/app/modules/delivery_purchase_list/controllers/delivery_purchase_list_controller.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../../data/local_storage/local_storage.dart';
@@ -14,6 +15,7 @@ import '../../../routes/app_pages.dart';
 import '../../../utils/toaster.dart';
 import '../../../utils/utility.dart';
 import '../../base/base_controller.dart';
+import '../../delivery_orders/controllers/delivery_orders_controller.dart';
 
 class HomeController extends BaseController {
   LocalStorage localStorage = Get.find();
@@ -136,10 +138,11 @@ class HomeController extends BaseController {
   }
 
   onDeliveryClick() {
-    Get.toNamed(Routes.DELIVERY_ORDERS);
+    Get.toNamed(Routes.DELIVERY_ORDERS,arguments: {"data":ParentRoute.deliveryOrders});
   }
 
   onDeliveryPurchaseClick() {
-    Get.toNamed(Routes.DELIVERY_PURCHASE_LIST);
+    Get.toNamed(Routes.DELIVERY_ORDERS,arguments: {"data":ParentRoute.deliveryPurchase});
+    // Get.toNamed(Routes.DELIVERY_PURCHASE_LIST);
   }
 }

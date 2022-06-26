@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/provider/localdb_provider.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/data/remote/PostPurchaseResponse.dart';
+import 'package:neiman_inventory/app/modules/delivery_orders/controllers/delivery_orders_controller.dart';
+import 'package:neiman_inventory/app/modules/delivery_purchase_list/controllers/delivery_purchase_list_controller.dart';
 
 import '../../data/models/DeliveryOrder.dart';
 import '../../data/models/Products.dart';
@@ -87,13 +89,13 @@ class ProductRepository extends GetxService {
     return _apiProvider.postPurchase(products: products);
   }
 
-  Future<List<DeliveryOrder>> getDeliveryOrders() async {
-    return _apiProvider.getDeliveryOrders();
+  Future<List<DeliveryOrder>> getDeliveryOrders({ParentRoute? parentRoute}) async {
+    return _apiProvider.getDeliveryOrders(parentRoute: parentRoute);
   }
 
   Future<List<SalesOrderItem>> getDeliveryDetails(
-      {required String? salesId}) async {
-    return _apiProvider.getDeliveryDetails(salesId: salesId);
+      {required DeliveryOrder? deliveryOrder, required ParentRoute? parentRoute}) async {
+    return _apiProvider.getDeliveryDetails(deliveryOrder: deliveryOrder, parentRoute: parentRoute);
   }
 
   Future<List<PurchaseItem>> getPurchaseDetails(
@@ -102,12 +104,11 @@ class ProductRepository extends GetxService {
   }
 
   Future<DeliverOrderStatusUpdateResponse> updateDeliveryStatus(
-      {required String? orderID, required String? orderStatus}) async {
-    return _apiProvider.updateDeliveryStatus(
-        orderID: orderID, orderStatus: orderStatus);
+      {required String? orderStatus, required DeliveryOrder? deliveryOrder, required ParentRoute? parentRoute}) async {
+    return _apiProvider.updateDeliveryStatus(orderStatus: orderStatus, deliveryOrder: deliveryOrder,parentRoute: parentRoute);
   }
 
-  Future<DeliveryOrder> getDeliveryOrder({required String? orderID}) async {
-    return _apiProvider.getDeliveryOrder(orderID: orderID);
+  Future<DeliveryOrder> getDeliveryOrder({required DeliveryOrder? deliveryOrder, required ParentRoute? parentRoute}) async {
+    return _apiProvider.getDeliveryOrder(deliveryOrder: deliveryOrder,parentRoute: parentRoute);
   }
 }

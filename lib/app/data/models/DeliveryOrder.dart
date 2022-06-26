@@ -1,20 +1,23 @@
 class DeliveryOrder {
   DeliveryOrder({
-      this.id, 
-      this.name, 
-      this.deleted, 
-      this.description, 
-      this.createdAt, 
-      this.modifiedAt, 
-      this.status, 
-      this.createdById, 
-      this.createdByName, 
-      this.modifiedById, 
-      this.modifiedByName, 
-      this.assignedUserId, 
-      this.assignedUserName, 
-      this.salesId, 
-      this.salesName,});
+    this.id,
+    this.name,
+    this.deleted,
+    this.description,
+    this.createdAt,
+    this.modifiedAt,
+    this.status,
+    this.createdById,
+    this.createdByName,
+    this.modifiedById,
+    this.modifiedByName,
+    this.assignedUserId,
+    this.assignedUserName,
+    this.salesId,
+    this.salesName,
+    this.purchaseName,
+    this.purchaseId,
+  });
 
   DeliveryOrder.fromJson(dynamic json) {
     id = json['id'];
@@ -32,7 +35,10 @@ class DeliveryOrder {
     assignedUserName = json['assignedUserName'];
     salesId = json['salesId'];
     salesName = json['salesName'];
+    purchaseId = json['purchaseId'];
+    purchaseName = json['purchaseName'];
   }
+
   String? id;
   dynamic name;
   bool? deleted;
@@ -48,6 +54,8 @@ class DeliveryOrder {
   dynamic assignedUserName;
   String? salesId;
   String? salesName;
+  String? purchaseId;
+  String? purchaseName;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -68,5 +76,4 @@ class DeliveryOrder {
     map['salesName'] = salesName;
     return map;
   }
-
 }
