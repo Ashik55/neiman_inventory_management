@@ -9,6 +9,7 @@ import '../../data/models/DeliveryOrder.dart';
 import '../../data/models/Products.dart';
 import '../../data/models/SalesOrderItem.dart';
 import '../../data/models/UserModel.dart';
+import '../../data/remote/BinItemModel.dart';
 import '../../data/remote/DeliverOrderStatusUpdateResponse.dart';
 import '../../data/remote/DeliveryPurchaseItem.dart';
 import '../../data/remote/POResponse.dart';
@@ -86,6 +87,10 @@ class ProductRepository extends GetxService {
   Future<List<SalesOrderItem>> getDeliveryDetails(
       {required DeliveryOrder? deliveryOrder, required ParentRoute? parentRoute}) async {
     return _apiProvider.getDeliveryDetails(deliveryOrder: deliveryOrder, parentRoute: parentRoute);
+  }
+  Future<List<BinItemModel>> getBinItems(
+      {required String? productID}) async {
+    return _apiProvider.getBinItems(productID: productID);
   }
 
   Future<List<PurchaseItem>> getPurchaseDetails(

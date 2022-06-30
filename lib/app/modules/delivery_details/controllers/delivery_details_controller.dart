@@ -90,6 +90,19 @@ class DeliveryDetailsController extends BaseController {
     searchedSalesOrderList = salesOrderList;
 
     stopLoading();
+    if(parentRoute == ParentRoute.deliveryOrders){
+      for (var element in searchedSalesOrderList) {
+        final binList = await _productRepository.getBinItems(productID: element.productId);
+        int itemIndex = searchedSalesOrderList.indexWhere((item) => item == element);
+        if(itemIndex != -1){
+          searchedSalesOrderList[itemIndex].binItems = binList;
+          update();
+        }
+      }
+    }
+
+
+    stopLoading();
   }
 
   sortSalesOrder() {

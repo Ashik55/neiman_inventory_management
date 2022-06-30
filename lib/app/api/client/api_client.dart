@@ -52,7 +52,7 @@ class ApiClient {
     }
 
     if (kDebugMode) {
-      printObject(data: response.body, title: "Response GET $uri");
+      printObject(data: json.decode(response.body), title: "Response GET $uri");
     }
 
     final decodedValue =

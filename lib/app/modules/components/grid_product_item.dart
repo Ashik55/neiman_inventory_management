@@ -52,27 +52,38 @@ class GridProductItem extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  CText(
-                    'Cat : ${products?.categoryName}',
-                    textAlign: TextAlign.center,
-                  ),
-                  CText(
-                    'Br : ${products?.brandName}',
-                    textAlign: TextAlign.center,
-                  ),
+
                   CText(
                     'Barcode : ${products?.barcode}',
                     textAlign: TextAlign.center,
                   ),
-                  CText(
-                    'Bin : ${products?.barcode}',
-                    textAlign: TextAlign.center,
-                  ),
+                  // CText(
+                  //   'Bin : ${products?.barcode}',
+                  //   textAlign: TextAlign.center,
+                  // ),
                 ],
               ),
             ),
             Row(
               children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 5.0),
+                  child: Card(
+                    elevation: 0,
+                    clipBehavior: Clip.antiAlias,
+                    margin: EdgeInsets.zero,
+                    color: Colors.grey.shade200,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(5),
+                          bottomRight: Radius.circular(5)),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CText('${products?.qty}',fontWeight: FontWeight.w600,),
+                    ),
+                  ),
+                ),
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(top: 5.0),

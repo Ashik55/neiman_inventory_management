@@ -140,8 +140,8 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                                           childAspectRatio:
                                               getOrientation(context) ==
                                                       Orientation.portrait
-                                                  ? 2.8
-                                                  : 2.8),
+                                                  ? 1.8
+                                                  : 1.8),
                                   itemBuilder: (BuildContext context,
                                           int index) =>
                                       InkWell(
@@ -213,11 +213,12 @@ class SalesDetailsItemView extends StatelessWidget {
             vertical: Dimens.basePaddingLarge, horizontal: Dimens.basePadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 3),
               child: CText(
-                'Name : ${parentRoute == ParentRoute.deliveryOrders ? salesDetailsItem?.name : salesDetailsItem?.productName}',
+                'Name : ${parentRoute == ParentRoute.deliveryOrders ? salesDetailsItem?.productName : salesDetailsItem?.productName}',
                 fontSize: Dimens.textMid,
                 fontWeight: FontWeight.w600,
                 textColor: CustomColors.KPrimaryColor,
@@ -256,13 +257,48 @@ class SalesDetailsItemView extends StatelessWidget {
                     maxLines: 2,
                   ),
                   CText(
-                    'Bin : ${salesDetailsItem?.bin}',
+                    'Item Number : ${salesDetailsItem?.itemNumber}',
                     fontSize: Dimens.textMid,
                     maxLines: 2,
                   ),
                 ],
               ),
             ),
+            if (salesDetailsItem?.binItems?.isNotEmpty == true)
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: CText(
+                  'Bin Items : ',
+                  fontSize: Dimens.textMid,
+                  fontWeight: FontWeight.w600,
+                  textColor: CustomColors.KPrimaryColor,
+                ),
+              ),
+            if (salesDetailsItem?.binItems?.isNotEmpty == true)
+              ListView.builder(
+                padding: const EdgeInsets.only(top: 5),
+                itemCount: salesDetailsItem?.binItems?.length,
+                shrinkWrap: true,
+                // physics: BouncingScrollPhysics(),
+                itemBuilder: (BuildContext context, int index2) => Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CText(
+                        'Bin Name : ${salesDetailsItem?.binItems?[index2].binName}',
+                        fontSize: Dimens.textMid,
+                        maxLines: 2,
+                      ),
+                      CText(
+                        'Bin Quantity : ${salesDetailsItem?.binItems?[index2].qty}',
+                        fontSize: Dimens.textMid,
+                        maxLines: 2,
+                      ),
+                    ],
+                  ),
+                ),
+              )
           ],
         ),
       ),

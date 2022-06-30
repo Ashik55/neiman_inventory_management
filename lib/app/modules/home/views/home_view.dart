@@ -328,8 +328,9 @@ class HomeView extends GetView<HomeController> {
                               itemBuilder: (BuildContext context, int index) =>
                                   GridProductItem(
                                 products: controller.productList[index],
-                                onclick: (Products? products) => controller
-                                    .onProductClick(products: products),
+                                onclick: (Products? products) => controller.onProductClick(
+                                    products: products,
+                                    index: index),
                               ),
                             )),
                 ],

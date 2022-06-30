@@ -4,6 +4,7 @@ import 'package:neiman_inventory/app/api/client/api_client.dart';
 import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
+import 'package:neiman_inventory/app/data/remote/BinItemModel.dart';
 import 'package:neiman_inventory/app/data/remote/DeliverOrderStatusUpdateResponse.dart';
 import 'package:neiman_inventory/app/data/remote/DeliveryPurchaseItem.dart';
 import 'package:neiman_inventory/app/data/remote/POResponse.dart';
@@ -27,6 +28,7 @@ class ApiProvider extends GetxService {
   static const String _deliveryOrders = '/DeliveryOrders';
   static const String _deliveryPurchase = '/DeliveryPurchase';
   static const String _deliveryOrdersItems = '/Sales/#/salesOrderItems';
+  static const String _productBinItems = '/Product/#/binItems';
 
   // static const String _deliveryDetails = '/Sales/627a9cf6628dabd85/salesOrderItems';
 
@@ -187,6 +189,22 @@ class ApiProvider extends GetxService {
           salesOrderItems.add(SalesOrderItem.fromJson(element));
         }
         return salesOrderItems;
+      },
+    );
+  }
+
+  Future<List<BinItemModel>> getBinItems(
+      {required String? productID}) async {
+    return apiClient.callGET(
+      endpoint: _productBinItems.replaceAll(
+          "#", "$productID"),
+      builder: (data) {
+        List<BinItemModel> binItems = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          binItems.add(BinItemModel.fromJson(element));
+        }
+        return binItems;
       },
     );
   }
