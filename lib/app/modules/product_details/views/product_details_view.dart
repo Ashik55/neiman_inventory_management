@@ -106,7 +106,6 @@ class PageContent extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                             textColor: CustomColors.KDarkBlackColor,
                           ),
-
                           const SizedBox(height: 15),
                           Card(
                             elevation: 0,
@@ -192,7 +191,7 @@ class PageContent extends StatelessWidget {
                                                   padding: const EdgeInsets
                                                       .symmetric(vertical: 2),
                                                   child: CText(
-                                                    "Vendore Name : ${products?.vendorName}"
+                                                    "Vendor Name : ${products?.vendorName}"
                                                         .capitalize,
                                                     textColor: CustomColors
                                                         .KLiteBlackColor,
@@ -212,7 +211,61 @@ class PageContent extends StatelessWidget {
                                                     "Qty: ${products?.qty}",
                                                   ),
                                                 ),
-
+                                                if (controller
+                                                        .binItems.isNotEmpty ==
+                                                    true)
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 15),
+                                                    child: CText(
+                                                      'Bin Items : ',
+                                                      fontSize: Dimens.textMid,
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      textColor: CustomColors
+                                                          .KPrimaryColor,
+                                                    ),
+                                                  ),
+                                                if (controller.binItems
+                                                        .isNotEmpty ==
+                                                    true)
+                                                  ListView.builder(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                            top: 5),
+                                                    itemCount: controller
+                                                        .binItems.length,
+                                                    shrinkWrap: true,
+                                                    // physics: BouncingScrollPhysics(),
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                                int index2) =>
+                                                            Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              4),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          CText(
+                                                            'Bin Name : ${controller.binItems[index2].binName}',
+                                                            fontSize:
+                                                                Dimens.textMid,
+                                                            maxLines: 2,
+                                                          ),
+                                                          CText(
+                                                            'Bin Quantity : ${controller.binItems[index2].qty}',
+                                                            fontSize:
+                                                                Dimens.textMid,
+                                                            maxLines: 2,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )
                                               ],
                                             ),
                                           ),

@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/modules/home/controllers/home_controller.dart';
 
+import '../../../api/repository/product_repository.dart';
 import '../../../data/local_storage/local_storage.dart';
 import '../../../data/models/Products.dart';
+import '../../../data/remote/BinItemModel.dart';
 import '../../../routes/app_pages.dart';
 import '../../../utils/toaster.dart';
 import '../../../utils/utility.dart';
@@ -12,6 +14,7 @@ import '../../../utils/utility.dart';
 class ProductDetailsController extends GetxController {
   LocalStorage localStorage = Get.find();
   HomeController productController = Get.find();
+  final ProductRepository _productRepository = Get.find();
 
   late PageController pageController;
   late int indexToShow;
@@ -22,6 +25,7 @@ class ProductDetailsController extends GetxController {
   bool isSearchSelected = false;
   bool loading = false;
   String? costVisibleIndex;
+  List<BinItemModel> binItems = [];
 
   @override
   void onInit() {
@@ -45,29 +49,25 @@ class ProductDetailsController extends GetxController {
       pageController = PageController();
       update();
     }
+
+    getBinItems();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-
+  getBinItems() async {
+    binItems.clear();
+    binItems = await _productRepository.getBinItems(
+        productID: getCurrentProduct()?.id);
+    update();
   }
-
-
 
   Products? getCurrentProduct() {
     return productController.productList[selectedIndex];
   }
 
-  onpageChange(int index) {
+  onpageChange(int index) async {
     print(index);
     selectedIndex = index;
-
-  }
-
-  copySKU() {
-    Clipboard.setData(ClipboardData(text: ""));
-    showMessageSnackbar(message: "Text copied to clipboard");
+    await getBinItems();
   }
 
   onImageClick(Products? products) {
@@ -75,10 +75,4 @@ class ProductDetailsController extends GetxController {
       "image": getRegularImageUrl(products?.pictureId),
     });
   }
-
-
-
-
-
-
 }
