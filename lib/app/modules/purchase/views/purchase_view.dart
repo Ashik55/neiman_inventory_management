@@ -33,10 +33,10 @@ class PurchaseView extends GetView<PurchaseController> {
                   textColor: Colors.white,
                 )),
             body: BaseView(
-              showLoading: controller.loading,
+              showLoading: controller.baseLoading,
               child: controller.purchaseList.isEmpty == true
                   ? NoDataWidget(
-                isLoading: controller.loading,
+                isLoading: controller.baseLoading,
                 dataName: "purchase",
               )
                   : GridView.builder(

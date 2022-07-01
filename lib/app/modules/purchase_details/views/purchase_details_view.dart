@@ -24,7 +24,7 @@ class PurchaseDetailsView extends GetView<PurchaseDetailsController> {
                 ),
               ),
               body: BaseView(
-                showLoading: controller.loading,
+                showLoading: controller.baseLoading,
                 child: GridView.builder(
                     itemCount: controller.purchaseList.length,
                     physics: const BouncingScrollPhysics(),

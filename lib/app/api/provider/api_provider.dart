@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/client/api_client.dart';
+import 'package:neiman_inventory/app/data/models/BinModel.dart';
 import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
@@ -29,6 +30,8 @@ class ApiProvider extends GetxService {
   static const String _deliveryPurchase = '/DeliveryPurchase';
   static const String _deliveryOrdersItems = '/Sales/#/salesOrderItems';
   static const String _productBinItems = '/Product/#/binItems';
+  static const String _binItems = '/binItems';
+  static const String _bins = '/bin';
 
   // static const String _deliveryDetails = '/Sales/627a9cf6628dabd85/salesOrderItems';
 
@@ -193,11 +196,9 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<List<BinItemModel>> getBinItems(
-      {required String? productID}) async {
+  Future<List<BinItemModel>> getBinItems({required String? productID}) async {
     return apiClient.callGET(
-      endpoint: _productBinItems.replaceAll(
-          "#", "$productID"),
+      endpoint: _productBinItems.replaceAll("#", "$productID"),
       builder: (data) {
         List<BinItemModel> binItems = [];
         Iterable i = data?['list'];
@@ -205,6 +206,37 @@ class ApiProvider extends GetxService {
           binItems.add(BinItemModel.fromJson(element));
         }
         return binItems;
+      },
+    );
+  }
+
+  Future<String> addBinItem(
+      {required String? productID,
+      required String? binID,
+      required String? qty}) async {
+    return apiClient.callPOST(
+      endpoint: _binItems,
+      body: {
+        "binId": binID,
+        "qty": qty,
+        "productId": productID,
+      },
+      builder: (data) {
+        return data["id"];
+      },
+    );
+  }
+
+  Future<List<BinModel>> getBinList() async {
+    return apiClient.callGET(
+      endpoint: _bins,
+      builder: (data) {
+        List<BinModel> list = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          list.add(BinModel.fromJson(element));
+        }
+        return list;
       },
     );
   }

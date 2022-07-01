@@ -40,10 +40,10 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
               ],
             ),
             body: BaseView(
-              showLoading: controller.loading,
+              showLoading: controller.baseLoading,
               child: controller.salesOrderList.isEmpty == true
                   ? NoDataWidget(
-                      isLoading: controller.loading,
+                      isLoading: controller.baseLoading,
                       dataName: "purchase",
                     )
                   : Column(

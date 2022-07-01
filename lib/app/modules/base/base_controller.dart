@@ -9,22 +9,24 @@ import '../../api/repository/product_repository.dart';
 import '../../data/local_storage/local_storage.dart';
 
 class BaseController extends GetxController {
-  bool loading = false;
+  bool baseLoading = false;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   startLoading() {
-    loading = true;
+    baseLoading = true;
     update();
     if (kDebugMode) {
-      print("loading : $loading");
+      print("loading : $baseLoading");
     }
   }
 
   stopLoading() {
-    loading = false;
+    baseLoading = false;
     update();
 
     if (kDebugMode) {
-      print("loading : $loading");
+      print("loading : $baseLoading");
     }
   }
 }

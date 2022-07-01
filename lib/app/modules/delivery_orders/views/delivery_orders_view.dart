@@ -32,10 +32,10 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
             //       textColor: Colors.white,
             //     )),
             body: BaseView(
-              showLoading: controller.loading,
+              showLoading: controller.baseLoading,
               child: controller.deliveryOrdersList.isEmpty == true
                   ? NoDataWidget(
-                      isLoading: controller.loading,
+                      isLoading: controller.baseLoading,
                       dataName: "purchase",
                     )
                   : GridView.builder(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:neiman_inventory/app/modules/base/base_view.dart';
 
 import '../../../data/models/Products.dart';
 import '../../../utils/colors.dart';
@@ -18,6 +19,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
   Widget build(BuildContext context) {
     return GetBuilder<ProductDetailsController>(
         builder: (controller) => Scaffold(
+          key: controller.scaffoldKey,
             backgroundColor: Colors.white,
             appBar: AppBar(
                 title: CText(
@@ -25,15 +27,20 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
               fontSize: Dimens.appbarTextSize,
               textColor: Colors.white,
             )),
-            body: PageView.builder(
-                controller: controller.pageController,
-                onPageChanged: (index) => controller.onpageChange(index),
-                itemCount: controller.productController.productList.length,
-                itemBuilder: (context, index) => PageContent(
-                      products: controller.productController.productList[index],
-                      onImageClick: (Products? products) =>
-                          controller.onImageClick(products),
-                    ))));
+            body: BaseView(
+              showLoading: controller.baseLoading,
+              child: PageView.builder(
+                  controller: controller.pageController,
+                  onPageChanged: (index) => controller.onpageChange(index),
+                  itemCount: controller.productController.productList.length,
+                  itemBuilder: (context, index) => PageContent(
+                        products: controller.productController.productList[index],
+                        onImageClick: (Products? products) =>
+                            controller.onImageClick(products),
+                        createBin: (Products? products) =>
+                            controller.createBinItem(products: products),
+                      )),
+            )));
   }
 }
 
@@ -41,10 +48,12 @@ class PageContent extends StatelessWidget {
   Products? products;
 
   Function(Products? products) onImageClick;
+  Function(Products? products) createBin;
 
   PageContent({
     required this.products,
     required this.onImageClick,
+    required this.createBin,
   });
 
   @override
@@ -62,6 +71,7 @@ class PageContent extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const BouncingScrollPhysics(),
                     children: [
+                      const SizedBox(height: 15,),
                       Container(
                         width: getMaxWidth(context),
                         color: Colors.white,
@@ -227,8 +237,8 @@ class PageContent extends StatelessWidget {
                                                           .KPrimaryColor,
                                                     ),
                                                   ),
-                                                if (controller.binItems
-                                                        .isNotEmpty ==
+                                                if (controller
+                                                        .binItems.isNotEmpty ==
                                                     true)
                                                   ListView.builder(
                                                     padding:
@@ -237,7 +247,7 @@ class PageContent extends StatelessWidget {
                                                     itemCount: controller
                                                         .binItems.length,
                                                     shrinkWrap: true,
-                                                    // physics: BouncingScrollPhysics(),
+                                                    physics: const ClampingScrollPhysics(),
                                                     itemBuilder:
                                                         (BuildContext context,
                                                                 int index2) =>
@@ -273,9 +283,6 @@ class PageContent extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    height: 10,
-                                  )
                                 ],
                               ),
                             ),
@@ -284,6 +291,15 @@ class PageContent extends StatelessWidget {
                       ),
                     ],
                   )),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CRoundedButton(
+                        onClick: () => createBin(products),
+                        text: "Create Bins Items",
+                        backgroundColor: CustomColors.KPrimaryColor,
+                        width: getMaxWidth(context),
+                        radius: Dimens.radiusNone),
+                  )
                 ],
               ),
             ));

@@ -5,6 +5,7 @@ import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/data/remote/PostPurchaseResponse.dart';
 import 'package:neiman_inventory/app/modules/delivery_orders/controllers/delivery_orders_controller.dart';
 
+import '../../data/models/BinModel.dart';
 import '../../data/models/DeliveryOrder.dart';
 import '../../data/models/Products.dart';
 import '../../data/models/SalesOrderItem.dart';
@@ -68,8 +69,6 @@ class ProductRepository extends GetxService {
     return _apiProvider.getPurchaseList();
   }
 
-
-
   Future<PoResponse> createPO(
       {required Products? products, required String? purchaseID}) async {
     return _apiProvider.createPO(products: products, purchaseID: purchaseID);
@@ -80,17 +79,32 @@ class ProductRepository extends GetxService {
     return _apiProvider.postPurchase(products: products);
   }
 
-  Future<List<DeliveryOrder>> getDeliveryOrders({ParentRoute? parentRoute}) async {
+  Future<List<DeliveryOrder>> getDeliveryOrders(
+      {ParentRoute? parentRoute}) async {
     return _apiProvider.getDeliveryOrders(parentRoute: parentRoute);
   }
 
   Future<List<SalesOrderItem>> getDeliveryDetails(
-      {required DeliveryOrder? deliveryOrder, required ParentRoute? parentRoute}) async {
-    return _apiProvider.getDeliveryDetails(deliveryOrder: deliveryOrder, parentRoute: parentRoute);
+      {required DeliveryOrder? deliveryOrder,
+      required ParentRoute? parentRoute}) async {
+    return _apiProvider.getDeliveryDetails(
+        deliveryOrder: deliveryOrder, parentRoute: parentRoute);
   }
-  Future<List<BinItemModel>> getBinItems(
-      {required String? productID}) async {
+
+  Future<List<BinItemModel>> getBinItems({required String? productID}) async {
     return _apiProvider.getBinItems(productID: productID);
+  }
+
+  Future<List<BinModel>> getBinList() async {
+    return _apiProvider.getBinList();
+  }
+
+  Future<String> addBinItem(
+      {required String? productID,
+      required String? binID,
+      required String? qty}) async {
+    return _apiProvider.addBinItem(
+        productID: productID, binID: binID, qty: qty);
   }
 
   Future<List<PurchaseItem>> getPurchaseDetails(
@@ -99,11 +113,19 @@ class ProductRepository extends GetxService {
   }
 
   Future<DeliverOrderStatusUpdateResponse> updateDeliveryStatus(
-      {required String? orderStatus, required DeliveryOrder? deliveryOrder, required ParentRoute? parentRoute}) async {
-    return _apiProvider.updateDeliveryStatus(orderStatus: orderStatus, deliveryOrder: deliveryOrder,parentRoute: parentRoute);
+      {required String? orderStatus,
+      required DeliveryOrder? deliveryOrder,
+      required ParentRoute? parentRoute}) async {
+    return _apiProvider.updateDeliveryStatus(
+        orderStatus: orderStatus,
+        deliveryOrder: deliveryOrder,
+        parentRoute: parentRoute);
   }
 
-  Future<DeliveryOrder> getDeliveryOrder({required DeliveryOrder? deliveryOrder, required ParentRoute? parentRoute}) async {
-    return _apiProvider.getDeliveryOrder(deliveryOrder: deliveryOrder,parentRoute: parentRoute);
+  Future<DeliveryOrder> getDeliveryOrder(
+      {required DeliveryOrder? deliveryOrder,
+      required ParentRoute? parentRoute}) async {
+    return _apiProvider.getDeliveryOrder(
+        deliveryOrder: deliveryOrder, parentRoute: parentRoute);
   }
 }

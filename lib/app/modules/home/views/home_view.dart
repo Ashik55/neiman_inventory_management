@@ -250,7 +250,7 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             body: BaseView(
-              showLoading: controller.loading,
+              showLoading: controller.baseLoading,
               child: Column(
                 children: [
                   Container(
@@ -297,7 +297,7 @@ class HomeView extends GetView<HomeController> {
                   Expanded(
                       child: controller.productList.isEmpty == true
                           ? NoDataWidget(
-                              isLoading: controller.loading,
+                              isLoading: controller.baseLoading,
                             )
                           :
 
