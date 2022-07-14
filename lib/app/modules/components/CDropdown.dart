@@ -8,6 +8,7 @@ import 'custom_textwidget.dart';
 class CDropdown extends StatelessWidget {
   Function(String? id) onChange;
   List<TitleIDModel>? itemList;
+  TitleIDModel? selectedItem;
   Color? backgroundColor;
   Color? textColor;
   Color? strokeColor;
@@ -17,6 +18,7 @@ class CDropdown extends StatelessWidget {
   CDropdown({
     required this.itemList,
     required this.onChange,
+    this.selectedItem,
     this.backgroundColor,
     this.textColor,
     this.textSize,
@@ -40,7 +42,7 @@ class CDropdown extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 15.0),
             child: DropdownButtonFormField(
                 decoration: const InputDecoration.collapsed(hintText: ''),
-                value: itemList?.first.id,
+                value: selectedItem?.id ?? itemList?.first.id,
                 style: TextStyle(
                     color: isDisable == true
                         ? Colors.grey.shade400

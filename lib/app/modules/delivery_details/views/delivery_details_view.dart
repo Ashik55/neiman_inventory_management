@@ -144,31 +144,32 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                                                   : 1.8),
                                   itemBuilder: (BuildContext context,
                                           int index) =>
-                                      InkWell(
-                                        onTap: () => controller.onItemClick(),
-                                        child: SalesDetailsItemView(
-                                          parentRoute: controller.parentRoute,
-                                          salesDetailsItem: controller
-                                                  .searchText.isEmpty
-                                              ? controller.salesOrderList[index]
-                                              : controller
-                                                      .searchedSalesOrderList[
-                                                  index],
-                                          allPacked: controller.isAllPacked(
-                                              controller.searchText.isEmpty
-                                                  ? controller
-                                                      .salesOrderList[index]
-                                                  : controller
-                                                          .searchedSalesOrderList[
-                                                      index]),
-                                          qtyPacked: controller.packedItem(
-                                              controller.searchText.isEmpty
-                                                  ? controller
-                                                      .salesOrderList[index]
-                                                  : controller
-                                                          .searchedSalesOrderList[
-                                                      index]),
-                                        ),
+                                      SalesDetailsItemView(
+                                        parentRoute: controller.parentRoute,
+                                        salesDetailsItem: controller
+                                                .searchText.isEmpty
+                                            ? controller.salesOrderList[index]
+                                            : controller
+                                                .searchedSalesOrderList[index],
+                                        allPacked: controller.isAllPacked(
+                                            controller.searchText.isEmpty
+                                                ? controller
+                                                    .salesOrderList[index]
+                                                : controller
+                                                        .searchedSalesOrderList[
+                                                    index]),
+                                        qtyPacked: controller.packedItem(
+                                            controller.searchText.isEmpty
+                                                ? controller
+                                                    .salesOrderList[index]
+                                                : controller
+                                                        .searchedSalesOrderList[
+                                                    index]),
+                                        onClick: (SalesOrderItem?
+                                                salesDetailsItem) =>
+                                            controller.onSalesDetailsItemClick(
+                                                salesDetailsItem:
+                                                    salesDetailsItem),
                                       )),
                         ),
                         Padding(
@@ -187,6 +188,7 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
 
 class SalesDetailsItemView extends StatelessWidget {
   ParentRoute? parentRoute;
+  Function(SalesOrderItem? salesDetailsItem) onClick;
   SalesOrderItem? salesDetailsItem;
   bool? allPacked;
   int? qtyPacked;
@@ -194,112 +196,118 @@ class SalesDetailsItemView extends StatelessWidget {
   SalesDetailsItemView(
       {required this.salesDetailsItem,
       required this.allPacked,
+      required this.onClick,
       required this.parentRoute,
       required this.qtyPacked});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      clipBehavior: Clip.antiAlias,
-      color: allPacked == true || salesDetailsItem?.scanned == true
-          ? Colors.green.shade100
-          : Colors.yellow.shade100,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Dimens.radiusMin),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: Dimens.basePaddingLarge, horizontal: Dimens.basePadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: CText(
-                'Name : ${parentRoute == ParentRoute.deliveryOrders ? salesDetailsItem?.productName : salesDetailsItem?.productName}',
-                fontSize: Dimens.textMid,
-                fontWeight: FontWeight.w600,
-                textColor: CustomColors.KPrimaryColor,
-                maxLines: 2,
-              ),
-            ),
-            const SizedBox(
-              height: 6,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CText(
-                    'QTY Ordered : ${salesDetailsItem?.qty}',
-                    fontSize: Dimens.textMid,
-                    maxLines: 2,
-                  ),
-                  CText(
-                    'Qty Packed : $qtyPacked',
-                    fontSize: Dimens.textMid,
-                    maxLines: 2,
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CText(
-                    'Barcode : ${salesDetailsItem?.barcode}',
-                    fontSize: Dimens.textMid,
-                    maxLines: 2,
-                  ),
-                  CText(
-                    'Item Number : ${salesDetailsItem?.itemNumber}',
-                    fontSize: Dimens.textMid,
-                    maxLines: 2,
-                  ),
-                ],
-              ),
-            ),
-            if (salesDetailsItem?.binItems?.isNotEmpty == true)
+    return InkWell(
+      onTap: () => onClick(salesDetailsItem),
+      child: Card(
+        elevation: 0,
+        clipBehavior: Clip.antiAlias,
+        color: allPacked == true || salesDetailsItem?.scanned == true
+            ? Colors.green.shade100
+            : Colors.yellow.shade100,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Dimens.radiusMin),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              vertical: Dimens.basePaddingLarge,
+              horizontal: Dimens.basePadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
               Padding(
-                padding: const EdgeInsets.only(top: 15),
+                padding: const EdgeInsets.symmetric(vertical: 3),
                 child: CText(
-                  'Bin Items : ',
+                  'Name : ${parentRoute == ParentRoute.deliveryOrders ? salesDetailsItem?.productName : salesDetailsItem?.productName}',
                   fontSize: Dimens.textMid,
                   fontWeight: FontWeight.w600,
                   textColor: CustomColors.KPrimaryColor,
+                  maxLines: 2,
                 ),
               ),
-            if (salesDetailsItem?.binItems?.isNotEmpty == true)
-              ListView.builder(
-                padding: const EdgeInsets.only(top: 5),
-                itemCount: salesDetailsItem?.binItems?.length,
-                shrinkWrap: true,
-                // physics: BouncingScrollPhysics(),
-                itemBuilder: (BuildContext context, int index2) => Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CText(
-                        'Bin Name : ${salesDetailsItem?.binItems?[index2].binName}',
-                        fontSize: Dimens.textMid,
-                        maxLines: 2,
-                      ),
-                      CText(
-                        'Bin Quantity : ${salesDetailsItem?.binItems?[index2].qty}',
-                        fontSize: Dimens.textMid,
-                        maxLines: 2,
-                      ),
-                    ],
+              const SizedBox(
+                height: 6,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CText(
+                      'QTY Ordered : ${salesDetailsItem?.qty}',
+                      fontSize: Dimens.textMid,
+                      maxLines: 2,
+                    ),
+                    CText(
+                      'Qty Packed : $qtyPacked',
+                      fontSize: Dimens.textMid,
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CText(
+                      'Barcode : ${salesDetailsItem?.barcode}',
+                      fontSize: Dimens.textMid,
+                      maxLines: 2,
+                    ),
+                    CText(
+                      'Item Number : ${salesDetailsItem?.itemNumber}',
+                      fontSize: Dimens.textMid,
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
+              ),
+              if (salesDetailsItem?.binItems?.isNotEmpty == true)
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: CText(
+                    'Bin Items : ',
+                    fontSize: Dimens.textMid,
+                    fontWeight: FontWeight.w600,
+                    textColor: CustomColors.KPrimaryColor,
                   ),
                 ),
-              )
-          ],
+              if (salesDetailsItem?.binItems?.isNotEmpty == true)
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(top: 5),
+                    itemCount: salesDetailsItem?.binItems?.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index2) => Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CText(
+                            'Bin Name : ${salesDetailsItem?.binItems?[index2].binName}',
+                            fontSize: Dimens.textMid,
+                            maxLines: 2,
+                          ),
+                          CText(
+                            'Bin Quantity : ${salesDetailsItem?.binItems?[index2].qty}',
+                            fontSize: Dimens.textMid,
+                            maxLines: 2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+            ],
+          ),
         ),
       ),
     );

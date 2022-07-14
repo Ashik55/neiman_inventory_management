@@ -13,7 +13,6 @@ enum ParentRoute { deliveryPurchase, deliveryOrders }
 class DeliveryOrdersController extends BaseController {
   final LocalStorage _localStorage = Get.find();
   final ProductRepository _productRepository = Get.find();
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   List<DeliveryOrder> deliveryOrdersList = [];
   ParentRoute? parentRoute;
 

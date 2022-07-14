@@ -227,6 +227,21 @@ class ApiProvider extends GetxService {
     );
   }
 
+  Future<String> updateBinItem(
+      {
+        required String? binID,
+        required String? qty}) async {
+    return apiClient.callPUT(
+      endpoint: _binItems+"/$binID",
+      body: {
+        "qty": qty,
+      },
+      builder: (data) {
+        return data["id"];
+      },
+    );
+  }
+
   Future<List<BinModel>> getBinList() async {
     return apiClient.callGET(
       endpoint: _bins,

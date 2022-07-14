@@ -16,17 +16,11 @@ class BaseController extends GetxController {
   startLoading() {
     baseLoading = true;
     update();
-    if (kDebugMode) {
-      print("loading : $baseLoading");
-    }
+
   }
 
   stopLoading() {
     baseLoading = false;
     update();
-
-    if (kDebugMode) {
-      print("loading : $baseLoading");
-    }
   }
 }

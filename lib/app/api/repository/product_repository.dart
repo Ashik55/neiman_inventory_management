@@ -107,6 +107,14 @@ class ProductRepository extends GetxService {
         productID: productID, binID: binID, qty: qty);
   }
 
+  Future<String> updateBinItem(
+      {
+        required String? binID,
+        required String? qty}) async {
+    return _apiProvider.updateBinItem(
+   binID: binID, qty: qty);
+  }
+
   Future<List<PurchaseItem>> getPurchaseDetails(
       {required String? purchaseID}) async {
     return _apiProvider.getPurchaseDetails(purchaseID: purchaseID);

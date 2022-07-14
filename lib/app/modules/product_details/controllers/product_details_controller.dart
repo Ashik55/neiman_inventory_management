@@ -34,7 +34,7 @@ class ProductDetailsController extends BaseController {
   bool isSearchSelected = false;
   String? costVisibleIndex;
   List<BinItemModel> binItems = [];
-  List<BinModel> binList = [];
+  List<TitleIDModel> binIDList = [];
 
   @override
   void onInit() {
@@ -66,8 +66,11 @@ class ProductDetailsController extends BaseController {
   getBins() async {
     startLoading();
 
-    binList.clear();
-    binList = await _productRepository.getBinList();
+    binIDList.clear();
+    final binList = await _productRepository.getBinList();
+    for (var element in binList) {
+      binIDList.add(TitleIDModel(id: element.id, title: element.name));
+    }
 
     stopLoading();
   }
@@ -96,21 +99,40 @@ class ProductDetailsController extends BaseController {
   }
 
   createBinItem({required Products? products}) {
-    List<TitleIDModel> binIDList = [];
-    for (var element in binList) {
-      binIDList.add(TitleIDModel(id: element.id, title: element.name));
-    }
-
     if (binIDList.isNotEmpty) {
       showCreateBinItemBottomSheet(
           binIDList: binIDList,
-          addBinItemClick: (binID, quantity)async {
+          addBinItemClick: (binID, quantity) async {
             Get.back();
             startLoading();
-            String data = await _productRepository.addBinItem(productID: getCurrentProduct()?.id, binID: binID, qty: quantity);
+            String data = await _productRepository.addBinItem(
+                productID: getCurrentProduct()?.id,
+                binID: binID,
+                qty: quantity);
             await getBinItems();
             stopLoading();
+          });
+    } else {
+      showMessageSnackbar(message: "Sorry Bin list is empty");
+    }
+  }
 
+  onBinItemClick({BinItemModel? binItemModel}) {
+    TitleIDModel titleIDModel =
+        TitleIDModel(id: binItemModel?.binId, title: binItemModel?.binName);
+
+    if (binIDList.isNotEmpty) {
+      showCreateBinItemBottomSheet(
+          selectedBin: titleIDModel,
+          quantity: "${binItemModel?.qty}",
+          binIDList: binIDList,
+          addBinItemClick: (binID, quantity) async {
+            Get.back();
+            startLoading();
+            String data = await _productRepository.updateBinItem(
+                binID: binItemModel?.id, qty: quantity);
+            await getBinItems();
+            stopLoading();
           });
     } else {
       showMessageSnackbar(message: "Sorry Bin list is empty");
@@ -119,14 +141,19 @@ class ProductDetailsController extends BaseController {
 
   void showCreateBinItemBottomSheet(
       {required List<TitleIDModel> binIDList,
+      TitleIDModel? selectedBin,
+      String? quantity,
       required Function(
         String? binID,
         String? quantity,
       )
           addBinItemClick}) {
-    String? selectedBinID = binIDList.first.id;
-
+    String? selectedBinID = selectedBin?.id ?? binIDList.first.id;
     TextEditingController quantityController = TextEditingController();
+
+    if (quantity != null) {
+      quantityController.text = quantity;
+    }
 
     showModalBottomSheet(
       shape: const RoundedRectangleBorder(
@@ -169,7 +196,9 @@ class ProductDetailsController extends BaseController {
               ),
               CDropdown(
                   itemList: binIDList,
+                  isDisable: selectedBin != null,
                   strokeColor: Colors.grey,
+                  selectedItem: selectedBin,
                   textColor: CustomColors.KPrimaryColor,
                   onChange: (selectedID) => selectedBinID = selectedID),
               Padding(
@@ -181,7 +210,6 @@ class ProductDetailsController extends BaseController {
               ),
               CTextField(
                 hintText: '0',
-                fontWeight: FontWeight.w700,
                 textInputType: TextInputType.number,
                 textAlign: TextAlign.start,
                 controller: quantityController,

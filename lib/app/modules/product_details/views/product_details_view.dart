@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:neiman_inventory/app/modules/base/base_view.dart';
 
 import '../../../data/models/Products.dart';
+import '../../../data/remote/BinItemModel.dart';
 import '../../../utils/colors.dart';
 import '../../../utils/dimens.dart';
 import '../../../utils/utility.dart';
@@ -19,7 +20,7 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
   Widget build(BuildContext context) {
     return GetBuilder<ProductDetailsController>(
         builder: (controller) => Scaffold(
-          key: controller.scaffoldKey,
+            key: controller.scaffoldKey,
             backgroundColor: Colors.white,
             appBar: AppBar(
                 title: CText(
@@ -34,11 +35,15 @@ class ProductDetailsView extends GetView<ProductDetailsController> {
                   onPageChanged: (index) => controller.onpageChange(index),
                   itemCount: controller.productController.productList.length,
                   itemBuilder: (context, index) => PageContent(
-                        products: controller.productController.productList[index],
+                        products:
+                            controller.productController.productList[index],
                         onImageClick: (Products? products) =>
                             controller.onImageClick(products),
                         createBin: (Products? products) =>
                             controller.createBinItem(products: products),
+                        onBinItemClick: (BinItemModel? binItemModel) =>
+                            controller.onBinItemClick(
+                                binItemModel: binItemModel),
                       )),
             )));
   }
@@ -49,11 +54,13 @@ class PageContent extends StatelessWidget {
 
   Function(Products? products) onImageClick;
   Function(Products? products) createBin;
+  Function(BinItemModel? binItemModel) onBinItemClick;
 
   PageContent({
     required this.products,
     required this.onImageClick,
     required this.createBin,
+    required this.onBinItemClick,
   });
 
   @override
@@ -71,7 +78,9 @@ class PageContent extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const BouncingScrollPhysics(),
                     children: [
-                      const SizedBox(height: 15,),
+                      const SizedBox(
+                        height: 15,
+                      ),
                       Container(
                         width: getMaxWidth(context),
                         color: Colors.white,
@@ -247,32 +256,42 @@ class PageContent extends StatelessWidget {
                                                     itemCount: controller
                                                         .binItems.length,
                                                     shrinkWrap: true,
-                                                    physics: const ClampingScrollPhysics(),
+                                                    physics:
+                                                        const ClampingScrollPhysics(),
                                                     itemBuilder:
                                                         (BuildContext context,
                                                                 int index2) =>
-                                                            Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              4),
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          CText(
-                                                            'Bin Name : ${controller.binItems[index2].binName}',
-                                                            fontSize:
-                                                                Dimens.textMid,
-                                                            maxLines: 2,
-                                                          ),
-                                                          CText(
-                                                            'Bin Quantity : ${controller.binItems[index2].qty}',
-                                                            fontSize:
-                                                                Dimens.textMid,
-                                                            maxLines: 2,
-                                                          ),
-                                                        ],
+                                                            InkWell(
+                                                      onTap: () =>
+                                                          onBinItemClick(
+                                                              controller
+                                                                      .binItems[
+                                                                  index2]),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                    .symmetric(
+                                                                horizontal: 6,
+                                                                vertical: 8),
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            CText(
+                                                              'Bin Name : ${controller.binItems[index2].binName}',
+                                                              fontSize: Dimens
+                                                                  .textMid,
+                                                              maxLines: 2,
+                                                            ),
+                                                            CText(
+                                                              'Bin Quantity : ${controller.binItems[index2].qty}',
+                                                              fontSize: Dimens
+                                                                  .textMid,
+                                                              maxLines: 2,
+                                                            ),
+                                                          ],
+                                                        ),
                                                       ),
                                                     ),
                                                   )

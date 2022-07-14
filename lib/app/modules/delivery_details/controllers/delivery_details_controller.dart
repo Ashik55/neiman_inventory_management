@@ -13,8 +13,16 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../../data/local_storage/local_storage.dart';
 import '../../../data/models/DeliveryOrder.dart';
+import '../../../data/models/title_id_model.dart';
+import '../../../data/remote/BinItemModel.dart';
 import '../../../data/remote/DeliverOrderStatusUpdateResponse.dart';
+import '../../../utils/colors.dart';
+import '../../../utils/dimens.dart';
 import '../../../utils/toaster.dart';
+import '../../components/CDropdown.dart';
+import '../../components/custom_textfield.dart';
+import '../../components/custom_textwidget.dart';
+import '../../components/rounded_button.dart';
 
 // Start = Started Packing
 // Done = Ready Delivery
@@ -27,7 +35,6 @@ class DeliveryDetailsController extends BaseController {
   TextEditingController searchController = TextEditingController();
   final LocalStorage _localStorage = Get.find();
   final ProductRepository _productRepository = Get.find();
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   List<SalesOrderItem> salesOrderList = [];
   List<SalesOrderItem> searchedSalesOrderList = [];
   List<SalesOrderItem> scannedSalesOrderList = [];
@@ -37,22 +44,47 @@ class DeliveryDetailsController extends BaseController {
 
   //orderStatus
   String startPacking = "Started Packing";
+  String startDelivery = "Started Delivery";
   String holdPacking = "On Hold";
   String donePacking = "Ready Delivery";
   String awaitPacking = "Awaiting Packing";
+  String awaitDelivery = "Awaiting Delivery";
 
   //St
   String searchText = "";
 
   ParentRoute? parentRoute;
+  List<BinItemModel> binItems = [];
+  List<TitleIDModel> binIDList = [];
+
 
   @override
   void onInit() {
     super.onInit();
+
     deliveryOrder = Get.arguments["data"];
     parentRoute = Get.arguments["parent"];
-    printObject(data: deliveryOrder);
+    printObject(data: deliveryOrder, title: "deliveryOrder data");
+    if (kDebugMode) {
+      print(parentRoute);
+    }
+
+    //get bins
+    if(parentRoute == ParentRoute.deliveryPurchase){
+      getBins();
+    }
+
     getDeliveryDetailsList();
+  }
+
+  getBins() async {
+    startLoading();
+    binIDList.clear();
+    final binList = await _productRepository.getBinList();
+    for (var element in binList) {
+      binIDList.add(TitleIDModel(id: element.id, title: element.name));
+    }
+    stopLoading();
   }
 
   clearSearch() {
@@ -85,8 +117,14 @@ class DeliveryDetailsController extends BaseController {
   void getDeliveryDetailsList() async {
     startLoading();
 
+
+    print("deliveryOrder");
+    print(deliveryOrder);
+    printObject(data: deliveryOrder);
     salesOrderList = await _productRepository.getDeliveryDetails(
         deliveryOrder: deliveryOrder, parentRoute: parentRoute);
+
+
     searchedSalesOrderList = salesOrderList;
 
     stopLoading();
@@ -117,7 +155,7 @@ class DeliveryDetailsController extends BaseController {
     update();
   }
 
-  onSalesItemClick(SalesOrderItem? salesOrderItem) {}
+
 
   enableBarcodeView() async {
     if (kDebugMode) {
@@ -177,10 +215,19 @@ class DeliveryDetailsController extends BaseController {
     return scannedCount >= qty;
   }
 
-  onItemClick() {
-    if (kDebugMode) {
-      print(scannedBarcodes);
+  onSalesDetailsItemClick({required SalesOrderItem? salesDetailsItem}) {
+    //on item click
+    if(parentRoute == ParentRoute.deliveryPurchase){
+
+      showSalesDetailsItemUpdateBottomSheet(addBinItemClick: (String? binID, String? quantity) { 
+        
+
+      }, salesDetailsItem: salesDetailsItem);
+
+
     }
+
+
   }
 
   onDonePacking() async {
@@ -244,4 +291,138 @@ class DeliveryDetailsController extends BaseController {
     showBarcode = false;
     update();
   }
+
+
+
+
+
+  void showSalesDetailsItemUpdateBottomSheet(
+      {required SalesOrderItem? salesDetailsItem,
+        TitleIDModel? selectedBin,
+        String? quantity,
+        required Function(
+            String? binID,
+            String? quantity,
+            )
+        addBinItemClick}) {
+
+    String? selectedBinID = selectedBin?.id ?? binIDList.first.id;
+    TextEditingController binQuantityController = TextEditingController();
+    TextEditingController quantityController = TextEditingController();
+
+    if(salesDetailsItem != null){
+      quantityController.text = "${salesDetailsItem.qty ?? 0}";
+    }
+
+
+    if (quantity != null) {
+      quantityController.text = quantity;
+    }
+
+    showModalBottomSheet(
+      shape:  const RoundedRectangleBorder(
+          borderRadius:
+          BorderRadius.vertical(top: Radius.circular(Dimens.radiusMid))),
+      isScrollControlled: true,
+      context: scaffoldKey.currentContext!,
+      backgroundColor: Colors.white,
+      builder: (context) => GetBuilder<DeliveryDetailsController>(
+        builder: (controller) => Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: ListView(
+            padding:
+            const EdgeInsets.symmetric(horizontal: Dimens.basePaddingLarge),
+            shrinkWrap: true,
+            physics: const BouncingScrollPhysics(),
+            children: [
+              const SizedBox(
+                height: 15,
+              ),
+              Center(
+                child: Container(
+                  width: 50,
+                  decoration: BoxDecoration(
+                      color: Colors.grey.shade300,
+                      borderRadius: const BorderRadius.all(Radius.circular(8))),
+                  height: 4,
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: CText(
+                  "Choose Bin",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              CDropdown(
+                  itemList: binIDList,
+                  isDisable: selectedBin != null,
+                  strokeColor: Colors.grey,
+                  selectedItem: selectedBin,
+                  textColor: CustomColors.KPrimaryColor,
+                  onChange: (selectedID) => selectedBinID = selectedID),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: CText(
+                  "Bin Quantity",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              CTextField(
+                hintText: '0',
+                textInputType: TextInputType.number,
+                textAlign: TextAlign.start,
+                controller: binQuantityController,
+                strokeColor: Colors.grey,
+                radius: Dimens.radiusMin,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: CText(
+                  "Recievable Quantity",
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              CTextField(
+                hintText: '0',
+                textInputType: TextInputType.number,
+                textAlign: TextAlign.start,
+                controller: quantityController,
+                strokeColor: Colors.grey,
+                radius: Dimens.radiusMin,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    vertical: Dimens.basePaddingLarge),
+                child: CRoundedButton(
+                    text: 'Add Bin Item',
+                    onClick: () {
+                      if (selectedBinID != null) {
+                        if (quantityController.text.isNotEmpty) {
+                          addBinItemClick(
+                              selectedBinID, quantityController.text);
+                        } else {
+                          showMessageSnackbar(
+                              message: "PLease enter valid quantity");
+                        }
+                      } else {
+                        showMessageSnackbar(message: "PLease select Bin");
+                      }
+                    },
+                    backgroundColor: CustomColors.KPrimaryColor,
+                    width: getMaxWidth(context),
+                    radius: Dimens.radiusNone),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+
 }

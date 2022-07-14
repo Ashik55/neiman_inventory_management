@@ -86,14 +86,15 @@ String getRegularImageUrl(String? imageId) {
 }
 
 printObject({required Object? data,String? title}) {
-  try{
-    DEV.log("${title ?? "data"} ===> ");
-    DEV.log(json.encode(data));
-  }on Exception catch(e) {
-    if (kDebugMode) {
-      print(e);
+  if(kDebugMode){
+    try{
+      DEV.log("${title ?? "data"} ===> ");
+      DEV.log(json.encode(data));
+    }on Exception catch(e) {
+      DEV.log(data.toString());
     }
   }
+
 
 }
 
