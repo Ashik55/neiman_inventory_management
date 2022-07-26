@@ -33,34 +33,34 @@ class PurchaseView extends GetView<PurchaseController> {
                   textColor: Colors.white,
                 )),
             body: BaseView(
-              showLoading: controller.loading,
+              showLoading: controller.baseLoading,
               child: controller.purchaseList.isEmpty == true
                   ? NoDataWidget(
-                      isLoading: controller.loading,
-                      dataName: "purchase",
-                    )
+                isLoading: controller.baseLoading,
+                dataName: "purchase",
+              )
                   : GridView.builder(
-                      itemCount: controller.purchaseList.length,
-                      physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: Dimens.basePaddingNone),
-                      shrinkWrap: true,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount:
-                              getOrientation(context) == Orientation.portrait
-                                  ? 1
-                                  : 2,
-                          childAspectRatio:
-                              getOrientation(context) == Orientation.portrait
-                                  ? 2.35
-                                  : 2.35),
-                      itemBuilder: (BuildContext context, int index) =>
-                          PurchaseItem(
-                        purchase: controller.purchaseList[index],
-                        onClick: (Purchase? purchase) =>
-                            controller.onPurchaseClick(purchase),
-                      ),
+                itemCount: controller.purchaseList.length,
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Dimens.basePaddingNone),
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount:
+                    getOrientation(context) == Orientation.portrait
+                        ? 1
+                        : 2,
+                    childAspectRatio:
+                    getOrientation(context) == Orientation.portrait
+                        ? 2.35
+                        : 2.35),
+                itemBuilder: (BuildContext context, int index) =>
+                    PurchaseItem(
+                      purchase: controller.purchaseList[index],
+                      onClick: (Purchase? purchase) =>
+                          controller.onPurchaseClick(purchase),
                     ),
+              ),
             )));
   }
 }

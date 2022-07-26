@@ -10,10 +10,14 @@ import '../modules/image_preview/bindings/image_preview_binding.dart';
 import '../modules/image_preview/views/image_preview_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/product_details/bindings/product_details_binding.dart';
+import '../modules/product_details/views/product_details_view.dart';
 import '../modules/purchase/bindings/purchase_binding.dart';
 import '../modules/purchase/views/purchase_view.dart';
 import '../modules/purchase_create/bindings/purchase_create_binding.dart';
 import '../modules/purchase_create/views/purchase_create_view.dart';
+import '../modules/purchase_details/bindings/purchase_details_binding.dart';
+import '../modules/purchase_details/views/purchase_details_view.dart';
 import '../modules/splash_screen/bindings/splash_screen_binding.dart';
 import '../modules/splash_screen/views/splash_screen_view.dart';
 
@@ -55,7 +59,6 @@ class AppPages {
       page: () => PurchaseCreateView(),
       binding: PurchaseCreateBinding(),
     ),
-
     GetPage(
       name: _Paths.DELIVERY_DETAILS,
       page: () => DeliveryDetailsView(),
@@ -65,6 +68,16 @@ class AppPages {
       name: _Paths.DELIVERY_ORDERS,
       page: () => DeliveryOrdersView(),
       binding: DeliveryOrdersBinding(),
+    ),
+    GetPage(
+      name: _Paths.PURCHASE_DETAILS,
+      page: () => PurchaseDetailsView(),
+      binding: PurchaseDetailsBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRODUCT_DETAILS,
+      page: () => ProductDetailsView(),
+      binding: ProductDetailsBinding(),
     ),
   ];
 }

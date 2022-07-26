@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/utils/constants.dart';
+import 'package:neiman_inventory/app/utils/utility.dart';
 import '../../data/local_storage/local_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -51,8 +52,7 @@ class ApiClient {
     }
 
     if (kDebugMode) {
-      print("response");
-      print(response.body);
+      printObject(data: json.decode(response.body), title: "Response GET $uri");
     }
 
     final decodedValue =
@@ -101,6 +101,12 @@ class ApiClient {
           responseBody: response.body.toString());
     }
 
+
+    if (kDebugMode) {
+      printObject(data: response.body, title: "Response POST $uri");
+    }
+
+
     return builder(json.decode(response.body));
   }
 
@@ -142,6 +148,10 @@ class ApiClient {
           customEndpoint: customEndpoint,
           body: body,
           responseBody: response.body.toString());
+    }
+
+    if (kDebugMode) {
+      printObject(data: response.body, title: "Response PUT $uri");
     }
 
     return builder(json.decode(response.body));

@@ -1,5 +1,5 @@
-class DeliveryOrder {
-  DeliveryOrder({
+class DeliveryPurchaseItem {
+  DeliveryPurchaseItem({
     this.id,
     this.name,
     this.deleted,
@@ -13,13 +13,11 @@ class DeliveryOrder {
     this.modifiedByName,
     this.assignedUserId,
     this.assignedUserName,
-    this.salesId,
-    this.salesName,
-    this.purchaseName,
     this.purchaseId,
+    this.purchaseName,
   });
 
-  DeliveryOrder.fromJson(dynamic json) {
+  DeliveryPurchaseItem.fromJson(dynamic json) {
     id = json['id'];
     name = json['name'];
     deleted = json['deleted'];
@@ -33,27 +31,23 @@ class DeliveryOrder {
     modifiedByName = json['modifiedByName'];
     assignedUserId = json['assignedUserId'];
     assignedUserName = json['assignedUserName'];
-    salesId = json['salesId'];
-    salesName = json['salesName'];
     purchaseId = json['purchaseId'];
     purchaseName = json['purchaseName'];
   }
 
   String? id;
-  dynamic name;
+  String? name;
   bool? deleted;
-  dynamic description;
+  String? description;
   String? createdAt;
   String? modifiedAt;
   String? status;
   String? createdById;
   String? createdByName;
-  dynamic modifiedById;
-  dynamic modifiedByName;
-  dynamic assignedUserId;
-  dynamic assignedUserName;
-  String? salesId;
-  String? salesName;
+  String? modifiedById;
+  String? modifiedByName;
+  String? assignedUserId;
+  String? assignedUserName;
   String? purchaseId;
   String? purchaseName;
 
@@ -72,8 +66,8 @@ class DeliveryOrder {
     map['modifiedByName'] = modifiedByName;
     map['assignedUserId'] = assignedUserId;
     map['assignedUserName'] = assignedUserName;
-    map['salesId'] = salesId;
-    map['salesName'] = salesName;
+    map['purchaseId'] = purchaseId;
+    map['purchaseName'] = purchaseName;
     return map;
   }
 }

@@ -18,16 +18,23 @@ import '../../../routes/app_pages.dart';
 import '../../../utils/toaster.dart';
 import '../../../utils/utility.dart';
 
+class PoProductModel {
+  String? purchaseId;
+  Products? products;
+
+  PoProductModel({this.purchaseId, this.products});
+}
+
 class PurchaseCreateController extends BaseController {
   LocalStorage localStorage = Get.find();
   ProductRepository productRepository = Get.find();
+  PurchaseController purchaseController = Get.find();
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController searchController = TextEditingController();
-  String searchText = "";
   String? sortBy;
   double totalPrice = 0;
   List<Products> productList = [];
-  List<Products> poProductList = [];
+  List<PoProductModel> poProductList = [];
 
   Future<void> loadInitialData() async {
     startLoading();
@@ -82,12 +89,10 @@ class PurchaseCreateController extends BaseController {
   }
 
   onSearchChange(String text) async {
-    searchText = text;
     if (text.isNotEmpty) {
       productList = await productRepository.searchProduct(searchText: text);
-      update();
     } else {
-      productList = await productRepository.getLocalProducts();
+      productList.clear();
     }
     update();
   }
@@ -132,44 +137,67 @@ class PurchaseCreateController extends BaseController {
 
   onPOSubmit(Products? products) async {
     if (products?.reOrder != null && products?.stock != null) {
-      poProductList.add(products!);
-      if (kDebugMode) {
-        print(json.encode(products));
+      startLoading();
+      if (poProductList.indexWhere(
+              (element) => element.products?.vendorID == products?.vendorID) ==
+          -1) {
+        PostPurchaseResponse postPurchaseResponse =
+            await productRepository.postPurchase(products: products);
+        if (postPurchaseResponse != null) {
+          poProductList.add(PoProductModel(
+              purchaseId: "${postPurchaseResponse.id}", products: products));
+
+          PoResponse poResponse = await productRepository.createPO(
+              products: products, purchaseID: "${postPurchaseResponse.id}");
+          if (poResponse != null) {
+            showMessageSnackbar(message: "Purchase Order Created Successfully");
+          }
+
+          //reload previous page
+          purchaseController.onInit();
+        }
+      } else {
+        int index = poProductList.indexWhere(
+            (element) => element.products?.vendorID == products?.vendorID);
+        PoResponse poResponse = await productRepository.createPO(
+            products: products,
+            purchaseID: "${poProductList[index].purchaseId}");
+        if (poResponse != null) {
+          showMessageSnackbar(message: "Purchase Order Created Successfully");
+        }
       }
-      PoResponse poResponse =
-          await productRepository.createPO(products: products);
-      if (poResponse != null) {
-        showMessageSnackbar(message: "Purchase Order Created Successfully");
-      }
+
+      stopLoading();
     } else {
       showMessageSnackbar(message: "Please add reorder & stock amount");
     }
   }
 
-  @override
-  void onClose() async {
-    super.onClose();
-    if (kDebugMode) {
-      print("closing PO PAGEEE");
-    }
-    List<Products> vendorProductList = [];
-    for (var poProductElement in poProductList) {
-      if (vendorProductList.indexWhere(
-              (element) => element.vendorID == poProductElement.vendorID) ==
-          -1) {
-        if (kDebugMode) {
-          print(poProductElement.vendorName);
-        }
-        vendorProductList.add(poProductElement);
-        PostPurchaseResponse postPurchaseResponse =
-            await productRepository.postPurchase(products: poProductElement);
-        if (postPurchaseResponse != null &&
-            poProductElement == poProductList.last) {
-          showMessageSnackbar(message: "Purchase Order Created Successfully");
-          PurchaseController purchaseController = Get.find();
-          purchaseController.onInit();
-        }
-      }
-    }
-  }
+// @override
+// void onClose() async {
+//   super.onClose();
+//   if (kDebugMode) {
+//     print("closing PO PAGEEE");
+//   }
+//   List<Products> vendorProductList = [];
+//   for (var poProductElement in poProductList) {
+//     if (vendorProductList.indexWhere(
+//             (element) => element.vendorID == poProductElement.vendorID) ==
+//         -1) {
+//       if (kDebugMode) {
+//         print(poProductElement.vendorName);
+//       }
+//       vendorProductList.add(poProductElement);
+//       PostPurchaseResponse postPurchaseResponse =
+//           await productRepository.postPurchase(products: poProductElement);
+//       if (postPurchaseResponse != null &&
+//           poProductElement == poProductList.last) {
+//         showMessageSnackbar(message: "Purchase Order Created Successfully");
+//         PurchaseController purchaseController = Get.find();
+//         purchaseController.onInit();
+//       }
+//     }
+//   }
+// }
+
 }

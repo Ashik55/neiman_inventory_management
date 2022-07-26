@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:intl/intl.dart';
+import 'package:neiman_inventory/app/data/local_storage/local_storage.dart';
 import 'dart:math';
-
+import 'dart:developer' as DEV;
 import 'constants.dart';
 
 const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
@@ -74,11 +76,26 @@ String getShortImageUrl(String? imageId) {
 }
 
 String getBasicAuth() {
-  return 'Basic ' + base64Encode(utf8.encode('developer:developer'));
+  LocalStorage localStorage = Get.find();
+  return 'Basic ' + base64Encode(utf8.encode(
+      '${localStorage.getUserName()}:${localStorage.getPassword()}'));
 }
 
 String getRegularImageUrl(String? imageId) {
   return imageBaseUrl + "?entryPoint=image&id=$imageId";
+}
+
+printObject({required Object? data,String? title}) {
+  if(kDebugMode){
+    try{
+      DEV.log("${title ?? "data"} ===> ");
+      DEV.log(json.encode(data));
+    }on Exception catch(e) {
+      DEV.log(data.toString());
+    }
+  }
+
+
 }
 
 extension EmailValidator on String {

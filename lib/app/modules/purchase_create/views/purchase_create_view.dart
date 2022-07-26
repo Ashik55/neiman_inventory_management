@@ -25,7 +25,7 @@ class PurchaseCreateView extends GetView<PurchaseCreateController> {
               ),
             ),
             body: BaseView(
-              showLoading: controller.loading,
+              showLoading: controller.baseLoading,
               child: Column(
                 children: [
                   Container(
@@ -72,7 +72,7 @@ class PurchaseCreateView extends GetView<PurchaseCreateController> {
                   Expanded(
                       child: controller.productList.isEmpty == true
                           ? NoDataWidget(
-                              isLoading: controller.loading,
+                              isLoading: controller.baseLoading,
                             )
                           : ListView.builder(
                               itemCount: controller.productList.length,

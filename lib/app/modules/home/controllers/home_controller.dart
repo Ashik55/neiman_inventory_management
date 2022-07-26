@@ -14,6 +14,7 @@ import '../../../routes/app_pages.dart';
 import '../../../utils/toaster.dart';
 import '../../../utils/utility.dart';
 import '../../base/base_controller.dart';
+import '../../delivery_orders/controllers/delivery_orders_controller.dart';
 
 class HomeController extends BaseController {
   LocalStorage localStorage = Get.find();
@@ -24,6 +25,8 @@ class HomeController extends BaseController {
   String? sortBy;
   double totalPrice = 0;
   List<Products> productList = [];
+  Products? selectedProduct;
+
 
   @override
   void onInit() {
@@ -110,11 +113,31 @@ class HomeController extends BaseController {
     await getFilteredProductsV3();
   }
 
-  onProductClick({Products? products}) {
-    Get.toNamed(Routes.IMAGE_PREVIEW, arguments: {
-      "image": getRegularImageUrl(products?.pictureId),
-    });
+
+
+  setSelectedProduct(Products? products) {
+    selectedProduct = products;
+    update();
   }
+
+  onProductClick({Products? products, int? index}) {
+    selectedProduct = products;
+    print(index);
+    print(json.encode(selectedProduct));
+
+    // getOrderHistory();
+    Get.toNamed(Routes.PRODUCT_DETAILS,
+        arguments: {"index": index, "list": "product"});
+  }
+
+  // onProductClick({Products? products}) {
+  //
+  //   Get.toNamed(page)
+  //
+  //   Get.toNamed(Routes.IMAGE_PREVIEW, arguments: {
+  //     "image": getRegularImageUrl(products?.pictureId),
+  //   });
+  // }
 
   onSortBySelect(String? id) async {
     if (sortBy == id) {
@@ -136,6 +159,12 @@ class HomeController extends BaseController {
   }
 
   onDeliveryClick() {
-    Get.toNamed(Routes.DELIVERY_ORDERS);
+    Get.toNamed(Routes.DELIVERY_ORDERS,
+        arguments: {"data": ParentRoute.deliveryOrders});
+  }
+
+  onDeliveryPurchaseClick() {
+    Get.toNamed(Routes.DELIVERY_ORDERS,
+        arguments: {"data": ParentRoute.deliveryPurchase});
   }
 }

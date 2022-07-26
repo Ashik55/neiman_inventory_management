@@ -1,61 +1,59 @@
-class DeliveryOrder {
-  DeliveryOrder({
-    this.id,
-    this.name,
-    this.deleted,
-    this.description,
-    this.createdAt,
-    this.modifiedAt,
-    this.status,
-    this.createdById,
-    this.createdByName,
-    this.modifiedById,
-    this.modifiedByName,
-    this.assignedUserId,
-    this.assignedUserName,
-    this.salesId,
-    this.salesName,
-    this.purchaseName,
-    this.purchaseId,
-  });
+class BinItemModel {
+  BinItemModel({
+      this.id, 
+      this.name, 
+      this.deleted, 
+      this.description, 
+      this.createdAt, 
+      this.modifiedAt, 
+      this.qty, 
+      this.createdById, 
+      this.createdByName, 
+      this.modifiedById, 
+      this.modifiedByName, 
+      this.assignedUserId, 
+      this.assignedUserName, 
+      this.productId, 
+      this.productName, 
+      this.binId, 
+      this.binName,});
 
-  DeliveryOrder.fromJson(dynamic json) {
+  BinItemModel.fromJson(dynamic json) {
     id = json['id'];
     name = json['name'];
     deleted = json['deleted'];
     description = json['description'];
     createdAt = json['createdAt'];
     modifiedAt = json['modifiedAt'];
-    status = json['status'];
+    qty = json['qty'];
     createdById = json['createdById'];
     createdByName = json['createdByName'];
     modifiedById = json['modifiedById'];
     modifiedByName = json['modifiedByName'];
     assignedUserId = json['assignedUserId'];
     assignedUserName = json['assignedUserName'];
-    salesId = json['salesId'];
-    salesName = json['salesName'];
-    purchaseId = json['purchaseId'];
-    purchaseName = json['purchaseName'];
+    productId = json['productId'];
+    productName = json['productName'];
+    binId = json['binId'];
+    binName = json['binName'];
   }
-
   String? id;
-  dynamic name;
+  String? name;
   bool? deleted;
   dynamic description;
   String? createdAt;
   String? modifiedAt;
-  String? status;
+  num? qty;
   String? createdById;
   String? createdByName;
-  dynamic modifiedById;
-  dynamic modifiedByName;
-  dynamic assignedUserId;
-  dynamic assignedUserName;
-  String? salesId;
-  String? salesName;
-  String? purchaseId;
-  String? purchaseName;
+  String? modifiedById;
+  String? modifiedByName;
+  String? assignedUserId;
+  String? assignedUserName;
+  String? productId;
+  String? productName;
+  String? binId;
+  String? binName;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
@@ -65,15 +63,18 @@ class DeliveryOrder {
     map['description'] = description;
     map['createdAt'] = createdAt;
     map['modifiedAt'] = modifiedAt;
-    map['status'] = status;
+    map['qty'] = qty;
     map['createdById'] = createdById;
     map['createdByName'] = createdByName;
     map['modifiedById'] = modifiedById;
     map['modifiedByName'] = modifiedByName;
     map['assignedUserId'] = assignedUserId;
     map['assignedUserName'] = assignedUserName;
-    map['salesId'] = salesId;
-    map['salesName'] = salesName;
+    map['productId'] = productId;
+    map['productName'] = productName;
+    map['binId'] = binId;
+    map['binName'] = binName;
     return map;
   }
+
 }

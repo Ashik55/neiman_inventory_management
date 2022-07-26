@@ -16,7 +16,7 @@ class LoginView extends GetView<LoginController> {
     return Scaffold(
         body: GetBuilder<LoginController>(
       builder: (controller) => BaseView(
-        showLoading: controller.loading,
+        showLoading: controller.baseLoading,
         child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: getOrientation(context) == Orientation.portrait

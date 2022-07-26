@@ -1,8 +1,11 @@
+import 'package:neiman_inventory/app/data/remote/BinItemModel.dart';
+
 class SalesOrderItem {
   SalesOrderItem({
     this.id,
     this.name,
     this.deleted,
+    this.scanned,
     this.description,
     this.createdAt,
     this.modifiedAt,
@@ -19,6 +22,7 @@ class SalesOrderItem {
     this.createdByName,
     this.modifiedById,
     this.barcode,
+    this.itemNumber,
     this.bin,
     this.modifiedByName,
     this.assignedUserId,
@@ -31,6 +35,7 @@ class SalesOrderItem {
     this.salesName,
     this.accountId,
     this.accountName,
+    this.binItems,
   });
 
   SalesOrderItem.fromJson(dynamic json) {
@@ -47,6 +52,7 @@ class SalesOrderItem {
     qbProductId = json['qbProductId'];
     done = json['done'];
     barcode = json['barcode'];
+    itemNumber = json['itemNumber'];
     bin = json['bin'];
     packingOrder = json['packingOrder'];
     unitPriceCurrency = json['unitPriceCurrency'];
@@ -70,6 +76,7 @@ class SalesOrderItem {
   String? id;
   String? name;
   bool? deleted;
+  bool? scanned = false;
   dynamic description;
   String? createdAt;
   String? modifiedAt;
@@ -81,6 +88,7 @@ class SalesOrderItem {
   bool? done;
   String? packingOrder;
   String? barcode;
+  String? itemNumber;
   String? bin;
   String? unitPriceCurrency;
   String? totalPriceCurrency;
@@ -98,6 +106,7 @@ class SalesOrderItem {
   String? salesName;
   String? accountId;
   String? accountName;
+  List<BinItemModel>? binItems=[];
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

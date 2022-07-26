@@ -1,24 +1,37 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/api/client/api_client.dart';
+import 'package:neiman_inventory/app/data/models/BinModel.dart';
 import 'package:neiman_inventory/app/data/models/DeliveryOrder.dart';
 import 'package:neiman_inventory/app/data/models/Purchase.dart';
 import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
+import 'package:neiman_inventory/app/data/remote/BinItemModel.dart';
 import 'package:neiman_inventory/app/data/remote/DeliverOrderStatusUpdateResponse.dart';
+import 'package:neiman_inventory/app/data/remote/DeliveryPurchaseItem.dart';
 import 'package:neiman_inventory/app/data/remote/POResponse.dart';
 import 'package:neiman_inventory/app/data/remote/PostPurchaseResponse.dart';
+import 'package:neiman_inventory/app/data/remote/PurchaseDetailsItem.dart';
+import 'package:neiman_inventory/app/data/remote/PurchaseItem.dart';
 
 import '../../data/models/Products.dart';
 import '../../data/models/UserModel.dart';
+import '../../modules/delivery_orders/controllers/delivery_orders_controller.dart';
 
 class ApiProvider extends GetxService {
   ApiClient apiClient = Get.find();
 
   static const String _product = '/product';
   static const String _purchase = '/Purchase';
+
+  static const String _deliveryPurchaseItems = '/Purchase/#/purchaseItems';
   static const String _login = '/App/user';
   static const String _purchaseItem = '/PurchaseItems';
   static const String _deliveryOrders = '/DeliveryOrders';
+  static const String _deliveryPurchase = '/DeliveryPurchase';
+  static const String _deliveryOrdersItems = '/Sales/#/salesOrderItems';
+  static const String _productBinItems = '/Product/#/binItems';
+  static const String _binItems = '/binItems';
+  static const String _bins = '/bin';
 
   // static const String _deliveryDetails = '/Sales/627a9cf6628dabd85/salesOrderItems';
 
@@ -67,13 +80,48 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<PoResponse> createPO({required Products? products}) async {
+/*  Future<List<DeliveryPurchaseItem>> getDeliveryPurchase() async {
+    return apiClient.callGET(
+      endpoint: _deliveryPurchase,
+      builder: (data) {
+        List<DeliveryPurchaseItem> purchaseList = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          purchaseList.add(DeliveryPurchaseItem.fromJson(element));
+        }
+        return purchaseList;
+      },
+    );
+  }
+
+  Future<List<PurchaseDetailsItem>> getDeliveryPurchaseDetails(
+      {required DeliveryPurchaseItem? deliveryPurchaseItem}) async {
+    return apiClient.callGET(
+      endpoint: _deliveryPurchaseItems.replaceAll(
+          // "#", "${deliveryPurchaseItem?.id}"),
+          "#",
+          "62914641db059e0d7"),
+      builder: (data) {
+        List<PurchaseDetailsItem> purchaseList = [];
+
+        Iterable i = data?['list'];
+        for (var element in i) {
+          purchaseList.add(PurchaseDetailsItem.fromJson(element));
+        }
+        return purchaseList;
+      },
+    );
+  }*/
+
+  Future<PoResponse> createPO(
+      {required Products? products, required String? purchaseID}) async {
     return apiClient.callPOST(
       endpoint: _purchaseItem,
       body: {
         "productId": products?.id,
         "qty": products?.reOrder,
         "qtyStock": products?.stock,
+        "purchaseId": purchaseID
       },
       builder: (data) {
         return PoResponse.fromJson(data);
@@ -81,7 +129,8 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<PostPurchaseResponse> postPurchase({required Products? products}) async {
+  Future<PostPurchaseResponse> postPurchase(
+      {required Products? products}) async {
     return apiClient.callPOST(
       endpoint: _purchase,
       body: {
@@ -95,12 +144,12 @@ class ApiProvider extends GetxService {
     );
   }
 
-
-
-
-  Future<List<DeliveryOrder>> getDeliveryOrders() async {
+  Future<List<DeliveryOrder>> getDeliveryOrders(
+      {ParentRoute? parentRoute}) async {
     return apiClient.callGET(
-      endpoint: _deliveryOrders,
+      endpoint: parentRoute == ParentRoute.deliveryOrders
+          ? _deliveryOrders
+          : _deliveryPurchase,
       builder: (data) {
         List<DeliveryOrder> deliveryOrders = [];
         Iterable i = data?['list'];
@@ -112,9 +161,13 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<DeliveryOrder> getDeliveryOrder({required String? orderID}) async {
+  Future<DeliveryOrder> getDeliveryOrder(
+      {required DeliveryOrder? deliveryOrder,
+      required ParentRoute? parentRoute}) async {
     return apiClient.callGET(
-      endpoint: _deliveryOrders+"/$orderID",
+      endpoint: parentRoute == ParentRoute.deliveryOrders
+          ? _deliveryOrders + "/${deliveryOrder?.id}"
+          : _deliveryPurchase + "/${deliveryOrder?.purchaseId}",
       builder: (data) {
         DeliveryOrder deliveryOrder = DeliveryOrder.fromJson(data);
         return deliveryOrder;
@@ -123,9 +176,15 @@ class ApiProvider extends GetxService {
   }
 
   Future<List<SalesOrderItem>> getDeliveryDetails(
-      {required String? salesId}) async {
+      {required DeliveryOrder? deliveryOrder,
+      required ParentRoute? parentRoute}) async {
     return apiClient.callGET(
-      endpoint: "/Sales/$salesId/salesOrderItems",
+      endpoint: parentRoute == ParentRoute.deliveryOrders
+          ? _deliveryOrdersItems.replaceAll("#", "${deliveryOrder?.salesId}")
+          : _deliveryPurchaseItems.replaceAll(
+              "#", "${deliveryOrder?.purchaseId}"),
+      //   "#",
+      //   "62914641db059e0d7"),
       builder: (data) {
         List<SalesOrderItem> salesOrderItems = [];
         Iterable i = data?['list'];
@@ -137,10 +196,89 @@ class ApiProvider extends GetxService {
     );
   }
 
-  Future<DeliverOrderStatusUpdateResponse> updateDeliveryStatus(
-      {required String? orderID, required String? orderStatus}) async {
+  Future<List<BinItemModel>> getBinItems({required String? productID}) async {
+    return apiClient.callGET(
+      endpoint: _productBinItems.replaceAll("#", "$productID"),
+      builder: (data) {
+        List<BinItemModel> binItems = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          binItems.add(BinItemModel.fromJson(element));
+        }
+        return binItems;
+      },
+    );
+  }
+
+  Future<String> addBinItem(
+      {required String? productID,
+      required String? binID,
+      required String? qty}) async {
+    return apiClient.callPOST(
+      endpoint: _binItems,
+      body: {
+        "binId": binID,
+        "qty": qty,
+        "productId": productID,
+      },
+      builder: (data) {
+        return data["id"];
+      },
+    );
+  }
+
+  Future<String> updateBinItem(
+      {
+        required String? binID,
+        required String? qty}) async {
     return apiClient.callPUT(
-      endpoint: "/DeliveryOrders/$orderID",
+      endpoint: _binItems+"/$binID",
+      body: {
+        "qty": qty,
+      },
+      builder: (data) {
+        return data["id"];
+      },
+    );
+  }
+
+  Future<List<BinModel>> getBinList() async {
+    return apiClient.callGET(
+      endpoint: _bins,
+      builder: (data) {
+        List<BinModel> list = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          list.add(BinModel.fromJson(element));
+        }
+        return list;
+      },
+    );
+  }
+
+  Future<List<PurchaseItem>> getPurchaseDetails(
+      {required String? purchaseID}) async {
+    return apiClient.callGET(
+      endpoint: "/Purchase/$purchaseID/purchaseItems",
+      builder: (data) {
+        List<PurchaseItem> purchaseItems = [];
+        Iterable i = data?['list'];
+        for (var element in i) {
+          purchaseItems.add(PurchaseItem.fromJson(element));
+        }
+        return purchaseItems;
+      },
+    );
+  }
+
+  Future<DeliverOrderStatusUpdateResponse> updateDeliveryStatus(
+      {required String? orderStatus,
+      required DeliveryOrder? deliveryOrder,
+      required ParentRoute? parentRoute}) async {
+    return apiClient.callPUT(
+      endpoint: parentRoute == ParentRoute.deliveryOrders
+          ? _deliveryOrders + "/${deliveryOrder?.id}"
+          : _deliveryPurchase + "/${deliveryOrder?.purchaseId}",
       body: {"status": orderStatus},
       builder: (data) {
         DeliverOrderStatusUpdateResponse deliverOrderStatusUpdateResponse =

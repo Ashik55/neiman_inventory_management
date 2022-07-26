@@ -72,6 +72,11 @@ class HomeView extends GetView<HomeController> {
                     onTap: () => controller.onDeliveryClick(),
                   ),
                   ListTile(
+                    leading: const Icon(Icons.description),
+                    title: CText('Delivery Purchase'),
+                    onTap: () => controller.onDeliveryPurchaseClick(),
+                  ),
+                  ListTile(
                     leading: const Icon(
                       Icons.arrow_back,
                       color: CustomColors.KPrimaryColor,
@@ -245,7 +250,7 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
             body: BaseView(
-              showLoading: controller.loading,
+              showLoading: controller.baseLoading,
               child: Column(
                 children: [
                   Container(
@@ -292,7 +297,7 @@ class HomeView extends GetView<HomeController> {
                   Expanded(
                       child: controller.productList.isEmpty == true
                           ? NoDataWidget(
-                              isLoading: controller.loading,
+                              isLoading: controller.baseLoading,
                             )
                           :
 
@@ -323,8 +328,9 @@ class HomeView extends GetView<HomeController> {
                               itemBuilder: (BuildContext context, int index) =>
                                   GridProductItem(
                                 products: controller.productList[index],
-                                onclick: (Products? products) => controller
-                                    .onProductClick(products: products),
+                                onclick: (Products? products) => controller.onProductClick(
+                                    products: products,
+                                    index: index),
                               ),
                             )),
                 ],

@@ -19,7 +19,7 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
             backgroundColor: Colors.grey.shade200,
             appBar: AppBar(
               title: CText(
-                'Delivery Orders',
+                'Delivery ${controller.parentRoute == ParentRoute.deliveryOrders ? 'Orders' : "Purchase"}',
                 fontSize: Dimens.appbarTextSize,
                 textColor: Colors.white,
               ),
@@ -32,16 +32,17 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
             //       textColor: Colors.white,
             //     )),
             body: BaseView(
-              showLoading: controller.loading,
+              showLoading: controller.baseLoading,
               child: controller.deliveryOrdersList.isEmpty == true
                   ? NoDataWidget(
-                      isLoading: controller.loading,
+                      isLoading: controller.baseLoading,
                       dataName: "purchase",
                     )
                   : GridView.builder(
                       itemCount: controller.deliveryOrdersList.length,
                       physics: const BouncingScrollPhysics(),
-                      padding: const EdgeInsets.symmetric(horizontal: Dimens.basePaddingNone,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: Dimens.basePaddingNone,
                           vertical: Dimens.basePaddingNone),
                       shrinkWrap: true,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -55,6 +56,7 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
                                   : 4.0),
                       itemBuilder: (BuildContext context, int index) =>
                           DeliveryItem(
+                        parentRoute: controller.parentRoute,
                         deliveryOrder: controller.deliveryOrdersList[index],
                         onClick: (DeliveryOrder? deliveryOrder) =>
                             controller.onDeliveryItemClick(deliveryOrder),
@@ -65,10 +67,14 @@ class DeliveryOrdersView extends GetView<DeliveryOrdersController> {
 }
 
 class DeliveryItem extends StatelessWidget {
+  ParentRoute? parentRoute;
   DeliveryOrder? deliveryOrder;
   Function(DeliveryOrder? deliveryOrder) onClick;
 
-  DeliveryItem({required this.deliveryOrder, required this.onClick});
+  DeliveryItem(
+      {required this.deliveryOrder,
+      required this.onClick,
+      required this.parentRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -94,7 +100,7 @@ class DeliveryItem extends StatelessWidget {
                   children: [
                     Expanded(
                       child: CText(
-                        'Name',
+                        'Name : ',
                         textColor: CustomColors.KPrimaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: Dimens.textRegular,
@@ -103,7 +109,7 @@ class DeliveryItem extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: CText(
-                        ': ${deliveryOrder?.salesName}',
+                        '${parentRoute == ParentRoute.deliveryOrders ? deliveryOrder?.salesName : deliveryOrder?.purchaseName}',
                         textColor: CustomColors.KPrimaryColor,
                         fontSize: Dimens.textRegular,
                         maxLines: 2,
@@ -118,7 +124,7 @@ class DeliveryItem extends StatelessWidget {
                   children: [
                     Expanded(
                       child: CText(
-                        'Status ',
+                        'Status : ',
                         textColor: CustomColors.KPrimaryColor,
                         fontWeight: FontWeight.bold,
                         fontSize: Dimens.textRegular,
@@ -127,8 +133,9 @@ class DeliveryItem extends StatelessWidget {
                     Expanded(
                       flex: 2,
                       child: CText(
-                        ': ${deliveryOrder?.status}',
-                        textColor: getColorByStatus(status: deliveryOrder?.status),
+                        '${deliveryOrder?.status}',
+                        textColor:
+                            getColorByStatus(status: deliveryOrder?.status),
                         fontSize: Dimens.textRegular,
                         fontWeight: FontWeight.bold,
                       ),

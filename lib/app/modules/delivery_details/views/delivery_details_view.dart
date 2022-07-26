@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:neiman_inventory/app/data/models/SalesOrderItem.dart';
 import 'package:neiman_inventory/app/modules/base/base_view.dart';
+import 'package:neiman_inventory/app/modules/delivery_orders/controllers/delivery_orders_controller.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../../utils/colors.dart';
@@ -24,26 +25,11 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
             backgroundColor: Colors.grey.shade200,
             appBar: AppBar(
               title: CText(
-                'Delivery Order Items',
+                'Delivery ${controller.parentRoute == ParentRoute.deliveryOrders ? "Order" : "Purchase"} Items',
                 fontSize: Dimens.appbarTextSize,
                 textColor: Colors.white,
               ),
               actions: [
-/*                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-
-                      ChipWidget(
-                        text: controller.deliveryOrder?.status,
-                        radius: Dimens.radiusExtraLarge,
-                        backgroundColor: CustomColors.KPrimaryColorLite1,
-                        textColor: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        elevation: 0,
-                      ),
-                  ],
-                ),*/
-
                 IconButton(
                   icon: CAssetImage(
                     imagePath: 'images/barcode.png',
@@ -54,10 +40,10 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
               ],
             ),
             body: BaseView(
-              showLoading: controller.loading,
+              showLoading: controller.baseLoading,
               child: controller.salesOrderList.isEmpty == true
                   ? NoDataWidget(
-                      isLoading: controller.loading,
+                      isLoading: controller.baseLoading,
                       dataName: "purchase",
                     )
                   : Column(
@@ -86,6 +72,35 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                                 width: getMaxWidth(context),
                                 radius: Dimens.radiusNone),
                           ),
+                        if (controller.salesOrderList.isNotEmpty &&
+                            controller.deliveryOrder?.status ==
+                                controller.startPacking)
+                          Padding(
+                            padding: const EdgeInsets.only(
+                                left: Dimens.basePadding,
+                                right: Dimens.basePadding,
+                                top: Dimens.basePadding),
+                            child: TextFormField(
+                              controller: controller.searchController,
+                              onChanged: (e) => controller.onSearchChange(e),
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                labelText: 'Search Items',
+                                border: const OutlineInputBorder(),
+                                prefixIcon: const Icon(
+                                  Icons.search,
+                                ),
+                                suffixIcon:
+                                    controller.searchController.text.isNotEmpty
+                                        ? IconButton(
+                                            onPressed: () =>
+                                                controller.clearSearch(),
+                                            icon: const Icon(Icons.clear),
+                                          )
+                                        : null,
+                              ),
+                            ),
+                          ),
                         if (controller.showBarcode)
                           Expanded(
                             flex: 2,
@@ -96,41 +111,66 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
                           ),
                         Expanded(
                           flex: 5,
-                          child: GridView.builder(
-                              itemCount: controller.salesOrderList.length,
-                              physics: const BouncingScrollPhysics(),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: Dimens.basePaddingNone),
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: getOrientation(context) ==
-                                              Orientation.portrait
-                                          ? 1
-                                          : 2,
-                                      childAspectRatio:
-                                          getOrientation(context) ==
-                                                  Orientation.portrait
-                                              ? 2.8
-                                              : 2.8),
-                              itemBuilder: (BuildContext context, int index) =>
-                                  // SalesItem(
-                                  //   salesOrderItem: controller.salesOrderList[0],
-                                  //   onClick: (SalesOrderItem? salesOrderItem) =>
-                                  //       controller.onSalesItemClick(salesOrderItem),
-                                  // ),
-
-                                  InkWell(
-                                    onTap: () => controller.onItemClick(),
-                                    child: SalesDetailsItemView(
-                                      salesDetailsItem:
-                                          controller.salesOrderList[index],
-                                      allPacked: controller.isAllPacked(
-                                          controller.salesOrderList[index]),
-                                      qtyPacked: controller.packedItem(
-                                          controller.salesOrderList[index]),
-                                    ),
-                                  )),
+                          child: controller.searchText.isNotEmpty &&
+                                  controller.searchedSalesOrderList.isEmpty
+                              ? Center(
+                                  child: CText(
+                                    "No Item Found",
+                                    textColor: Colors.red,
+                                    fontSize: Dimens.textRegular,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              : GridView.builder(
+                                  itemCount: controller.searchText.isEmpty
+                                      ? controller.salesOrderList.length
+                                      : controller
+                                          .searchedSalesOrderList.length,
+                                  physics: const BouncingScrollPhysics(),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: Dimens.basePaddingNone),
+                                  shrinkWrap: true,
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount:
+                                              getOrientation(context) ==
+                                                      Orientation.portrait
+                                                  ? 1
+                                                  : 2,
+                                          childAspectRatio:
+                                              getOrientation(context) ==
+                                                      Orientation.portrait
+                                                  ? 1.8
+                                                  : 1.8),
+                                  itemBuilder: (BuildContext context,
+                                          int index) =>
+                                      SalesDetailsItemView(
+                                        parentRoute: controller.parentRoute,
+                                        salesDetailsItem: controller
+                                                .searchText.isEmpty
+                                            ? controller.salesOrderList[index]
+                                            : controller
+                                                .searchedSalesOrderList[index],
+                                        allPacked: controller.isAllPacked(
+                                            controller.searchText.isEmpty
+                                                ? controller
+                                                    .salesOrderList[index]
+                                                : controller
+                                                        .searchedSalesOrderList[
+                                                    index]),
+                                        qtyPacked: controller.packedItem(
+                                            controller.searchText.isEmpty
+                                                ? controller
+                                                    .salesOrderList[index]
+                                                : controller
+                                                        .searchedSalesOrderList[
+                                                    index]),
+                                        onClick: (SalesOrderItem?
+                                                salesDetailsItem) =>
+                                            controller.onSalesDetailsItemClick(
+                                                salesDetailsItem:
+                                                    salesDetailsItem),
+                                      )),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(Dimens.basePadding),
@@ -147,6 +187,8 @@ class DeliveryDetailsView extends GetView<DeliveryDetailsController> {
 }
 
 class SalesDetailsItemView extends StatelessWidget {
+  ParentRoute? parentRoute;
+  Function(SalesOrderItem? salesDetailsItem) onClick;
   SalesOrderItem? salesDetailsItem;
   bool? allPacked;
   int? qtyPacked;
@@ -154,73 +196,118 @@ class SalesDetailsItemView extends StatelessWidget {
   SalesDetailsItemView(
       {required this.salesDetailsItem,
       required this.allPacked,
+      required this.onClick,
+      required this.parentRoute,
       required this.qtyPacked});
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      clipBehavior: Clip.antiAlias,
-      color: allPacked == true ? Colors.green.shade100 : Colors.yellow.shade100,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Dimens.radiusMin),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-            vertical: Dimens.basePaddingLarge, horizontal: Dimens.basePadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: CText(
-                'Name : ${salesDetailsItem?.name}',
-                fontSize: Dimens.textMid,
-                fontWeight: FontWeight.w600,
-                textColor: CustomColors.KPrimaryColor,
-                maxLines: 2,
+    return InkWell(
+      onTap: () => onClick(salesDetailsItem),
+      child: Card(
+        elevation: 0,
+        clipBehavior: Clip.antiAlias,
+        color: allPacked == true || salesDetailsItem?.scanned == true
+            ? Colors.green.shade100
+            : Colors.yellow.shade100,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Dimens.radiusMin),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+              vertical: Dimens.basePaddingLarge,
+              horizontal: Dimens.basePadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 3),
+                child: CText(
+                  'Name : ${parentRoute == ParentRoute.deliveryOrders ? salesDetailsItem?.productName : salesDetailsItem?.productName}',
+                  fontSize: Dimens.textMid,
+                  fontWeight: FontWeight.w600,
+                  textColor: CustomColors.KPrimaryColor,
+                  maxLines: 2,
+                ),
               ),
-            ),
-            const SizedBox(
-              height: 6,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CText(
-                    'QTY Ordered : ${salesDetailsItem?.qty}',
-                    fontSize: Dimens.textMid,
-                    maxLines: 2,
-                  ),
-                  CText(
-                    'Qty Packed : $qtyPacked',
-                    fontSize: Dimens.textMid,
-                    maxLines: 2,
-                  ),
-                ],
+              const SizedBox(
+                height: 6,
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(4),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CText(
-                    'Barcode : ${salesDetailsItem?.barcode}',
-                    fontSize: Dimens.textMid,
-                    maxLines: 2,
-                  ),
-                  CText(
-                    'Bin : ${salesDetailsItem?.bin}',
-                    fontSize: Dimens.textMid,
-                    maxLines: 2,
-                  ),
-                ],
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CText(
+                      'QTY Ordered : ${salesDetailsItem?.qty}',
+                      fontSize: Dimens.textMid,
+                      maxLines: 2,
+                    ),
+                    CText(
+                      'Qty Packed : $qtyPacked',
+                      fontSize: Dimens.textMid,
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CText(
+                      'Barcode : ${salesDetailsItem?.barcode}',
+                      fontSize: Dimens.textMid,
+                      maxLines: 2,
+                    ),
+                    CText(
+                      'Item Number : ${salesDetailsItem?.itemNumber}',
+                      fontSize: Dimens.textMid,
+                      maxLines: 2,
+                    ),
+                  ],
+                ),
+              ),
+              if (salesDetailsItem?.binItems?.isNotEmpty == true)
+                Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: CText(
+                    'Bin Items : ',
+                    fontSize: Dimens.textMid,
+                    fontWeight: FontWeight.w600,
+                    textColor: CustomColors.KPrimaryColor,
+                  ),
+                ),
+              if (salesDetailsItem?.binItems?.isNotEmpty == true)
+                Expanded(
+                  child: ListView.builder(
+                    padding: const EdgeInsets.only(top: 5),
+                    itemCount: salesDetailsItem?.binItems?.length,
+                    shrinkWrap: true,
+                    itemBuilder: (BuildContext context, int index2) => Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          CText(
+                            'Bin Name : ${salesDetailsItem?.binItems?[index2].binName}',
+                            fontSize: Dimens.textMid,
+                            maxLines: 2,
+                          ),
+                          CText(
+                            'Bin Quantity : ${salesDetailsItem?.binItems?[index2].qty}',
+                            fontSize: Dimens.textMid,
+                            maxLines: 2,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                )
+            ],
+          ),
         ),
       ),
     );
